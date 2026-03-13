@@ -11,6 +11,11 @@ class DukeTest {
     }
 
     @Test
+    public void sampleTest4() {
+        assertTrue(true);
+    }
+  
+    @Test
     public void listTest() {
         assertTrue(true);
     }
