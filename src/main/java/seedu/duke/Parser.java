@@ -6,7 +6,10 @@ public class Parser {
         // No implementation needed for the constructor as of now
     }
 
-    /* Parses the user input and executes the corresponding command. Returns true if the command is "exit", false otherwise. */
+    /**
+     * Parses the user input and executes the corresponding command.
+     * Returns true if the command is "exit", false otherwise.
+     */
     public static boolean parse(String fullCommand, FoodList foodList, UserInterface ui) {
         fullCommand = fullCommand.trim();
 
@@ -20,7 +23,7 @@ public class Parser {
             ui.showExit();
             return true;
         } else {
-            throw new BitbitesException(BitbitesResponses.UNKNOWN_COMMAND);
+            throw new BitbitesException(BitbitesResponses.unknownCommand);
         }
 
         return false;

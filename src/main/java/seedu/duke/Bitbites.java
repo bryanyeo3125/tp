@@ -1,7 +1,5 @@
 package seedu.duke;
 
-import java.util.Scanner;
-
 public class Bitbites {
 
     /* The user interface for the chatbot. */

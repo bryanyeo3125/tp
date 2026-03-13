@@ -21,8 +21,8 @@ public class UserInterface {
 
     //// SHOW section ////
     /* Displays the welcome message and prompts the user for their name. */
-    public void showWelcome(){
-        System.out.println(bitbitesResponses.WELCOME_MESSAGE);
+    public void showWelcome() {
+        System.out.println(bitbitesResponses.welcomeMessage);
         System.out.println("What is your name?");
 
         // Get user input for name and greet them
@@ -31,11 +31,11 @@ public class UserInterface {
 
     /* Show an error message to the user. */
     public void showError(String message) {
-        System.out.println(bitbitesResponses.ERROR_MESSAGE);
+        System.out.println(bitbitesResponses.errorMessage);
     }
 
     /* Show the exit message to the user. */
     public void showExit() {
-        System.out.println(bitbitesResponses.EXIT_MESSAGE);
+        System.out.println(bitbitesResponses.exitMessage);
     }
 }
