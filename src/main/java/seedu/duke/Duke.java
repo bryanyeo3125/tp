@@ -17,5 +17,12 @@ public class Duke {
 
         Scanner in = new Scanner(System.in);
         System.out.println("Hello " + in.nextLine());
+
+
+        // Exit Command - rayminQAQ
     }
+
+    // TODO: List all food items
+
+    // TODO: List food items for a specific date
 }
