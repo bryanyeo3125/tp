@@ -2,7 +2,7 @@ package seedu.duke;
 
 import java.util.Scanner;
 
-public class Duke {
+public class Bitbites {
     /**
      * Main entry-point for the java.duke.Duke application.
      */
@@ -17,20 +17,20 @@ public class Duke {
 
         Scanner in = new Scanner(System.in);
         System.out.println("Hello " + in.nextLine());
-
-
-        // Exit Command - rayminQAQ
     }
 
     // TODO: List all food items
 
     // TODO: List food items for a specific date
+
+    // TODO: Add - Bryan
+    /*
+        Command - Add (Bryan)
+        Adds a food item to the list with its calorie and protein information
+
+        Format:
+        add n/NAME c/CALORIES_IN_KCAL p/PROTEIN_IN_G d/DATE
+    */
+
+    // TODO: Exit Command - rayminQAQ
 }
-
-/*
-Command - Add (Bryan)
-Adds a food item to the list with its calorie and protein information
-
-Format:
-add n/NAME c/CALORIES_IN_KCAL p/PROTEIN_IN_G d/DATE
- */
