@@ -11,6 +11,11 @@ class DukeTest {
     }
 
     @Test
+    public void sampleTest4() {
+        assertTrue(true);
+    }
+
+    @Test
     public void listTest() {
         assertTrue(true);
     }
@@ -20,3 +25,7 @@ class DukeTest {
         assertTrue(true);
     }
 }
+
+/*
+Bryan: Added some comments in the JUnit code
+ */
