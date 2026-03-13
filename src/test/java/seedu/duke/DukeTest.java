@@ -20,3 +20,7 @@ class DukeTest {
         assertTrue(true);
     }
 }
+
+/*
+Bryan: Added some comments in the JUnit code
+ */
