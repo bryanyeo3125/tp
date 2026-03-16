@@ -29,13 +29,7 @@ public class UserInterface {
     //// READ section ////
     /* Reads a command from the user input. */
     public String readCommand() {
-//        // TODO: Implement read command logic
-//        String input = scanner.nextLine();
-//
-//        if (input.startsWith("list")) {
-//            return "list";
-//        }
-          return this.scanner.nextLine();
+        return this.scanner.nextLine();
     }
 
     //// SHOW section ////
