@@ -30,12 +30,16 @@ public class Parser {
     public static boolean parse(String fullCommand, FoodList foodList, UserInterface ui) {
         fullCommand = fullCommand.trim();
 
-        if (fullCommand.equals("list")) {   
+        if (fullCommand.equals("list")) {
             handleListAll(fullCommand, foodList, ui);
-        } else if (fullCommand.equals("list d/")) {
+        } else if (fullCommand.startsWith("list d/")) {
             handleListFromDate(fullCommand, foodList, ui);
-        } else if (fullCommand.equals("add ")) {
+        } else if (fullCommand.startsWith("add ")) {
             handleAdd(fullCommand, foodList, ui);
+        } else if (fullCommand.equals("help")) {
+            handleHelp(ui);
+        } else if (fullCommand.startsWith("delete ")) {
+            handleDelete(fullCommand, foodList, ui);
         } else if (fullCommand.equals("exit")) {
             ui.showExit();
             return true;
