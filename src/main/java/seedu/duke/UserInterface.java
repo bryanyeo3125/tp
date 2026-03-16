@@ -35,7 +35,7 @@ public class UserInterface {
 //        if (input.startsWith("list")) {
 //            return "list";
 //        }
-        return this.scanner.nextLine();
+          return this.scanner.nextLine();
     }
 
     //// SHOW section ////
