@@ -59,6 +59,10 @@ public class UserInterface {
         System.out.println(bitbitesResponses.exitMessage);
     }
 
+    public void showHelp() {
+        System.out.println(BitbitesResponses.helpMessage);
+    }
+
     public void showDeletedFood(Food food, int remaining) {
         System.out.println(bitbitesResponses.deleteMessage);
         System.out.println("  " + food);

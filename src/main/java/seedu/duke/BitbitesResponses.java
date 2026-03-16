@@ -30,4 +30,11 @@ public class BitbitesResponses {
     static String addMessage = "Got it. I've added the food item!"; // EXAMPLE
     static String deleteMessage = "Got it. I've removed the food item!";
     static String exitMessage = "Bye. Hope to see you again soon!";
+    static String helpMessage = "Here are the available commands:\n"
+            + "  list                                    - List all food items\n"
+            + "  list d/DATE                             - List food items for a specific date\n"
+            + "  add n/NAME c/CALORIES p/PROTEIN d/DATE  - Add a food item\n"
+            + "  delete INDEX                            - Delete a food item by index\n"
+            + "  help                                    - Show this help message\n"
+            + "  exit                                    - Exit the application";
 }

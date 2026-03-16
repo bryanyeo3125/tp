@@ -72,6 +72,10 @@ public class Parser {
         */
     }
 
+    private static void handleHelp(UserInterface ui) {
+        ui.showHelp();
+    }
+
     private static void handleDelete(String fullCommand, FoodList foodList, UserInterface ui) {
         String[] parts = fullCommand.split(" ", 2);
         if (parts.length < 2 || parts[1].trim().isEmpty()) {
