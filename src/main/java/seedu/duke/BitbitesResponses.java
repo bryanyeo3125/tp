@@ -36,6 +36,6 @@ public class BitbitesResponses {
             + "  list d/DATE                             - List food items for a specific date\n"
             + "  add n/NAME c/CALORIES p/PROTEIN d/DATE  - Add a food item\n"
             + "  delete INDEX                            - Delete a food item by index\n"
-            + "  help                                    - Show this help message\n"
+            + "  help                                    - Show help message\n"
             + "  exit                                    - Exit the application";
 }

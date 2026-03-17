@@ -16,4 +16,7 @@ java -jar %jarloc% < ..\..\text-ui-test\input.txt > ..\..\text-ui-test\ACTUAL.TX
 
 cd ..\..\text-ui-test
 
+powershell -Command "(Get-Content ACTUAL.TXT) | Set-Content -NoNewline ([System.IO.File]::ReadAllText('ACTUAL.TXT').Replace(\"`r`n\",\"`n\")) -Encoding UTF8 ACTUAL_UNIX.TXT"
+powershell -Command "(Get-Content EXPECTED.TXT) | Set-Content -NoNewline ([System.IO.File]::ReadAllText('EXPECTED.TXT').Replace(\"`r`n\",\"`n\")) -Encoding UTF8 EXPECTED_UNIX.TXT"
+
 FC ACTUAL.TXT EXPECTED.TXT >NUL && ECHO Test passed! || Echo Test failed!
