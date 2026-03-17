@@ -29,13 +29,6 @@ public class UserInterface {
     //// READ section ////
     /* Reads a command from the user input. */
     public String readCommand() {
-        // TODO: Implement read command logic
-        String input = scanner.nextLine();
-
-        if (input.startsWith("list")) {
-            return "list";
-        }
-
         return this.scanner.nextLine();
     }
 
@@ -57,5 +50,15 @@ public class UserInterface {
     /* Show the exit message to the user. */
     public void showExit() {
         System.out.println(bitbitesResponses.exitMessage);
+    }
+
+    public void showHelp() {
+        System.out.println(BitbitesResponses.helpMessage);
+    }
+
+    public void showDeletedFood(Food food, int remaining) {
+        System.out.println(bitbitesResponses.deleteMessage);
+        System.out.println("  " + food);
+        System.out.println("Now you have " + remaining + " item(s) in the list.");
     }
 }

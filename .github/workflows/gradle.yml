@@ -10,6 +10,9 @@ jobs:
     runs-on: ${{ matrix.platform }}
 
     steps:
+      - name: Set git to use LF
+        run: git config --global core.autocrlf false
+
       - name: Set up repository
         uses: actions/checkout@master
 

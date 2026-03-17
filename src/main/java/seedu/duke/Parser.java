@@ -36,6 +36,10 @@ public class Parser {
             handleListAll(fullCommand, foodList, ui);
         } else if (fullCommand.startsWith("add ")) {
             handleAdd(fullCommand, foodList, ui);
+        } else if (fullCommand.equals("help")) {
+            handleHelp(ui);
+        } else if (fullCommand.startsWith("delete ")) {
+            handleDelete(fullCommand, foodList, ui);
         } else if (fullCommand.equals("exit")) {
             ui.showExit();
             return true;
@@ -100,5 +104,24 @@ public class Parser {
         foodList.addFood(newFood);
 
         System.out.println(BitbitesResponses.addMessage);
+    }
+
+    private static void handleHelp(UserInterface ui) {
+        ui.showHelp();
+    }
+
+    private static void handleDelete(String fullCommand, FoodList foodList, UserInterface ui) {
+        String[] parts = fullCommand.split(" ", 2);
+        if (parts.length < 2 || parts[1].trim().isEmpty()) {
+            throw new BitbitesException("Please specify an item number. Format: delete INDEX");
+        }
+        int index;
+        try {
+            index = Integer.parseInt(parts[1].trim()) - 1;
+        } catch (NumberFormatException e) {
+            throw new BitbitesException("Invalid index format. Please enter a number.");
+        }
+        Food removed = foodList.deleteFood(index);
+        ui.showDeletedFood(removed, foodList.size());
     }
 }

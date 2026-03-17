@@ -29,6 +29,13 @@ public class FoodList {
         this.foodList.add(food);
     }
 
+    public Food deleteFood(int index) {
+        if (index < 0 || index >= foodList.size()) {
+            throw new BitbitesException(BitbitesResponses.deleteErrorMessage);
+        }
+        return foodList.remove(index);
+    }
+
     public java.util.ArrayList<Food> getFoodList() {
         return this.foodList;
     }
