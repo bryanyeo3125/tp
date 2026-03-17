@@ -32,6 +32,10 @@ public class BitbitesResponses {
     static String addMessage = "Got it. I've added the food item!";
     static String addFormatReminder = "Please use the correct format: " +
             "add n/NAME c/CALORIES_IN_KCAL p/PROTEIN_IN_G d/DATE";
+    // List Message
+    static String listMessage = "Here are all the food items in your list:";
+    // List From Date Message
+    static String listFromDateMessage = "Here are the food items from ";
     // Delete Message
     static String deleteMessage = "Got it. I've removed the food item!";
     // Exit Message

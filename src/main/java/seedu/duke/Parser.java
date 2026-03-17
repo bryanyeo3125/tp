@@ -53,7 +53,7 @@ public class Parser {
     // TODO: List all food items
     private static void handleListAll(String fullCommand, FoodList foodList, UserInterface ui) {
         // Implementation for listing all food items
-        System.out.println("Here are the food items in your list:");
+        System.out.println(BitbitesResponses.listMessage);
 
         for (int i = 0; i < foodList.size(); i++) {
             System.out.println((i + 1) + ". " + foodList.get(i));
@@ -63,6 +63,22 @@ public class Parser {
     // TODO: List food items for a specific date
     private static void handleListFromDate(String fullCommand, FoodList foodList, UserInterface ui) {
         // Implementation for listing food items
+        String[] words = fullCommand.split("d/");
+        if (words.length < 2) {
+            throw new BitbitesException("OOPS!!! Missing date. Please provide a valid date.");
+        }
+
+        String date = words[1];
+        System.out.println(BitbitesResponses.listFromDateMessage + date + ":");
+
+        int count = 1;
+
+        for (int i = 0; i < foodList.size(); i++) {
+            if (foodList.get(i).getDate().equals(date)) {
+                System.out.println(count + ". " + foodList.get(i));
+                count++;
+            }
+        }
     }
 
     private static void handleAdd(String fullCommand, FoodList foodList, UserInterface ui) {

@@ -19,10 +19,6 @@ public class FoodList {
 
     public FoodList() {
         this.foodList = new java.util.ArrayList<Food>();
-
-        // For testing handleListAll only, delete once handleAdd has been implemented
-        Food initialFood = new Food("Burger", 443, 27, "16/03/2026");
-        foodList.add(initialFood);
     }
 
     public void addFood(Food food) {
