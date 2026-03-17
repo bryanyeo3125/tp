@@ -30,10 +30,10 @@ public class Parser {
     public static boolean parse(String fullCommand, FoodList foodList, UserInterface ui) {
         fullCommand = fullCommand.trim();
 
-        if (fullCommand.equals("list")) {
-            handleListAll(fullCommand, foodList, ui);
-        } else if (fullCommand.startsWith("list d/")) {
+        if (fullCommand.startsWith("list d/")) {
             handleListFromDate(fullCommand, foodList, ui);
+        } else if (fullCommand.equals("list")) {
+            handleListAll(fullCommand, foodList, ui);
         } else if (fullCommand.startsWith("add ")) {
             handleAdd(fullCommand, foodList, ui);
         } else if (fullCommand.equals("help")) {
@@ -65,15 +65,45 @@ public class Parser {
         // Implementation for listing food items
     }
 
-    // TODO: Add - Bryan
     private static void handleAdd(String fullCommand, FoodList foodList, UserInterface ui) {
-        /*
-            Command - Add (Bryan)
-            Adds a food item to the list with its calorie and protein information
+        // fullCommand looks like: "add n/Chicken Rice c/500 p/30.5 d/2026-03-14"
+        // Check that all required prefixes exist
+        String correctFormat = BitbitesResponses.addFormatReminder;
+        if (!fullCommand.contains("n/") || !fullCommand.contains("c/") ||
+                !fullCommand.contains("p/") || !fullCommand.contains("d/")) {
+            System.out.println(correctFormat);
+            return;
+        }
 
-            Format:
-            add n/NAME c/CALORIES_IN_KCAL p/PROTEIN_IN_G d/DATE
-        */
+        // Extract each field by finding the prefix and grabbing text until the next prefix
+        String name = fullCommand.substring(
+                fullCommand.indexOf("n/") + 2,
+                fullCommand.indexOf("c/")
+        ).trim();
+
+        String caloriesStr = fullCommand.substring(
+                fullCommand.indexOf("c/") + 2,
+                fullCommand.indexOf("p/")
+        ).trim();
+
+        String proteinStr = fullCommand.substring(
+                fullCommand.indexOf("p/") + 2,
+                fullCommand.indexOf("d/")
+        ).trim();
+
+        String date = fullCommand.substring(
+                fullCommand.indexOf("d/") + 2
+        ).trim();
+
+        // Convert calories and protein from String to their correct types
+        int calories = Integer.parseInt(caloriesStr);
+        double protein = Double.parseDouble(proteinStr);
+
+        // Create the Food object and add it to the list
+        Food newFood = new Food(name, calories, protein, date);
+        foodList.addFood(newFood);
+
+        System.out.println(BitbitesResponses.addMessage);
     }
 
     private static void handleHelp(UserInterface ui) {

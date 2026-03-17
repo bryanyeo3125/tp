@@ -28,9 +28,15 @@ public class BitbitesResponses {
     static String deleteErrorMessage = "OOPS!!! Invalid index. Please provide a valid item number.";
 
     // Features section
-    static String addMessage = "Got it. I've added the food item!"; // EXAMPLE
+    // Command-Add Messages
+    static String addMessage = "Got it. I've added the food item!";
+    static String addFormatReminder = "Please use the correct format: " +
+            "add n/NAME c/CALORIES_IN_KCAL p/PROTEIN_IN_G d/DATE";
+    // Delete Message
     static String deleteMessage = "Got it. I've removed the food item!";
+    // Exit Message
     static String exitMessage = "Bye. Hope to see you again soon!";
+    // Help Message
     static String helpMessage = "Here are the available commands:\n"
             + "  list                                    - List all food items\n"
             + "  list d/DATE                             - List food items for a specific date\n"
