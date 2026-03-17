@@ -16,12 +16,12 @@ package seedu.duke;
 public class BitbitesResponses {
     // Greetings section
     static String welcomeMessage = "Hello from\n"
-            + "__________._____________________________.___.______________________ \n"
-            + "\\______   \\   \\__    ___/\\______   \\__  |   |\\__    ___/\\_   _____/ \n"
-            + " |    |  _/   | |    |    |    |  _//   |   |  |    |    |    __)_  \n"
-            + " |    |   \\   | |    |    |    |   \\\\____   |  |    |    |        \\ \n"
-            + " |______  /___| |____|    |______  // ______|  |____|   /_______  / \n"
-            + "        \\/                       \\/ \\/                          \\/  \n";
+            + "__________._____________________________.___.______________________\n"
+            + "\\______   \\   \\__    ___/\\______   \\__  |   |\\__    ___/\\_   _____/\n"
+            + " |    |  _/   | |    |    |    |  _//   |   |  |    |    |    __)_\n"
+            + " |    |   \\   | |    |    |    |   \\\\____   |  |    |    |        \\\n"
+            + " |______  /___| |____|    |______  // ______|  |____|   /_______  /\n"
+            + "        \\/                       \\/ \\/                          \\/\n";
     // Errors & Exceptions Handled by the chatbot section
     static String unknownCommand = "OOPS!!! I'm sorry, but I don't know what that means :-( ";
     static String errorMessage = "OOPS!!! I'm sorry, but I don't know what that means :-( ";
