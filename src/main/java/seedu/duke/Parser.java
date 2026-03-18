@@ -10,7 +10,11 @@
  * - BitbitesException: For error handling
  * - BitbitesResponses: For error messages
  */
+
 package seedu.duke;
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * Parser interprets user commands and executes the appropriate handlers.
@@ -18,6 +22,8 @@ package seedu.duke;
  * Throws BitbitesException for unknown commands.
  */
 public class Parser {
+
+    private static final Logger logger = Logger.getLogger(Parser.class.getName());
 
     public Parser() {
         // No implementation needed for the constructor as of now
@@ -83,6 +89,7 @@ public class Parser {
 
     private static void handleAdd(String fullCommand, FoodList foodList, UserInterface ui) {
         String correctFormat = BitbitesResponses.addFormatReminder;
+        logger.log(Level.INFO, "Attempting to add food:" + fullCommand);
 
         // Check that all required prefixes exist
         if (!fullCommand.contains("n/") || !fullCommand.contains("c/") ||
@@ -132,11 +139,21 @@ public class Parser {
                 return;
             }
 
+            // Assert statements
+            assert !name.isEmpty() : "Name should not be empty";
+            assert calories >= 0 : "Calories should not be negative";
+            assert protein >= 0 : "Protein should not be negative";
+            assert date.matches("\\d{4}-\\d{2}-\\d{2}") :
+                    "Date format should be YYYY-MM-DD";
+
             Food newFood = new Food(name, calories, protein, date);
+            logger.log(Level.INFO, "Successfully adding food:" + name +
+                    " | Calories: " + calories + " | Protein: " + protein);
             foodList.addFood(newFood);
             System.out.println(BitbitesResponses.addMessage);
 
         } catch (NumberFormatException e) {
+            logger.log(Level.WARNING, "Invalid number format in: " + fullCommand);
             System.out.println("Calories must be an integer and protein must be a number.");
         } catch (StringIndexOutOfBoundsException e) {
             System.out.println(correctFormat);
