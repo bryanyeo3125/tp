@@ -82,44 +82,65 @@ public class Parser {
     }
 
     private static void handleAdd(String fullCommand, FoodList foodList, UserInterface ui) {
-        // fullCommand looks like: "add n/Chicken Rice c/500 p/30.5 d/2026-03-14"
-        // Check that all required prefixes exist
         String correctFormat = BitbitesResponses.addFormatReminder;
+
+        // Check that all required prefixes exist
         if (!fullCommand.contains("n/") || !fullCommand.contains("c/") ||
                 !fullCommand.contains("p/") || !fullCommand.contains("d/")) {
             System.out.println(correctFormat);
             return;
         }
 
-        // Extract each field by finding the prefix and grabbing text until the next prefix
-        String name = fullCommand.substring(
-                fullCommand.indexOf("n/") + 2,
-                fullCommand.indexOf("c/")
-        ).trim();
+        try {
+            String name = fullCommand.substring(
+                    fullCommand.indexOf("n/") + 2,
+                    fullCommand.indexOf("c/")
+            ).trim();
 
-        String caloriesStr = fullCommand.substring(
-                fullCommand.indexOf("c/") + 2,
-                fullCommand.indexOf("p/")
-        ).trim();
+            String caloriesStr = fullCommand.substring(
+                    fullCommand.indexOf("c/") + 2,
+                    fullCommand.indexOf("p/")
+            ).trim();
 
-        String proteinStr = fullCommand.substring(
-                fullCommand.indexOf("p/") + 2,
-                fullCommand.indexOf("d/")
-        ).trim();
+            String proteinStr = fullCommand.substring(
+                    fullCommand.indexOf("p/") + 2,
+                    fullCommand.indexOf("d/")
+            ).trim();
 
-        String date = fullCommand.substring(
-                fullCommand.indexOf("d/") + 2
-        ).trim();
+            String date = fullCommand.substring(
+                    fullCommand.indexOf("d/") + 2
+            ).trim();
 
-        // Convert calories and protein from String to their correct types
-        int calories = Integer.parseInt(caloriesStr);
-        double protein = Double.parseDouble(proteinStr);
+            // Validate fields are not empty
+            if (name.isEmpty() || caloriesStr.isEmpty() || proteinStr.isEmpty() || date.isEmpty()) {
+                System.out.println(correctFormat);
+                return;
+            }
 
-        // Create the Food object and add it to the list
-        Food newFood = new Food(name, calories, protein, date);
-        foodList.addFood(newFood);
+            int calories = Integer.parseInt(caloriesStr);
+            double protein = Double.parseDouble(proteinStr);
 
-        System.out.println(BitbitesResponses.addMessage);
+            // Validate non-negative values
+            if (calories < 0 || protein < 0) {
+                System.out.println("Calories and protein must be non-negative.");
+                return;
+            }
+
+            // Validate date format YYYY-MM-DD
+            if (!date.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                System.out.println("Date must be in YYYY-MM-DD format.");
+                return;
+            }
+
+            Food newFood = new Food(name, calories, protein, date);
+            foodList.addFood(newFood);
+            System.out.println(BitbitesResponses.addMessage);
+
+        } catch (NumberFormatException e) {
+            System.out.println("Calories must be an integer and protein must be a number.");
+        } catch (StringIndexOutOfBoundsException e) {
+            System.out.println(correctFormat);
+        }
     }
 
     private static void handleHelp(UserInterface ui) {

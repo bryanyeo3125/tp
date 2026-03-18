@@ -28,7 +28,7 @@ public class BitbitesResponses {
     static String deleteErrorMessage = "OOPS!!! Invalid index. Please provide a valid item number.";
 
     // Features section
-    // Command-Add Messages
+    // Add Messages
     static String addMessage = "Got it. I've added the food item!";
     static String addFormatReminder = "Please use the correct format: " +
             "add n/NAME c/CALORIES_IN_KCAL p/PROTEIN_IN_G d/DATE";
