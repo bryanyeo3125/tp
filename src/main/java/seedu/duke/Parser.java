@@ -47,6 +47,7 @@ public class Parser {
         } else if (fullCommand.startsWith("delete ")) {
             handleDelete(fullCommand, foodList, ui);
         } else if (fullCommand.equals("exit")) {
+            logger.log(Level.INFO, "Attempting to exit");
             ui.showExit();
             return true;
         } else {

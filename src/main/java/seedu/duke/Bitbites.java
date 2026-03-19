@@ -47,6 +47,9 @@ public class Bitbites {
             try {
                 String fullCommand = ui.readCommand();
                 isExit = Parser.parse(fullCommand, foods, ui);
+
+                // Assertion
+                assert !isExit || fullCommand.trim().equals("exit") : "Exit command should be 'exit'";
             } catch (BitbitesException e) {
                 ui.showError(e.getMessage());
             }
