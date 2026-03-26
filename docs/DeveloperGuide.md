@@ -1,4 +1,4 @@
-# BiteBites Developer Guide
+# BitBites Developer Guide
 
 ## Acknowledgements
 
@@ -29,6 +29,9 @@ When the user inputs the `list` command followed by the date parameter (e.g., `l
 3. **Filtering:** The method extracts the target `date` string. It initialises a local `count` variable at 1 to ensure the printed list maintains a continuous numerical sequence.
 4. **Execution:** The system iterates over every item in the `FoodList`. For each item, it compares the item's stored date with the target `date`. If a match is found, it is printed to the console and the `count` is incremented.
 
+Below is the sequence diagram illustrating the execution flow of the `handleListFromDate` method:
+
+![handleListFromDate sequence diagram](uml/list.png)
 
 ## Product scope
 ### Target user profile

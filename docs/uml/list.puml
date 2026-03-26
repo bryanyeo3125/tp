@@ -1,0 +1,47 @@
+@startuml
+skinparam arrowThickness 1.1
+skinparam maxMessageSize 150
+
+box "Logic" #LightBlue
+participant "parser:Parser" as Parser
+end box
+
+box "Data" #LightYellow
+participant "foodList:FoodList" as FoodList
+participant "foodItem:Food" as Food
+end box
+
+box "UI" #LightGreen
+participant "ui:UserInterface" as UI
+end box
+
+-> Parser : handleListFromDate("list d/DATE", foodList, ui)
+activate Parser
+
+Parser -> UI : print(BitbitesResponses.listFromDateMessage + date)
+activate UI
+UI --> Parser
+deactivate UI
+
+loop for i = 0 to foodList.size() - 1
+    Parser -> FoodList : get(i)
+    activate FoodList
+    FoodList --> Parser : foodItem
+    deactivate FoodList
+
+    Parser -> Food : getDate()
+    activate Food
+    Food --> Parser : itemDate
+    deactivate Food
+
+    opt itemDate.equals(date)
+        Parser -> UI : print(count + ". " + foodItem)
+        activate UI
+        UI --> Parser
+        deactivate UI
+    end
+end
+
+<-- Parser
+deactivate Parser
+@enduml
