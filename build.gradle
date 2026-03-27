@@ -16,6 +16,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    enableAssertions = true
 
     testLogging {
         events "passed", "skipped", "failed"
@@ -29,11 +30,11 @@ test {
 }
 
 application {
-    mainClass.set("seedu.duke.Bitbites")
+    mainClass.set("seedu.bitbites.Bitbites")
 }
 
 shadowJar {
-    archiveBaseName.set("duke")
+    archiveBaseName.set("bitbites")
     archiveClassifier.set("")
 }
 
