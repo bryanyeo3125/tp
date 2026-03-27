@@ -17,9 +17,6 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import seedu.bitbites.BitbitesException;
 import seedu.bitbites.BitbitesResponses;
-import model.Food;
-import model.FoodList;
-import ui.UserInterface;
 
 import command.Command;
 import command.DeleteCommand;
