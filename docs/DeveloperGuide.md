@@ -33,6 +33,26 @@ Below is the sequence diagram illustrating the execution flow of the `handleList
 
 ![handleListFromDate sequence diagram](uml/list.png)
 
+### 2. Adding a Food Item `add`
+The `add` feature allows users to log a new food entry into the tracker. It is implemented with a single execution path that handles parsing, validation, and storage of the new food item.
+
+#### 2.1 Implementation Details
+The feature is driven by the `handleAdd()` method in `Parser.java`. It depends on the `FoodList` component to store data and the `UserInterface` to display feedback to the user.
+
+**Executing `add n/NAME c/CALORIES p/PROTEIN d/DATE`:**
+When the user inputs the `add` command followed by the required parameters, `handleAdd()` is invoked. The execution follows these steps:
+1. **Prefix Validation:** The method checks that all four required prefixes (`n/`, `c/`, `p/`, `d/`) are present in the command. If any are missing, the correct format reminder is printed and execution stops early.
+2. **Field Extraction:** Each field is extracted using `String.substring()` based on the positions of the prefixes. Extracted values are trimmed of leading and trailing whitespace.
+3. **Empty Field Check:** If any extracted field is empty after trimming, the format reminder is displayed again and execution stops early.
+4. **Type Parsing and Validation:** `calories` is parsed as an `int` and `protein` as a `double`. Both values must be non-negative. A `NumberFormatException` is caught if parsing fails, and a descriptive error is shown to the user.
+5. **Date Validation:** The date string is validated against the regex `\d{4}-\d{2}-\d{2}`. If the format does not match, an error message is shown.
+6. **Defensive Programming:** Internal `assert` statements verify that the name is non-empty, values are non-negative, and the date format is correct before the object is created.
+7. **Food Creation:** A new `Food` object is constructed with the validated fields and added to the `FoodList` via `addFood()`. A confirmation message is printed to the user.
+
+Below is the sequence diagram illustrating the execution flow of the `handleAdd` method:
+
+![handleAdd sequence diagram](uml/add.png)
+
 ## Product scope
 ### Target user profile
 
