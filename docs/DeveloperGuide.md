@@ -62,6 +62,23 @@ When the user inputs `exit`, the following execution flow occurs:
 1. **Command Matching:** `Parser.parse(...)` checks whether the trimmed input is exactly `exit`.
 2. **User Feedback:** The parser invokes `ui.showExit()` to display a farewell message.
 
+### 4. Deleting A Food Item `delete`
+The `delete` feature provides users with the ability to delete their logged food items. It is implemented with one execution path:
+1. **delete INDEX:** Delete the logged food item by its index.
+   [
+#### 4.1 Implementation Details
+The feature is driven by `handleDelete()` in `Parser`, which interacts with `FoodList` to remove the item and `UserInterface` to confirm the deletion to the user.
+
+**Executing `delete INDEX`:**
+When the user inputs the `delete` command followed by an index (e.g., `delete 2`), `handleDelete()` is invoked. The execution follows these steps:
+
+1. **Parsing and Validation:** The raw command string is split into two parts using a space delimiter with a limit of 2. The method verifies that a second element exists and is not empty. If the index argument is missing, a `BitbitesException` is thrown immediately.
+2. **Index Conversion:** The extracted index string is parsed into an `int` using `Integer.parseInt()`. If the string is non-numeric, a `NumberFormatException` is caught and re-thrown as a `BitbitesException`. The index is then converted from 1-based (user-facing) to 0-based (internal).
+3. **Defensive Programming:** An `assert` statement verifies that the converted index is non-negative before passing it to `FoodList`.
+4. **Deletion:** `foodList.deleteFood(index)` is called. Inside `FoodList`, bounds checking is performed — if the index is out of range, a `BitbitesException` is thrown. Otherwise, the item is removed from the internal `ArrayList` and returned.
+5. **Postcondition Check:** An `assert` statement verifies that `foodList.size()` has decreased by exactly 1 after deletion.
+6. **Confirmation:** `ui.showDeletedFood(removed, foodList.size())` is called to print the removed item and the updated list size.
+
 ## Product scope
 ### Target user profile
 
