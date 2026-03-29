@@ -31,7 +31,7 @@ public class BitbitesResponses {
     // Add Messages
     public static String addMessage = "Got it. I've added the food item!";
     public static String addFormatReminder = "Please use the correct format: " +
-            "add n/NAME c/CALORIES_IN_KCAL p/PROTEIN_IN_G d/DATE";
+            "add n/NAME c/CALORIES_IN_KCAL p/PROTEIN_IN_G d/DD-MM-YYYY";
     // List Message
     public static String listMessage = "Here are all the food items in your list:";
     // List From Date Message
@@ -42,11 +42,13 @@ public class BitbitesResponses {
     public static String exitMessage = "Bye. Hope to see you again soon!";
     // Help Message
     public static String helpMessage = "Here are the available commands:\n"
-            + "  list                                    - List all food items\n"
-            + "  list d/DATE                             - List food items for a specific date\n"
-            + "  add n/NAME c/CALORIES p/PROTEIN d/DATE  - Add a food item\n"
-            + "  delete INDEX                            - Delete a food item by index\n"
-            + "  help                                    - Show help message\n"
-            + "  exit                                    - Exit the application\n"
-            + "  (Date format: YYYY-MM-YY)";
+            + "  list                                              - List all food items\n"
+            + "  list d/DATE                                       - List food items for a specific date\n"
+            + "  add n/NAME c/CALORIES p/PROTEIN d/DATE            - Add a food item\n"
+            + "  delete INDEX                                      - Delete a food item by index\n"
+            + "  goals                                             - View daily and weekly goal progress\n"
+            + "  goals set dc/CAL dp/PROT wc/CAL wp/PROT          - Set daily/weekly calorie and protein goals\n"
+            + "  help                                              - Show help message\n"
+            + "  exit                                              - Exit the application\n"
+            + "  (Date format: DD-MM-YYYY)";
 }

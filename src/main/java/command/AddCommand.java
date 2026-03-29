@@ -15,6 +15,7 @@ public class AddCommand extends Command {
         this.fullCommand = fullCommand;
     }
 
+    // @@author bryanyeo3125
     @Override
     public boolean execute(FoodList foodList, UserInterface ui) {
         String correctFormat = BitbitesResponses.addFormatReminder;
@@ -65,18 +66,16 @@ public class AddCommand extends Command {
                 return false;
             }
 
-            // Validate date format YYYY-MM-DD
-            if (!date.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                logger.log(Level.WARNING, "Invalid date format: " + date);
-                System.out.println("Date must be in YYYY-MM-DD format.");
-                return false;
+            // Validate date format DD-MM-YYYY
+            if (!date.matches("\\d{2}-\\d{2}-\\d{4}")) {
+                System.out.println("Date must be in DD-MM-YYYY format.");
             }
 
             // Assert statements
             assert !name.isEmpty() : "Name should not be empty";
             assert calories >= 0 : "Calories should not be negative";
             assert protein >= 0 : "Protein should not be negative";
-            assert date.matches("\\d{4}-\\d{2}-\\d{2}") : "Date format should be YYYY-MM-DD";
+            assert date.matches("\\d{2}-\\d{2}-\\d{4}") : "Date format should be DD-MM-YYYY";
 
             Food newFood = new Food(name, calories, protein, date);
             foodList.addFood(newFood);
@@ -94,4 +93,5 @@ public class AddCommand extends Command {
         }
         return false;
     }
+    // @@author
 }
