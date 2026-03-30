@@ -13,7 +13,9 @@ Here are the available commands:
   list d/DATE                             - List food items for a specific date
   add n/NAME c/CALORIES p/PROTEIN d/DATE  - Add a food item
   delete INDEX                            - Delete a food item by index
+  goals                                   - View daily and weekly goal progress
+  goals set dc/CAL dp/PROT wc/CAL wp/PROT - Set daily/weekly calorie and protein goals
   help                                    - Show help message
   exit                                    - Exit the application
-  (Date format: YYYY-MM-YY)
+  (Date format: DD-MM-YYYY)
 Bye. Hope to see you again soon!
