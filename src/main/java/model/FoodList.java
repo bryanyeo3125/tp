@@ -47,6 +47,7 @@ public class FoodList {
         return foodList.get(index);
     }
 
+    //@@author j-kennethh
     public int size() {
         return foodList.size();
     }
@@ -54,4 +55,5 @@ public class FoodList {
     public Food get(int i) {
         return foodList.get(i);
     }
+    //@@author
 }

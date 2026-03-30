@@ -6,6 +6,7 @@ import seedu.bitbites.BitbitesException;
 import seedu.bitbites.BitbitesResponses;
 import ui.UserInterface;
 
+//@@author j-kennethh
 public class ListByDateCommand extends Command {
     private static final Logger logger = Logger.getLogger(ListByDateCommand.class.getName());
     private final String fullCommand;
@@ -34,6 +35,8 @@ public class ListByDateCommand extends Command {
                 count++;
             }
         }
+
         return false;
     }
 }
+//@@author

@@ -59,6 +59,7 @@ public class Food {
         this.date = date;
     }
 
+    //@@author j-kennethh
     /**
      * Returns a string representation of the food item to be displayed in the list.
      *
@@ -68,4 +69,5 @@ public class Food {
     public String toString() {
         return name + " (" + calories + "kcal, " + protein + "g protein) on " + date;
     }
+    //@@author
 }
