@@ -24,6 +24,7 @@ public class ListByDateCommand extends Command {
         }
 
         assert words[0].trim().equals("list") : "List command should be 'list d/DATE'";
+        assert !words[1].isEmpty() : "Date should not be empty.";
 
         String date = words[1].trim();
         System.out.println(BitbitesResponses.listFromDateMessage + date + ":");
