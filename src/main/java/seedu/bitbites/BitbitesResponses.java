@@ -50,11 +50,15 @@ public class BitbitesResponses {
             + "  list d/DATE                             - List food items for a specific date\n"
             + "  add n/NAME c/CALORIES p/PROTEIN d/DATE  - Add a food item\n"
             + "  delete INDEX                            - Delete a food item by index\n"
+            + "  edit INDEX                              - Edit an existing food item\n"
+            + "  (Optional: [n/NAME] [c/CALORIES] [p/PROTEIN] [d/DATE])\n"
+            + "  preset add n/NAME c/CALORIES p/PROTEIN  - Save a new food preset\n"
+            + "  preset list                             - View all saved presets\n"
+            + "  preset delete INDEX                     - Delete a preset by index\n"
+            + "  preset use INDEX [d/DATE]               - Log a preset (date defaults to today)\n"
             + "  goals                                   - View daily and weekly goal progress\n"
             + "  goals set dc/CAL dp/PROT wc/CAL wp/PROT - Set daily/weekly calorie and protein goals\n"
             + "  help                                    - Show help message\n"
-            + "  edit INDEX                              - Edit an existing food item\n"
-            + "  (Optional: [n/NAME] [c/CALORIES] [p/PROTEIN] [d/DATE])\n"
             + "  exit                                    - Exit the application\n"
             + "  (Date format: DD-MM-YYYY)";
 }

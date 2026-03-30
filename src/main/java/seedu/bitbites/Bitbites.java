@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 
 import command.Command;
 import model.FoodList;
+import model.PresetList;
 import parser.Parser;
 import storage.Storage;
 import ui.UserInterface;
@@ -28,18 +29,28 @@ import ui.UserInterface;
 public class Bitbites {
     private UserInterface ui;
     private FoodList foods;
-    private Storage storage;
+    private PresetList presets;
+    private Storage foodStorage;
+    private Storage presetStorage;
 
     //@@author j-kennethh
-    public Bitbites(String filePath) {
+    public Bitbites(String foodFilePath, String presetFilePath) {
         ui = new UserInterface();
-        storage = new Storage(filePath);
+        foodStorage = new Storage(foodFilePath);
+        presetStorage = new Storage(presetFilePath);
 
         try {
-            foods = new FoodList(storage.load());
+            foods = new FoodList(foodStorage.load());
         } catch (BitbitesException | FileNotFoundException e) {
-            ui.showError(e.getMessage());
+            ui.showError("Could not load daily food data: " + e.getMessage());
             foods = new FoodList();
+        }
+
+        try {
+            presets = new PresetList(presetStorage.load());
+        } catch (BitbitesException | FileNotFoundException e) {
+            ui.showError("Could not load presets: " + e.getMessage());
+            presets = new PresetList();
         }
     }
     //@@author
@@ -52,9 +63,11 @@ public class Bitbites {
             try {
                 String fullCommand = ui.readCommand();
                 Command command = Parser.parse(fullCommand);
-                isExit = command.execute(foods, ui);
 
-                storage.save(foods);
+                isExit = command.execute(foods, presets, ui);
+
+                foodStorage.save(foods);
+                presetStorage.save(presets);
 
                 assert !isExit || fullCommand.trim().equals("exit") : "Exit command should be 'exit'";
             } catch (BitbitesException e) {
@@ -65,7 +78,7 @@ public class Bitbites {
 
     //@@author j-kennethh
     public static void main(String[] args) {
-        new Bitbites("./data.txt").run();
+        new Bitbites("./data.txt", "./presets.txt").run();
     }
     //@@author
 }

@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import model.Food;
 import model.FoodList;
+import model.PresetList;
 import seedu.bitbites.BitbitesException;
 
 //@@author j-kennethh
@@ -64,6 +65,22 @@ public class Storage {
                         food.getCalories() + " | " +
                         food.getProtein() + " | " +
                         food.getDate() + System.lineSeparator();
+                fw.write(line);
+            }
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Error saving to file: " + e.getMessage());
+            throw new BitbitesException("An error occurred while saving data.");
+        }
+    }
+
+    public void save(PresetList presetList) {
+        try (FileWriter fw = new FileWriter(filePath)) {
+            for (int i = 0; i < presetList.size(); i++) {
+                Food preset = presetList.getPreset(i);
+                String line = preset.getName() + " | " +
+                        preset.getCalories() + " | " +
+                        preset.getProtein() + " | " +
+                        preset.getDate() + System.lineSeparator();
                 fw.write(line);
             }
         } catch (IOException e) {
