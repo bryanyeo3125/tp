@@ -18,6 +18,14 @@ Here are the available commands:
   help                                    - Show help message
   edit INDEX                              - Edit an existing food item
   (Optional: [n/NAME] [c/CALORIES] [p/PROTEIN] [d/DATE])
+  summary d/DATE                          - Show summary for a specific date
+  summary from/DATE1 to/DATE2             - Show trend between two dates
+  summary compare d/DATE1 d/DATE2         - Compare two days
+  history                                 - Show all food history
+  history /top N                          - Show top N highest calorie days
+  history /best N                         - Show top N lowest calorie days
+  history streak                          - Show tracking streak
+  tips                                    - Show tips for estimating calories and protein
   exit                                    - Exit the application
   (Date format: DD-MM-YYYY)
 Bye. Hope to see you again soon!
