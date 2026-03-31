@@ -21,6 +21,14 @@ Here are the available commands:
   preset use INDEX [d/DATE]               - Log a preset (date defaults to today)
   goals                                   - View daily and weekly goal progress
   goals set dc/CAL dp/PROT wc/CAL wp/PROT - Set daily/weekly calorie and protein goals
+  summary d/DATE                          - Show summary for a specific date
+  summary from/DATE1 to/DATE2             - Show trend between two dates
+  summary compare d/DATE1 d/DATE2         - Compare two days
+  history                                 - Show all food history
+  history /top N                          - Show top N highest calorie days
+  history /best N                         - Show top N lowest calorie days
+  history streak                          - Show tracking streak
+  tips                                    - Show tips for estimating calories and protein
   help                                    - Show help message
   exit                                    - Exit the application
   (Date format: DD-MM-YYYY)

@@ -2,6 +2,14 @@ package parser;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import command.HistoryBestCommand;
+import command.HistoryCommand;
+import command.HistoryStreakCommand;
+import command.HistoryTopCommand;
+import command.SummaryByDateCommand;
+import command.SummaryCompareCommand;
+import command.SummaryRangeCommand;
+import command.TipsCommand;
 import seedu.bitbites.BitbitesException;
 import seedu.bitbites.BitbitesResponses;
 
@@ -43,6 +51,22 @@ public class Parser {
             return new EditCommand(fullCommand);
         } else if (fullCommand.startsWith("preset")) {
             return new PresetCommand(fullCommand);
+        } else if (fullCommand.startsWith("summary from/")) {
+            return new SummaryRangeCommand(fullCommand);
+        } else if (fullCommand.startsWith("summary compare")) {
+            return new SummaryCompareCommand(fullCommand);
+        } else if (fullCommand.startsWith("summary d/")) {
+            return new SummaryByDateCommand(fullCommand);
+        } else if (fullCommand.startsWith("history /top")) {
+            return new HistoryTopCommand(fullCommand);
+        } else if (fullCommand.startsWith("history /best")) {
+            return new HistoryBestCommand(fullCommand);
+        } else if (fullCommand.equals("history streak")) {
+            return new HistoryStreakCommand();
+        } else if (fullCommand.equals("history")) {
+            return new HistoryCommand();
+        } else if (fullCommand.equals("tips")) {
+            return new TipsCommand();
         } else if (fullCommand.equals("exit")) {
             logger.log(Level.INFO, "Attempting to exit");
             return new ExitCommand();
