@@ -9,14 +9,34 @@ import seedu.bitbites.BitbitesResponses;
 import ui.UserInterface;
 
 //@@author j-kennethh
+/**
+ * Represents a command to list all food items recorded on a specific date.
+ * When executed, this command filters the user's food diary and displays
+ * only the entries that match the user-provided date.
+ */
 public class ListByDateCommand extends Command {
     private static final Logger logger = Logger.getLogger(ListByDateCommand.class.getName());
     private final String fullCommand;
 
+    /**
+     * Constructs a ListByDateCommand with the specified user input.
+     *
+     * @param fullCommand The complete command string entered by the user
+     * (e.g., "list d/DD-MM-YYYY").
+     */
     public ListByDateCommand(String fullCommand) {
         this.fullCommand = fullCommand;
     }
 
+    /**
+     * Executes the list-by-date command.
+     * Parses the full command string to extract the target date, then iterates
+     * through the food list to find and print all items recorded on that date.
+     *
+     * @param context The application context containing the user's data, including the FoodList and UI.
+     * @return false, indicating that the application should continue running after execution.
+     * @throws BitbitesException If the user fails to provide the "d/" prefix or leaves the date blank.
+     */
     @Override
     public boolean execute(AppContext context) {
         FoodList foodList = context.getFoodList();
