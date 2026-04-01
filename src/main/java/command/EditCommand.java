@@ -66,7 +66,6 @@ public class EditCommand extends Command {
                 if (name.isEmpty()) {
                     throw new BitbitesException("Name should not be empty.");
                 }
-                assert !name.isEmpty() : "Name should not be empty";
                 food.setName(name);
                 logger.log(Level.INFO, "Updated name to: " + name);
             }
@@ -77,7 +76,6 @@ public class EditCommand extends Command {
                 if (calories < 0) {
                     throw new BitbitesException("Calories must be non-negative.");
                 }
-                assert calories >= 0 : "Calories should not be negative";
                 food.setCalories(calories);
                 logger.log(Level.INFO, "Updated calories to: " + calories);
             }

@@ -32,7 +32,6 @@ public class HistoryBestCommand extends Command {
             if (n <= 0) {
                 throw new BitbitesException("N must be a positive number.");
             }
-            assert n > 0 : "N should be positive";
 
             int calorieGoal = GoalsCommand.getDailyCalorieGoal();
             double proteinGoal = GoalsCommand.getDailyProteinGoal();

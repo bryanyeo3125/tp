@@ -12,6 +12,7 @@ package ui;
 
 import java.util.List;
 import java.util.Scanner;
+import command.GoalsCommand;
 import model.Food;
 import model.NutritionSummary;
 import storage.ProfileStorage;
@@ -137,11 +138,18 @@ public class UserInterface {
         for (NutritionSummary s : summaries) {
             String bar = ProgressBar.generateSegmented(
                     s.getItems(), s.getTotalCalories(), maxCalories, maxBarLength);
-            System.out.printf("  %-12s  %-10s  %-10s  %s%n",
+
+            int calorieGoal = GoalsCommand.getDailyCalorieGoal();
+            int diff = Math.abs(s.getTotalCalories() - calorieGoal);
+            boolean nearGoal = diff <= calorieGoal * 0.2; // 20% 以内
+            String goalTag = nearGoal ? " ✓" : "";
+
+            System.out.printf("    %-12s  %-10s  %-10s  %s%s",
                     s.getDate(),
                     s.getTotalCalories() + " kcal",
                     String.format("%.1fg", s.getTotalProtein()),
-                    bar);
+                    bar,
+                    goalTag);
         }
     }
 
@@ -166,11 +174,11 @@ public class UserInterface {
         for (NutritionSummary s : summaries) {
             String bar = ProgressBar.generateSegmented(
                     s.getItems(), s.getTotalCalories(), maxCalories, maxBarLength);
-            System.out.println(String.format("  %-12s  %-10s  %-10s  %s",
+            System.out.printf("  %-12s  %-10s  %-10s  %s%n",
                     s.getDate(),
                     s.getTotalCalories() + " kcal",
                     String.format("%.1fg", s.getTotalProtein()),
-                    bar));
+                    bar);
         }
 
         if (recordedToday) {

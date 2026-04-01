@@ -32,7 +32,6 @@ public class HistoryTopCommand extends Command {
             if (n <= 0) {
                 throw new BitbitesException("N must be a positive number.");
             }
-            assert n > 0 : "N should be positive";
             List<NutritionSummary> top = foodList.getTopDaysByCalories(n);
             ui.showHistoryTop(top, n);
         } catch (NumberFormatException e) {
