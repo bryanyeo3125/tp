@@ -21,8 +21,7 @@ public class ListByDateCommand extends Command {
     /**
      * Constructs a ListByDateCommand with the specified user input.
      *
-     * @param fullCommand The complete command string entered by the user
-     * (e.g., "list d/DD-MM-YYYY").
+     * @param fullCommand The complete command string entered by the user.
      */
     public ListByDateCommand(String fullCommand) {
         this.fullCommand = fullCommand;

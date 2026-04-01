@@ -25,8 +25,7 @@ public class PresetCommand extends Command {
     /**
      * Constructs a {@code PresetCommand} with the specified user input.
      *
-     * @param fullCommand The complete command string entered by the user
-     * (e.g., "preset add n/Chicken c/200 p/30" or "preset use 1").
+     * @param fullCommand The complete command string entered by the user.
      */
     public PresetCommand(String fullCommand) {
         this.fullCommand = fullCommand;
@@ -39,8 +38,7 @@ public class PresetCommand extends Command {
      *
      * @param context The application context containing the user's data, including the FoodList and PresetList.
      * @return false, indicating that the application should continue running after execution.
-     * @throws BitbitesException If the command format is invalid, values are missing/incorrect,
-     * or an unknown preset action is provided.
+     * @throws BitbitesException If the command format is invalid or values are missing/incorrect.
      */
     @Override
     public boolean execute(AppContext context) {
