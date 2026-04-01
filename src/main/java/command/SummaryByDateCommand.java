@@ -33,8 +33,12 @@ public class SummaryByDateCommand extends Command {
             System.out.println("No food items found for " + date + ".");
             return false;
         }
+
+        int calorieGoal = GoalsCommand.getDailyCalorieGoal();
+        double proteinGoal = GoalsCommand.getDailyProteinGoal();
+
         NutritionSummary summary = foodList.getSummaryByDate(date);
-        ui.showSummary(summary);
+        ui.showSummary(summary, calorieGoal, proteinGoal);
         return false;
     }
 }

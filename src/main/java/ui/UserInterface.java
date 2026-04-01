@@ -73,9 +73,29 @@ public class UserInterface {
         System.out.println("  " + food);
     }
 
-    /* Show the summary to the user. */
-    public void showSummary(NutritionSummary summary) {
+
+    public void showSummary(NutritionSummary summary, int calorieGoal, double proteinGoal) {
+        assert summary != null : "Summary should not be null";
         System.out.println(summary.toString());
+
+        int totalCal = summary.getTotalCalories();
+        double totalProtein = summary.getTotalProtein();
+
+        System.out.println("  Goal Status:");
+        if (totalCal >= calorieGoal) {
+            System.out.printf("  Calories : %d / %d kcal (Goal reached!)%n",
+                    totalCal, calorieGoal);
+        } else {
+            System.out.printf("  Calories : %d / %d kcal (%d kcal remaining)%n",
+                    totalCal, calorieGoal, calorieGoal - totalCal);
+        }
+        if (totalProtein >= proteinGoal) {
+            System.out.printf("  Protein  : %.1f / %.1fg (Goal reached!)%n",
+                    totalProtein, proteinGoal);
+        } else {
+            System.out.printf("  Protein  : %.1f / %.1fg (%.1fg remaining)%n",
+                    totalProtein, proteinGoal, proteinGoal - totalProtein);
+        }
     }
 
     public void showSummaryCompare(NutritionSummary s1, NutritionSummary s2) {
@@ -126,27 +146,68 @@ public class UserInterface {
     }
 
     /* Show the history count to the user. */
-    public void showHistory(List<NutritionSummary> summaries) {
+    public void showHistory(List<NutritionSummary> summaries, boolean recordedToday) {
         assert summaries != null : "Summaries should not be null";
         if (summaries.isEmpty()) {
             System.out.println("No food history found.");
             return;
         }
+
+        int maxCalories = summaries.stream()
+                .mapToInt(NutritionSummary::getTotalCalories)
+                .max().orElse(1);
+        int maxBarLength = 30;
+
         System.out.println("Food History:");
-        System.out.printf("  %-12s  %-12s  %-10s  %s%n",
-                "Date", "Calories", "Protein", "Items");
-        System.out.println("  " + "-".repeat(46));
+        System.out.printf("  %-12s  %-10s  %-10s  %s%n",
+                "Date", "Calories", "Protein", "Breakdown");
+        System.out.println("  " + "-".repeat(66));
+
         for (NutritionSummary s : summaries) {
-            System.out.printf("  %-12s  %-12s  %-10s  %d%n",
+            String bar = ProgressBar.generateSegmented(
+                    s.getItems(), s.getTotalCalories(), maxCalories, maxBarLength);
+            System.out.println(String.format("  %-12s  %-10s  %-10s  %s",
                     s.getDate(),
                     s.getTotalCalories() + " kcal",
                     String.format("%.1fg", s.getTotalProtein()),
-                    s.getItemCount());
+                    bar));
+        }
+
+        if (recordedToday) {
+            System.out.println("  Today's meals are recorded.");
+        } else {
+            System.out.println("  You haven't recorded anything today yet!");
         }
     }
 
     public void showHistoryTop(List<NutritionSummary> summaries, int n) {
         System.out.println("Top " + n + " Highest Calorie Days:");
+        filterHistory(summaries);
+    }
+
+    public void showHistoryBest(List<NutritionSummary> summaries, int n,
+                                int calorieGoal, double proteinGoal) {
+        System.out.println("Top " + n + " Days Closest to Daily Goal (" + calorieGoal + " kcal):");
+        if (summaries.isEmpty()) {
+            System.out.println("  No food history found.");
+            return;
+        }
+        for (int i = 0; i < summaries.size(); i++) {
+            NutritionSummary s = summaries.get(i);
+            int calDiff = s.getTotalCalories() - calorieGoal;
+            double proteinDiff = s.getTotalProtein() - proteinGoal;
+            String calStatus = calDiff >= 0 ? "+" + calDiff + " kcal over" : Math.abs(calDiff) + " kcal under";
+            String proteinStatus = proteinDiff >= 0
+                    ? "+" + String.format("%.1f", proteinDiff) + "g over"
+                    : String.format("%.1f", Math.abs(proteinDiff)) + "g under";
+            System.out.printf("  %d. %-12s  %d kcal (%s) | %.1fg protein (%s)%n",
+                    i + 1, s.getDate(),
+                    s.getTotalCalories(), calStatus,
+                    s.getTotalProtein(), proteinStatus);
+        }
+    }
+
+    private void filterHistory(List<NutritionSummary> summaries) {
         if (summaries.isEmpty()) {
             System.out.println("  No food history found.");
             return;
@@ -158,24 +219,13 @@ public class UserInterface {
         }
     }
 
-    public void showHistoryBest(List<NutritionSummary> summaries, int n) {
-        System.out.println("Top " + n + " Lowest Calorie Days:");
-        if (summaries.isEmpty()) {
-            System.out.println("  No food history found.");
-            return;
-        }
-        for (int i = 0; i < summaries.size(); i++) {
-            NutritionSummary s = summaries.get(i);
-            System.out.printf("  %d. %s  %d kcal | %.1fg protein%n",
-                    i + 1, s.getDate(), s.getTotalCalories(), s.getTotalProtein());
-        }
-    }
-
-    public void showStreak(int current, int longest) {
+    public void showStreak(int current, int longest, boolean recordedToday) {
         System.out.println("Tracking Streak:");
         System.out.println("  Current streak : " + current + " day(s)");
         System.out.println("  Longest streak : " + longest + " day(s)");
-        if (current == longest && current > 1) {
+        if (!recordedToday) {
+            System.out.println("  Don't forget to log today's meals to keep your streak!");
+        } else if (current == longest && current > 1) {
             System.out.println("  You're on your best streak ever! Keep it up!");
         } else if (current >= 7) {
             System.out.println("  Amazing! A week-long streak!");
