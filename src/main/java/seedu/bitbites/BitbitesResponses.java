@@ -71,7 +71,6 @@ public class BitbitesResponses {
             + "  profile                                 - View your profile, BMI and BMR\n"
             + "  profile set n/NAME a/AGE w/WEIGHT h/HEIGHT - Set up your profile\n"
             + "  profile clear                           - Clear your profile\n"
-            + "  summary d/DATE                          - Show summary for a specific date\n"
             + "  (Date format: DD-MM-YYYY)";
     //Tip Message
     public static String tipsMessage = "Here are some tips to estimate calories and protein:\n"

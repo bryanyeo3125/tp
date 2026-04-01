@@ -1,5 +1,7 @@
 package command;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import model.FoodList;
@@ -15,10 +17,14 @@ public class HistoryStreakCommand extends Command {
         UserInterface ui = context.getUi();
 
         assert foodList != null : "FoodList should not be null";
+
+        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        boolean recordedToday = foodList.getItemCountByDate(today) > 0;
+
         int current = foodList.getCurrentStreak();
         int longest = foodList.getLongestStreak();
         logger.log(Level.INFO, "Current streak: " + current + ", Longest: " + longest);
-        ui.showStreak(current, longest);
+        ui.showStreak(current, longest, recordedToday);
         return false;
     }
 }

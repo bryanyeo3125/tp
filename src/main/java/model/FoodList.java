@@ -163,6 +163,17 @@ public class FoodList {
         return summaries;
     }
 
+    public List<NutritionSummary> getDaysClosestToGoal(int n, int calorieGoal) {
+        assert n > 0 : "N should be positive";
+        List<NutritionSummary> summaries = new ArrayList<>(getAllDailySummaries());
+        summaries.sort((a, b) -> {
+            int diffA = Math.abs(a.getTotalCalories() - calorieGoal);
+            int diffB = Math.abs(b.getTotalCalories() - calorieGoal);
+            return diffA - diffB;
+        });
+        return summaries.subList(0, Math.min(n, summaries.size()));
+    }
+
     public List<NutritionSummary> getTopDaysByCalories(int n) {
         List<NutritionSummary> summaries = new ArrayList<>(getAllDailySummaries());
         summaries.sort((a, b) -> b.getTotalCalories() - a.getTotalCalories());
@@ -199,6 +210,17 @@ public class FoodList {
         if (dates.isEmpty()) {
             return 0;
         }
+
+        String today = java.time.LocalDate.now()
+                .format(java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String yesterday = java.time.LocalDate.now().minusDays(1)
+                .format(java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String lastRecorded = dates.get(dates.size() - 1);
+
+        if (!lastRecorded.equals(today) && !lastRecorded.equals(yesterday)) {
+            return 0;
+        }
+
         int currentStreak = 1;
         for (int i = dates.size() - 1; i > 0; i--) {
             if (isConsecutive(dates.get(i - 1), dates.get(i))) {

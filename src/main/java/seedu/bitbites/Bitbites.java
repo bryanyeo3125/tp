@@ -65,6 +65,8 @@ public class Bitbites {
                 String fullCommand = ui.readCommand();
                 Command command = Parser.parse(fullCommand);
                 isExit = command.execute(context);
+                foodStorage.save(foods);
+                presetStorage.save(presets);
             } catch (BitbitesException e) {
                 ui.showError(e.getMessage());
             }

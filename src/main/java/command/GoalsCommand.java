@@ -181,6 +181,14 @@ public class GoalsCommand extends Command {
         System.out.println("================================");
     }
 
+    public static int getDailyCalorieGoal() {
+        return dailyCalorieGoal;
+    }
+
+    public static double getDailyProteinGoal() {
+        return dailyProteinGoal;
+    }
+
     /**
      * Parses and updates one or more goal values from the command string.
      * Supports setting daily calories (dc/), daily protein (dp/),
