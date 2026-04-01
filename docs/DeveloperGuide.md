@@ -1,4 +1,4 @@
-'# BitBites Developer Guide
+# BitBites Developer Guide
 
 ## Acknowledgements
 
@@ -31,7 +31,7 @@ When the user inputs the `list` command followed by the date parameter (e.g., `l
 
 Below is the sequence diagram illustrating the execution flow of the `handleListFromDate` method:
 
-![handleListFromDate sequence diagram](uml/list.png)
+![handleListFromDate sequence diagram](uml/listFromDate.png)
 
 ### 2. Adding a Food Item `add`
 The `add` feature allows users to log a new food entry into the tracker. It is implemented with a single execution path that handles parsing, validation, and storage of the new food item.
@@ -196,6 +196,60 @@ consecutive dates. `getCurrentStreak()` also checks whether the last recorded da
 is today or yesterday using `LocalDate.now()` — if neither, the streak returns 0.
 
 ![history streak sequence diagram](uml/historyStreak.png)
+
+### 9. Food Presets `preset`
+The `preset` feature allows users to save frequently consumed food items as templates and quickly log them later without needing to re-enter the nutritional information. It supports four sub-commands.
+
+| Command | Description |
+|---------|-------------|
+| `preset add n/NAME c/CALORIES p/PROTEIN` | Saves a new food template |
+| `preset list` | Displays all saved templates |
+| `preset delete INDEX` | Removes a saved template by its index |
+| `preset use INDEX [d/DATE]` | Logs a template to the food diary |
+
+#### 9.1 Implementation Details
+The feature is driven by the `PresetCommand` class, which receives both the `FoodList` and `PresetList` from the `AppContext`. The command string is split to determine the specific action (`add`, `list`, `delete`, or `use`), and execution is routed to the corresponding internal handler method.
+
+**`preset add`:**
+1. **Validation:** Checks that the `n/`, `c/`, and `p/` prefixes are all present.
+2. **Extraction:** Extracts the name, calories, and protein using the internal `extractField()` method.
+3. **Creation:** Validates that numbers are positive and the name is not empty. A new `Food` object is created with a hardcoded date of `"PRESET"` and added to the `PresetList`.
+
+**`preset list` & `preset delete`:**
+1. **List:** Checks if `PresetList` is empty. If not, it iterates through the list, printing each preset's name, calories, and protein alongside a 1-based index.
+2. **Delete:** Parses the provided index, converts it to a 0-based index, and calls `PresetList.deletePreset(index)`. The deleted item is displayed to the user as confirmation.
+
+**`preset use`:**
+1. **Index Retrieval:** Parses the target index and retrieves the corresponding `Food` template from the `PresetList`.
+2. **Date Determination:** Defaults the logging date to today using `LocalDate.now()`. If the user provided the optional `d/DATE` prefix, it overrides the default date and validates the `DD-MM-YYYY` format.
+3. **Logging:** Creates a brand-new `Food` object using the template's nutritional values and the determined date, then adds it to the `FoodList`.
+
+Below is the sequence diagram illustrating the execution flow of using a preset:
+
+![preset use sequence diagram](uml/presetUse.png)
+
+### 10. Storage Integration
+The storage component ensures that the user's logged food items and saved presets persist across application restarts. It reads from and writes to local text files (`foods.txt` and `presets.txt`) located within a designated `/data` directory.
+
+#### 10.1 Implementation Details
+The persistence logic is handled entirely by the `Storage` class. Two distinct `Storage` instances are created upon application startup in `Bitbites.java`, one for daily logs and one for presets.
+
+**Loading Data (`load()`):**
+1. **File Check:** Instantiates a `File` object. If the file does not exist, it logs an informational message and returns an empty `ArrayList<Food>`, allowing the app to start fresh.
+2. **Parsing:** Uses a `Scanner` to read the file line by line. Each line is split by the `" | "` delimiter.
+3. **Validation:** It verifies the split array has exactly 4 parts (Name, Calories, Protein, Date). If the format is correct, it parses the values and constructs a `Food` object.
+4. **Error Handling:** If non-numeric strings are found where numbers are expected, a `NumberFormatException` is caught and rethrown as a `BitbitesException` to warn the user of a corrupted save file.
+
+**Saving Data (`save()`):**
+1. **Directory Management:** Before writing, the method calls `ensureDirectoryExists()`. This extracts the parent directory from the file path and calls `File.mkdirs()` to safely create the `/data` folder if it was deleted or has not been created yet.
+2. **Writing:** Uses a `FileWriter` inside a try-with-resources block. It iterates through the provided `FoodList` or `PresetList`, formatting each `Food` object's properties into a single string delimited by `" | "` and appending a system line separator.
+3. **Trigger Point:** To guarantee data safety, both `foodStorage.save(foods)` and `presetStorage.save(presets)` are called sequentially inside the main `while` loop of `Bitbites.java` immediately after *any* command finishes executing.
+
+Below is the sequence diagram illustrating the save execution flow:
+
+![storage save sequence diagram](uml/storageSave.png)
+
+
 ## Product scope
 ### Target user profile
 

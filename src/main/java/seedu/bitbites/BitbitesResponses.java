@@ -1,3 +1,4 @@
+//@@author rayminQAQ
 /**
  * BitbitesResponses.java
  * <p>
@@ -72,6 +73,7 @@ public class BitbitesResponses {
             + "  help                                    - Show help message\n"
             + "  exit                                    - Exit the application\n"
             + "  (Date format: DD-MM-YYYY)";
+    //@@author
     //Tip Message
     public static String tipsMessage = "Here are some tips to estimate calories and protein:\n"
             + "\n"

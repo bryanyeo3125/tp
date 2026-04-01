@@ -1,16 +1,3 @@
-/**
- * Bitbites.java
- * <p>
- * This is the main entry point for the Bitbites chatbot application.
- * It initializes and orchestrates the core components (UserInterface, Parser, FoodList)
- * and manages the main application loop for command processing.
- * <p>
- * Dependencies:
- * - UserInterface: For displaying messages and reading user input
- * - Parser: For parsing and executing user commands
- * - FoodList: For managing the list of food items
- * - BitbitesException: For custom exception handling
- */
 package seedu.bitbites;
 
 import java.io.FileNotFoundException;
@@ -24,8 +11,9 @@ import storage.Storage;
 import ui.UserInterface;
 
 /**
- * Bitbites is the main chatbot class that manages the overall application flow.
- * It coordinates user input, command parsing, and food item management.
+ * The main entry point and driver class for the Bitbites application.
+ * This class handles the initialisation of all core components (UI, Storage, Data Models)
+ * and contains the main execution loop that processes user commands.
  */
 public class Bitbites {
     private UserInterface ui;
@@ -35,6 +23,15 @@ public class Bitbites {
     private Storage presetStorage;
 
     //@@author j-kennethh
+    /**
+     * Constructs a {@code Bitbites} application instance.
+     * Initialises the user interface and storage handlers, and attempts to load
+     * any previously saved food logs and presets from the local disk. If no saved
+     * data is found or if the files are corrupted, it initialises empty lists.
+     *
+     * @param foodFilePath   The file path where daily food logs are stored.
+     * @param presetFilePath The file path where saved food presets are stored.
+     */
     public Bitbites(String foodFilePath, String presetFilePath) {
         ui = new UserInterface();
         foodStorage = new Storage(foodFilePath);
@@ -56,15 +53,24 @@ public class Bitbites {
     }
     //@@author
 
+    /**
+     * Runs the main execution loop of the application.
+     * Displays a welcome message, then continuously reads, parses, and executes
+     * user commands until the user issues the exit command. It also automatically
+     * saves data to the disk after every successful command execution.
+     */
+    //@@author rayminQAQ
     public void run() {
         ui.showWelcome();
         GoalsCommand.loadGoalsIfNeeded(ui.getCurrentUser());
         boolean isExit = false;
         AppContext context = new AppContext(foods, presets, ui);
+
         while (!isExit) {
             try {
                 String fullCommand = ui.readCommand();
                 Command command = Parser.parse(fullCommand);
+
                 isExit = command.execute(context);
                 foodStorage.save(foods);
                 presetStorage.save(presets);
@@ -73,10 +79,17 @@ public class Bitbites {
             }
         }
     }
+    //@@author
 
     //@@author j-kennethh
+    /**
+     * The main method that launches the Bitbites application.
+     * Instantiates the app with the default file paths and begins execution.
+     *
+     * @param args Command-line arguments (not currently used).
+     */
     public static void main(String[] args) {
-        new Bitbites("./data.txt", "./presets.txt").run();
+        new Bitbites("./data/foods.txt", "./data/presets.txt").run();
     }
     //@@author
 }

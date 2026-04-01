@@ -12,14 +12,34 @@ import seedu.bitbites.AppContext;
 import seedu.bitbites.BitbitesException;
 
 //@@author j-kennethh
+/**
+ * Represents a command that manages and utilises food presets.
+ * This command handles parsing and executing various preset actions,
+ * including adding new templates, listing saved templates, deleting templates,
+ * and using a template to quickly log a daily food entry.
+ */
 public class PresetCommand extends Command {
     private static final Logger logger = Logger.getLogger(PresetCommand.class.getName());
     private final String fullCommand;
 
+    /**
+     * Constructs a {@code PresetCommand} with the specified user input.
+     *
+     * @param fullCommand The complete command string entered by the user.
+     */
     public PresetCommand(String fullCommand) {
         this.fullCommand = fullCommand;
     }
 
+    /**
+     * Executes the preset command based on the user's specified action.
+     * Extracts the specific action (add, list, delete, use) and routes the
+     * request to the appropriate internal handler method.
+     *
+     * @param context The application context containing the user's data, including the FoodList and PresetList.
+     * @return false, indicating that the application should continue running after execution.
+     * @throws BitbitesException If the command format is invalid or values are missing/incorrect.
+     */
     @Override
     public boolean execute(AppContext context) {
         FoodList foodList = context.getFoodList();
@@ -142,9 +162,6 @@ public class PresetCommand extends Command {
 
     private String extractField(String args, String prefix) {
         int start = args.indexOf(prefix) + prefix.length();
-        if (args.indexOf(prefix) == -1) {
-            return "";
-        }
         int end = args.length();
 
         String[] prefixes = {"n/", "c/", "p/", "d/"};
