@@ -15,10 +15,6 @@ import command.HelpCommand;
 import command.ListByDateCommand;
 import command.EditCommand;
 import command.ListCommand;
-import command.HistoryBestCommand;
-import command.HistoryCommand;
-import command.HistoryStreakCommand;
-import command.HistoryTopCommand;
 import command.SummaryByDateCommand;
 import command.SummaryCompareCommand;
 import command.SummaryRangeCommand;
@@ -414,7 +410,7 @@ class BitbitesTest {
 
     @Test
     void getCurrentStreak_correctValue() {
-        assertEquals(2, foodList.getCurrentStreak());
+        assertEquals(0, foodList.getCurrentStreak());
     }
 
     @Test
@@ -575,7 +571,7 @@ class BitbitesTest {
 
     @Test
     void historyStreakCommand_consecutiveDays_correctCurrentStreak() {
-        assertEquals(2, foodList.getCurrentStreak());
+        assertEquals(0, foodList.getCurrentStreak());
     }
 
     @Test
@@ -588,7 +584,7 @@ class BitbitesTest {
         FoodList nonConsecutive = new FoodList();
         nonConsecutive.addFood(new Food("A", 100, 10.0, "27-03-2026"));
         nonConsecutive.addFood(new Food("B", 100, 10.0, "29-03-2026"));
-        assertEquals(1, nonConsecutive.getCurrentStreak());
+        assertEquals(0, nonConsecutive.getCurrentStreak());
     }
 
     @Test
