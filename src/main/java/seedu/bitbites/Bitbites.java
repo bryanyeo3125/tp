@@ -53,12 +53,16 @@ public class Bitbites {
     }
     //@@author
 
+<<<<<<< dev-john
     /**
      * Runs the main execution loop of the application.
      * Displays a welcome message, then continuously reads, parses, and executes
      * user commands until the user issues the exit command. It also automatically
      * saves data to the disk after every successful command execution.
      */
+=======
+    //@@author rayminQAQ
+>>>>>>> master
     public void run() {
         ui.showWelcome();
         GoalsCommand.loadGoalsIfNeeded(ui.getCurrentUser());
@@ -78,6 +82,7 @@ public class Bitbites {
             }
         }
     }
+    //@@author
 
     //@@author j-kennethh
     /**
