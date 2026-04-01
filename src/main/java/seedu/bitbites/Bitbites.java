@@ -59,17 +59,12 @@ public class Bitbites {
         ui.showWelcome();
 
         boolean isExit = false;
+        AppContext context = new AppContext(foods, presets, ui);
         while (!isExit) {
             try {
                 String fullCommand = ui.readCommand();
                 Command command = Parser.parse(fullCommand);
-
-                isExit = command.execute(foods, presets, ui);
-
-                foodStorage.save(foods);
-                presetStorage.save(presets);
-
-                assert !isExit || fullCommand.trim().equals("exit") : "Exit command should be 'exit'";
+                isExit = command.execute(context);
             } catch (BitbitesException e) {
                 ui.showError(e.getMessage());
             }

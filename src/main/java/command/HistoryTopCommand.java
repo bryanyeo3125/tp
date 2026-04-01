@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import model.FoodList;
 import model.NutritionSummary;
+import seedu.bitbites.AppContext;
 import ui.UserInterface;
 import seedu.bitbites.BitbitesException;
 
@@ -17,7 +18,10 @@ public class HistoryTopCommand extends Command {
     }
 
     @Override
-    public boolean execute(FoodList foodList, UserInterface ui) {
+    public boolean execute(AppContext context) {
+        FoodList foodList = context.getFoodList();
+        UserInterface ui = context.getUi();
+
         assert foodList != null : "FoodList should not be null";
         String[] parts = fullCommand.split("/top");
         if (parts.length < 2 || parts[1].trim().isEmpty()) {

@@ -7,29 +7,7 @@ __________._____________________________.___.______________________
         \/                       \/ \/                          \/
 
 What is your name?
-Hello James Gosling
-Here are the available commands:
-  list                                    - List all food items
-  list d/DATE                             - List food items for a specific date
-  add n/NAME c/CALORIES p/PROTEIN d/DATE  - Add a food item
-  delete INDEX                            - Delete a food item by index
-  edit INDEX                              - Edit an existing food item
-  (Optional: [n/NAME] [c/CALORIES] [p/PROTEIN] [d/DATE])
-  preset add n/NAME c/CALORIES p/PROTEIN  - Save a new food preset
-  preset list                             - View all saved presets
-  preset delete INDEX                     - Delete a preset by index
-  preset use INDEX [d/DATE]               - Log a preset (date defaults to today)
-  goals                                   - View daily and weekly goal progress
-  goals set dc/CAL dp/PROT wc/CAL wp/PROT - Set daily/weekly calorie and protein goals
-  summary d/DATE                          - Show summary for a specific date
-  summary from/DATE1 to/DATE2             - Show trend between two dates
-  summary compare d/DATE1 d/DATE2         - Compare two days
-  history                                 - Show all food history
-  history /top N                          - Show top N highest calorie days
-  history /best N                         - Show top N lowest calorie days
-  history streak                          - Show tracking streak
-  tips                                    - Show tips for estimating calories and protein
-  help                                    - Show help message
-  exit                                    - Exit the application
-  (Date format: DD-MM-YYYY)
+Hello James Gosling! Set up your profile with:
+  profile set n/James Gosling a/AGE w/WEIGHT h/HEIGHT
+Type 'help' for a list of available commands.
 Bye. Hope to see you again soon!

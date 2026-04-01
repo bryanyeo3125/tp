@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Scanner;
 import model.Food;
 import model.NutritionSummary;
+import storage.ProfileStorage;
+import model.Profile;
 import seedu.bitbites.BitbitesResponses;
 
 /**
@@ -21,13 +23,11 @@ import seedu.bitbites.BitbitesResponses;
  * Handles display of messages and reading of user commands from the console.
  */
 public class UserInterface {
-    /* The responses used by the chatbot. */
-    static BitbitesResponses bitbitesResponses = new BitbitesResponses();
-
     /**
      * The scanner used to read user input from the console.
      */
     private final Scanner scanner;
+    private String currentUser;
 
     public UserInterface() {
         this.scanner = new Scanner(System.in);
@@ -42,12 +42,23 @@ public class UserInterface {
     /// / SHOW section ////
     /* Displays the welcome message and prompts the user for their name. */
     public void showWelcome() {
-        System.out.println(bitbitesResponses.welcomeMessage);
+        System.out.println(BitbitesResponses.welcomeMessage);
         System.out.println("What is your name?");
+        String name = this.scanner.nextLine();
+        this.currentUser = name;
 
-        // Get user input for name and greet them
-        System.out.println("Hello " + this.scanner.nextLine());
-        System.out.println(BitbitesResponses.helpMessage);
+        Profile profile = ProfileStorage.loadProfile(name);
+        if (profile != null) {
+            System.out.println("Welcome back " + name + "!");
+        } else {
+            System.out.println("Hello " + name + "! Set up your profile with:");
+            System.out.println("  profile set n/" + name + " a/AGE w/WEIGHT h/HEIGHT");
+        }
+        System.out.println("Type 'help' for a list of available commands.");
+    }
+
+    public String getCurrentUser() {
+        return currentUser;
     }
 
     /* Show an error message to the user. */
@@ -179,7 +190,7 @@ public class UserInterface {
 
     /* Show the exit message to the user. */
     public void showExit() {
-        System.out.println(bitbitesResponses.exitMessage);
+        System.out.println(BitbitesResponses.exitMessage);
     }
 
     public void showHelp() {
@@ -187,7 +198,7 @@ public class UserInterface {
     }
 
     public void showDeletedFood(Food food, int remaining) {
-        System.out.println(bitbitesResponses.deleteMessage);
+        System.out.println(BitbitesResponses.deleteMessage);
         System.out.println("  " + food);
         System.out.println("Now you have " + remaining + " item(s) in the list.");
     }

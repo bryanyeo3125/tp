@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import model.Food;
 import model.FoodList;
 import seedu.bitbites.BitbitesResponses;
-import ui.UserInterface;
+import seedu.bitbites.AppContext;
 
 public class AddCommand extends Command {
     private static final Logger logger = Logger.getLogger(AddCommand.class.getName());
@@ -17,7 +17,9 @@ public class AddCommand extends Command {
 
     // @@author bryanyeo3125
     @Override
-    public boolean execute(FoodList foodList, UserInterface ui) {
+    public boolean execute(AppContext context) {
+        FoodList foodList = context.getFoodList();
+
         String correctFormat = BitbitesResponses.addFormatReminder;
         logger.log(Level.INFO, "Attempting to add food: " + fullCommand);
 
@@ -72,8 +74,6 @@ public class AddCommand extends Command {
             }
 
             // Assert statements
-            assert !name.isEmpty() : "Name should not be empty";
-            assert calories >= 0 : "Calories should not be negative";
             assert protein >= 0 : "Protein should not be negative";
             assert date.matches("\\d{2}-\\d{2}-\\d{4}") : "Date format should be DD-MM-YYYY";
 

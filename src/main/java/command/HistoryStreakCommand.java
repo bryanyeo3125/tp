@@ -3,13 +3,17 @@ package command;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import model.FoodList;
+import seedu.bitbites.AppContext;
 import ui.UserInterface;
 
 public class HistoryStreakCommand extends Command {
     private static final Logger logger = Logger.getLogger(HistoryStreakCommand.class.getName());
 
     @Override
-    public boolean execute(FoodList foodList, UserInterface ui) {
+    public boolean execute(AppContext context) {
+        FoodList foodList = context.getFoodList();
+        UserInterface ui = context.getUi();
+
         assert foodList != null : "FoodList should not be null";
         int current = foodList.getCurrentStreak();
         int longest = foodList.getLongestStreak();

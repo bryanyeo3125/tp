@@ -3,6 +3,7 @@ package command;
 import java.util.logging.Logger;
 
 import model.FoodList;
+import seedu.bitbites.AppContext;
 import seedu.bitbites.BitbitesException;
 import seedu.bitbites.BitbitesResponses;
 import ui.UserInterface;
@@ -17,7 +18,10 @@ public class ListByDateCommand extends Command {
     }
 
     @Override
-    public boolean execute(FoodList foodList, UserInterface ui) {
+    public boolean execute(AppContext context) {
+        FoodList foodList = context.getFoodList();
+        UserInterface ui = context.getUi();
+
         String[] words = fullCommand.split("d/");
         if (words.length < 2) {
             throw new BitbitesException("OOPS!!! Missing date. Please provide a valid date.");

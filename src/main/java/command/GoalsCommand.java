@@ -2,9 +2,11 @@ package command;
 
 import model.FoodList;
 import model.Food;
+import model.PresetList;
 import ui.UserInterface;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import seedu.bitbites.AppContext;
 
 // @@author bryanyeo3125
 public class GoalsCommand extends Command {
@@ -21,7 +23,11 @@ public class GoalsCommand extends Command {
     }
 
     @Override
-    public boolean execute(FoodList foodList, UserInterface ui) {
+    public boolean execute(AppContext context) {
+        FoodList foodList = context.getFoodList();
+        UserInterface ui = context.getUi();
+        PresetList presetList = context.getPresetList();
+
         if (fullCommand.equals("goals")) {
             showGoalsMenu(foodList);
         } else if (fullCommand.startsWith("goals set")) {
@@ -99,10 +105,11 @@ public class GoalsCommand extends Command {
     }
 
     private void handleSetGoals(String fullCommand) {
-        // Format: goals set dc/CALORIES dp/PROTEIN wc/CALORIES wp/PROTEIN
+        String[] prefixes = {"dc/", "dp/", "wc/", "wp/"};
         try {
             if (fullCommand.contains("dc/")) {
-                int val = Integer.parseInt(extractValue(fullCommand, "dc/", nextPrefix(fullCommand, "dc/")));
+                int val = Integer.parseInt(extractValue(fullCommand, "dc/", nextPrefix(fullCommand,
+                        "dc/", prefixes)));
                 if (val < 0) {
                     throw new NumberFormatException();
                 }
@@ -110,7 +117,8 @@ public class GoalsCommand extends Command {
                 System.out.println("Daily calorie goal set to " + val + " kcal.");
             }
             if (fullCommand.contains("dp/")) {
-                double val = Double.parseDouble(extractValue(fullCommand, "dp/", nextPrefix(fullCommand, "dp/")));
+                double val = Double.parseDouble(extractValue(fullCommand, "dp/", nextPrefix(fullCommand,
+                        "dp/", prefixes)));
                 if (val < 0) {
                     throw new NumberFormatException();
                 }
@@ -118,7 +126,8 @@ public class GoalsCommand extends Command {
                 System.out.println("Daily protein goal set to " + val + "g.");
             }
             if (fullCommand.contains("wc/")) {
-                int val = Integer.parseInt(extractValue(fullCommand, "wc/", nextPrefix(fullCommand, "wc/")));
+                int val = Integer.parseInt(extractValue(fullCommand, "wc/", nextPrefix(fullCommand,
+                        "wc/", prefixes)));
                 if (val < 0) {
                     throw new NumberFormatException();
                 }
@@ -126,7 +135,8 @@ public class GoalsCommand extends Command {
                 System.out.println("Weekly calorie goal set to " + val + " kcal.");
             }
             if (fullCommand.contains("wp/")) {
-                double val = Double.parseDouble(extractValue(fullCommand, "wp/", nextPrefix(fullCommand, "wp/")));
+                double val = Double.parseDouble(extractValue(fullCommand, "wp/", nextPrefix(fullCommand,
+                        "wp/", prefixes)));
                 if (val < 0) {
                     throw new NumberFormatException();
                 }
@@ -136,30 +146,6 @@ public class GoalsCommand extends Command {
         } catch (NumberFormatException e) {
             System.out.println("Invalid value. Goals must be non-negative numbers.");
         }
-    }
-
-    private String extractValue(String command, String prefix, String nextPfx) {
-        int start = command.indexOf(prefix) + prefix.length();
-        int end = nextPfx == null ? command.length() : command.indexOf(nextPfx);
-        return command.substring(start, end).trim();
-    }
-
-    private String nextPrefix(String command, String currentPrefix) {
-        String[] prefixes = {"dc/", "dp/", "wc/", "wp/"};
-        int currentIndex = command.indexOf(currentPrefix);
-        int nearest = Integer.MAX_VALUE;
-        String nearestPrefix = null;
-        for (String p : prefixes) {
-            if (p.equals(currentPrefix)) {
-                continue;
-            }
-            int idx = command.indexOf(p);
-            if (idx > currentIndex && idx < nearest) {
-                nearest = idx;
-                nearestPrefix = p;
-            }
-        }
-        return nearestPrefix;
     }
 }
 // @@author

@@ -7,6 +7,7 @@ import model.FoodList;
 import seedu.bitbites.BitbitesException;
 import seedu.bitbites.BitbitesResponses;
 import ui.UserInterface;
+import seedu.bitbites.AppContext;
 
 public class EditCommand extends Command {
     private static final Logger logger = Logger.getLogger(EditCommand.class.getName());
@@ -17,7 +18,10 @@ public class EditCommand extends Command {
     }
 
     @Override
-    public boolean execute(FoodList foodList, UserInterface ui) {
+    public boolean execute(AppContext context) {
+        FoodList foodList = context.getFoodList();
+        UserInterface ui = context.getUi();
+
         assert foodList != null : "FoodList should not be null";
 
         // Format: edit INDEX [n/NAME] [c/CALORIES] [p/PROTEIN] [d/DATE]

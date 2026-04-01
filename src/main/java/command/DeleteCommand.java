@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Food;
 import model.FoodList;
+import seedu.bitbites.AppContext;
 import seedu.bitbites.BitbitesException;
 import ui.UserInterface;
 
@@ -16,7 +17,10 @@ public class DeleteCommand extends Command {
     }
 
     @Override
-    public boolean execute(FoodList foodList, UserInterface ui) {
+    public boolean execute(AppContext context) {
+        FoodList foodList = context.getFoodList();
+        UserInterface ui = context.getUi();
+
         assert foodList != null : "FoodList should not be null";
         logger.log(Level.INFO, "Attempting to delete: " + fullCommand);
 
