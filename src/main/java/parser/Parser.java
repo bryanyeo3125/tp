@@ -12,6 +12,7 @@ import command.SummaryRangeCommand;
 import command.TipsCommand;
 import command.ProfileCommand;
 import command.LoginCommand;
+import command.MotivateCommand;
 import seedu.bitbites.BitbitesException;
 import seedu.bitbites.BitbitesResponses;
 
@@ -82,6 +83,10 @@ public class Parser {
             logger.log(Level.CONFIG, "Initiating user authentication and profile switching process");
             logger.log(Level.FINE, "Creating LoginCommand instance to handle user login flow");
             return new LoginCommand();
+        } else if (fullCommand.equals("motivate")) {
+            logger.log(Level.CONFIG, "Motivate command received from user");
+            logger.log(Level.FINE, "Creating MotivateCommand instance to handle motivate flow");
+            return new MotivateCommand(fullCommand);
         } else {
             logger.log(Level.WARNING, "Unknown command received: " + fullCommand);
             logger.log(Level.WARNING, "Command does not match any recognized command patterns");

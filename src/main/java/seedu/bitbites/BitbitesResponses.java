@@ -123,4 +123,31 @@ public class BitbitesResponses {
             + "  Thumb-sized fat portion    ~100-120 kcal\n"
             + "  Daily protein target       ~0.8-1g per kg of body weight\n"
             + "  Daily calorie target       ~2000 kcal (general guideline)\n";
+
+    // Motivate Messages
+    public static String[] motivationRandomMessages = {
+            "Every step towards your health goal is a victory! You've got this! 💪",
+            "Remember why you started! Your future self will thank you! 🎯",
+            "Progress over perfection. You're doing amazing! ⭐",
+            "Your dedication to health is inspiring! Keep it up! 🌟",
+            "One meal at a time. You're building healthy habits! 🌱",
+            "You're stronger than your excuses. Keep tracking! 💯",
+            "Health is a journey, not a destination. Enjoy the process! 🚀",
+            "Every food logged is a step closer to your goals! 🏆",
+            "Your body is a temple. Treat it with respect! 🏛️",
+            "Consistency is key! You're crushing it! 🔥",
+            "Small changes lead to big results! Keep going! 🎊",
+            "You're taking control of your health. That's powerful! ✨",
+            "Stay hungry for success, not just food! 😄",
+            "Your determination is admirable! Keep the momentum! 🌊",
+            "Every day is a chance to get stronger! 💪"
+    };
+
+    public static String motivationStartDay = "Let's start fresh today! Track your first meal and set yourself up for success! 🌅";
+    public static String motivationCalorieGoalReached = "Congratulations! You've reached your daily calorie goal! 🎉";
+    public static String motivationProteinGoalReached = "Excellent! You've hit your daily protein target! 💪";
+    public static String motivationBothGoalsReached = "Perfect! You've achieved both your calorie AND protein goals today! 🏆";
+    public static String motivationStreakStart = "Start your tracking streak today! One day is the beginning of greatness! 🌟";
+    public static String motivationStreakOne = "You've logged 1 day! That's the foundation of a great habit! 🎯";
 }
+
