@@ -352,6 +352,34 @@ class BitbitesTest {
         });
     }
 
+    @Test
+    void storage_save_createsDirectory() {
+        String nestedFilePath = tempDir.resolve("missing_data_folder/test_data.txt").toString();
+        Storage nestedStorage = new Storage(nestedFilePath);
+
+        FoodList dummyList = new FoodList();
+        dummyList.addFood(new Food("Apple", 95, 0.5, "2026-04-02"));
+
+        nestedStorage.save(dummyList);
+
+        java.io.File savedFile = new java.io.File(nestedFilePath);
+        assertTrue(savedFile.getParentFile().exists(), "The parent directory should have been created.");
+        assertTrue(savedFile.exists(), "The data file should have been created inside the new directory.");
+    }
+
+    @Test
+    void storage_save_nullParentDir() {
+        Storage noParentStorage = new Storage("just_a_filename.txt");
+        FoodList dummyList = new FoodList();
+        dummyList.addFood(new Food("Apple", 95, 0.5, "2026-04-02"));
+
+        noParentStorage.save(dummyList);
+
+        java.io.File createdFile = new java.io.File("just_a_filename.txt");
+        assertTrue(createdFile.exists(), "File should be created in the root directory.");
+        createdFile.delete();
+    }
+
     // ── PresetCommand ─────────────────────────────────────────
     @Test
     void parser_preset_returnsCommand() {

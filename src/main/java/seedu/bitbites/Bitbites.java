@@ -66,7 +66,6 @@ public class Bitbites {
                 Command command = Parser.parse(fullCommand);
 
                 isExit = command.execute(context);
-
                 foodStorage.save(foods);
                 presetStorage.save(presets);
             } catch (BitbitesException e) {
@@ -77,7 +76,7 @@ public class Bitbites {
 
     //@@author j-kennethh
     public static void main(String[] args) {
-        new Bitbites("./data/food.txt", "./data/presets.txt").run();
+        new Bitbites("./data/foods.txt", "./data/presets.txt").run();
     }
     //@@author
 }
