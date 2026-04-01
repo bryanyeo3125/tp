@@ -11,6 +11,7 @@ import command.SummaryCompareCommand;
 import command.SummaryRangeCommand;
 import command.TipsCommand;
 import command.ProfileCommand;
+import command.LoginCommand;
 import seedu.bitbites.BitbitesException;
 import seedu.bitbites.BitbitesResponses;
 
@@ -25,6 +26,7 @@ import command.ExitCommand;
 import command.GoalsCommand;
 import command.PresetCommand;
 
+//@@author RayminQAQ
 public class Parser {
 
     private static final Logger logger = Logger.getLogger(Parser.class.getName());
@@ -72,11 +74,20 @@ public class Parser {
                 || fullCommand .equals("profile clear")) {
             return new ProfileCommand(fullCommand);
         } else if (fullCommand.equals("exit")) {
-            logger.log(Level.INFO, "Attempting to exit");
+            logger.log(Level.INFO, "Attempting to exit application");
+            logger.log(Level.FINE, "Exit command received from user");
             return new ExitCommand();
+        } else if (fullCommand.equals("login")) {
+            logger.log(Level.CONFIG, "Login command received from user");
+            logger.log(Level.CONFIG, "Initiating user authentication and profile switching process");
+            logger.log(Level.FINE, "Creating LoginCommand instance to handle user login flow");
+            return new LoginCommand();
         } else {
-            logger.log(Level.WARNING, "Unknown command: " + fullCommand);
+            logger.log(Level.WARNING, "Unknown command received: " + fullCommand);
+            logger.log(Level.WARNING, "Command does not match any recognized command patterns");
+            logger.log(Level.FINE, "Throwing BitbitesException due to invalid command input");
             throw new BitbitesException(BitbitesResponses.unknownCommand);
         }
     }
 }
+//@@author
