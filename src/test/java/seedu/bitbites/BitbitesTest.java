@@ -60,6 +60,7 @@ class BitbitesTest {
         foodList = new FoodList();
         presetList = new PresetList();
         ui = new UserInterface();
+        context = new AppContext(foodList, presetList, ui);
         foodList.addFood(new Food("Burger", 450, 30, "27-03-2026"));
         foodList.addFood(new Food("Salad", 200, 10, "28-03-2026"));
 
@@ -107,7 +108,7 @@ class BitbitesTest {
     @Test
     void helpCommand_doesNotModifyFoodList() {
         int sizeBefore = foodList.size();
-        Parser.parse("help").execute(foodList, ui);
+        Parser.parse("help").execute(context);
         assertEquals(sizeBefore, foodList.size());
     }
 
@@ -115,7 +116,7 @@ class BitbitesTest {
     @Test
     void tipsCommand_doesNotModifyFoodList() {
         int sizeBefore = foodList.size();
-        Parser.parse("tips").execute(foodList, ui);
+        Parser.parse("tips").execute(context);
         assertEquals(sizeBefore, foodList.size());
     }
 
@@ -452,121 +453,123 @@ class BitbitesTest {
 
     @Test
     void summaryByDateCommand_execute_returnsFalse() {
-        boolean isExit = Parser.parse("summary d/27-03-2026").execute(foodList, ui);
+        boolean isExit = Parser.parse("summary d/27-03-2026").execute(context);
         assertFalse(isExit);
     }
 
     @Test
     void summaryRangeCommand_execute_returnsFalse() {
         boolean isExit = Parser.parse(
-                "summary from/27-03-2026 to/29-03-2026").execute(foodList, ui);
+                "summary from/27-03-2026 to/29-03-2026").execute(context);
         assertFalse(isExit);
     }
 
     @Test
     void summaryRangeCommand_fromAfterTo_throwsException() {
         assertThrows(BitbitesException.class, () ->
-                Parser.parse("summary from/29-03-2026 to/27-03-2026").execute(foodList, ui)
+                Parser.parse("summary from/29-03-2026 to/27-03-2026").execute(context)
         );
     }
 
     @Test
     void summaryCompareCommand_execute_returnsFalse() {
         boolean isExit = Parser.parse(
-                "summary compare d/27-03-2026 d/28-03-2026").execute(foodList, ui);
+                "summary compare d/27-03-2026 d/28-03-2026").execute(context);
         assertFalse(isExit);
     }
 
     // ── history command execute ───────────────────────────
     @Test
     void historyCommand_execute_returnsFalse() {
-        assertFalse(Parser.parse("history").execute(foodList, ui));
+        assertFalse(Parser.parse("history").execute(context));
     }
 
     @Test
     void historyCommand_doesNotModifyFoodList() {
         int sizeBefore = foodList.size();
-        Parser.parse("history").execute(foodList, ui);
+        Parser.parse("history").execute(context);
         assertEquals(sizeBefore, foodList.size());
     }
 
     @Test
     void historyCommand_emptyList_doesNotThrow() {
+        AppContext emptyContext = new AppContext(new FoodList(), presetList, ui);
         assertDoesNotThrow(() ->
-                Parser.parse("history").execute(new FoodList(), ui)
+                Parser.parse("history").execute(emptyContext)
         );
     }
 
     @Test
     void historyTopCommand_execute_returnsFalse() {
-        assertFalse(Parser.parse("history /top 2").execute(foodList, ui));
+        assertFalse(Parser.parse("history /top 2").execute(context));
     }
 
     @Test
     void historyTopCommand_nLargerThanData_doesNotThrow() {
         assertDoesNotThrow(() ->
-                Parser.parse("history /top 99").execute(foodList, ui)
+                Parser.parse("history /top 99").execute(context)
         );
     }
 
     @Test
     void historyTopCommand_zeroN_throwsException() {
         assertThrows(BitbitesException.class, () ->
-                Parser.parse("history /top 0").execute(foodList, ui)
+                Parser.parse("history /top 0").execute(context)
         );
     }
 
     @Test
     void historyBestCommand_execute_returnsFalse() {
-        assertFalse(Parser.parse("history /best 2").execute(foodList, ui));
+        assertFalse(Parser.parse("history /best 2").execute(context));
     }
 
     @Test
     void historyBestCommand_nLargerThanData_doesNotThrow() {
         assertDoesNotThrow(() ->
-                Parser.parse("history /best 99").execute(foodList, ui)
+                Parser.parse("history /best 99").execute(context)
         );
     }
 
     @Test
     void historyBestCommand_zeroN_throwsException() {
         assertThrows(BitbitesException.class, () ->
-                Parser.parse("history /best 0").execute(foodList, ui)
+                Parser.parse("history /best 0").execute(context)
         );
     }
 
     @Test
     void historyBestCommand_invalidN_throwsException() {
         assertThrows(BitbitesException.class, () ->
-                Parser.parse("history /best abc").execute(foodList, ui)
+                Parser.parse("history /best abc").execute(context)
         );
     }
 
     @Test
     void historyTopCommand_invalidN_throwsException() {
         assertThrows(BitbitesException.class, () ->
-                Parser.parse("history /top abc").execute(foodList, ui)
+                Parser.parse("history /top abc").execute(context)
         );
     }
 
     // ── HistoryStreakCommand ──────────────────────────────
     @Test
     void historyStreakCommand_execute_returnsFalse() {
-        boolean isExit = Parser.parse("history streak").execute(foodList, ui);
+        boolean isExit = Parser.parse("history streak").execute(context);
         assertFalse(isExit);
     }
 
     @Test
     void historyStreakCommand_doesNotModifyFoodList() {
         int sizeBefore = foodList.size();
-        Parser.parse("history streak").execute(foodList, ui);
+        Parser.parse("history streak").execute(context);
         assertEquals(sizeBefore, foodList.size());
     }
 
     @Test
     void historyStreakCommand_emptyList_doesNotThrow() {
+        AppContext emptyContext = new AppContext(new FoodList(), presetList, ui);
         assertDoesNotThrow(() ->
-                Parser.parse("history streak").execute(new FoodList(), ui)
+                Parser.parse("history streak").execute(emptyContext)
         );
     }
 
@@ -584,7 +587,7 @@ class BitbitesTest {
     void historyStreakCommand_nonConsecutive_currentStreakOne() {
         FoodList nonConsecutive = new FoodList();
         nonConsecutive.addFood(new Food("A", 100, 10.0, "27-03-2026"));
-        nonConsecutive.addFood(new Food("B", 100, 10.0, "29-03-2026")); // gap
+        nonConsecutive.addFood(new Food("B", 100, 10.0, "29-03-2026"));
         assertEquals(1, nonConsecutive.getCurrentStreak());
     }
 
