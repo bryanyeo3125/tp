@@ -3,6 +3,7 @@ package seedu.bitbites;
 import java.io.FileNotFoundException;
 
 import command.Command;
+import command.GoalsCommand;
 import model.FoodList;
 import model.PresetList;
 import parser.Parser;
@@ -60,6 +61,7 @@ public class Bitbites {
      */
     public void run() {
         ui.showWelcome();
+        GoalsCommand.loadGoalsIfNeeded(ui.getCurrentUser());
         boolean isExit = false;
         AppContext context = new AppContext(foods, presets, ui);
 

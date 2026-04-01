@@ -185,8 +185,8 @@ class BitbitesTest {
 
     @Test
     void editCommand_changeDate_correct() {
-        Parser.parse("edit 1 d/2026-01-01").execute(context);
-        assertEquals("2026-01-01", foodList.get(0).getDate());
+        Parser.parse("edit 1 d/01-01-2026").execute(context);
+        assertEquals("01-01-2026", foodList.get(0).getDate());
     }
 
     @Test

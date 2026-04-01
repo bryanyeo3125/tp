@@ -66,7 +66,6 @@ public class EditCommand extends Command {
                 if (name.isEmpty()) {
                     throw new BitbitesException("Name should not be empty.");
                 }
-                assert !name.isEmpty() : "Name should not be empty";
                 food.setName(name);
                 logger.log(Level.INFO, "Updated name to: " + name);
             }
@@ -77,7 +76,6 @@ public class EditCommand extends Command {
                 if (calories < 0) {
                     throw new BitbitesException("Calories must be non-negative.");
                 }
-                assert calories >= 0 : "Calories should not be negative";
                 food.setCalories(calories);
                 logger.log(Level.INFO, "Updated calories to: " + calories);
             }
@@ -95,10 +93,10 @@ public class EditCommand extends Command {
 
             if (args.contains("d/")) {
                 String date = extractField(args, "d/").trim();
-                if (!date.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                    throw new BitbitesException("Date must be in YYYY-MM-DD format.");
+                if (!date.matches("\\d{2}-\\d{2}-\\d{4}")) {
+                    throw new BitbitesException("Date must be in DD-MM-YYYY format.");
                 }
-                assert date.matches("\\d{4}-\\d{2}-\\d{2}") : "Date format should be YYYY-MM-DD";
+                assert date.matches("\\d{2}-\\d{2}-\\d{4}") : "Date format should be DD-MM-YYYY";
                 food.setDate(date);
                 logger.log(Level.INFO, "Updated date to: " + date);
             }

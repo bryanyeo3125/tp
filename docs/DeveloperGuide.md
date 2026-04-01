@@ -1,4 +1,4 @@
-# BitBites Developer Guide
+'# BitBites Developer Guide
 
 ## Acknowledgements
 
@@ -62,23 +62,140 @@ When the user inputs `exit`, the following execution flow occurs:
 1. **Command Matching:** `Parser.parse(...)` checks whether the trimmed input is exactly `exit`.
 2. **User Feedback:** The parser invokes `ui.showExit()` to display a farewell message.
 
-### 4. Deleting A Food Item `delete`
-The `delete` feature provides users with the ability to delete their logged food items. It is implemented with one execution path:
-1. **delete INDEX:** Delete the logged food item by its index.
-   [
+### 4. Deleting a Food Item `delete`
+The `delete` feature allows users to remove a logged food item from the list by its
+displayed index. After deletion, a daily progress summary is shown to reflect the
+updated intake against the user's goals.
+
 #### 4.1 Implementation Details
-The feature is driven by `handleDelete()` in `Parser`, which interacts with `FoodList` to remove the item and `UserInterface` to confirm the deletion to the user.
+The feature is implemented in `DeleteCommand`, following the Command Pattern.
+`Parser` creates the command object and `Bitbites` calls `execute(context)`.
 
 **Executing `delete INDEX`:**
-When the user inputs the `delete` command followed by an index (e.g., `delete 2`), `handleDelete()` is invoked. The execution follows these steps:
+1. **Parsing and Validation:** The command is split by space. If the index is missing,
+   a `BitbitesException` is thrown.
+2. **Index Conversion:** The index is parsed to `int` and converted from 1-based to
+   0-based. Non-numeric input throws a `BitbitesException`.
+3. **Defensive Programming:** An `assert` verifies the converted index is non-negative.
+4. **Deletion:** `FoodList.deleteFood(index)` performs bounds checking internally and
+   removes the item.
+5. **Postcondition Check:** An `assert` verifies `foodList.size()` decreased by 1.
+6. **Confirmation:** `ui.showDeletedFood()` prints the removed item and remaining count.
+7. **Goal Progress:** `GoalsCommand.showDailyProgress()` prints today's intake against
+   the daily goal.
+8. **Persistence:** `foodStorage.save(foods)` is called in the main loop after execution.
 
-1. **Parsing and Validation:** The raw command string is split into two parts using a space delimiter with a limit of 2. The method verifies that a second element exists and is not empty. If the index argument is missing, a `BitbitesException` is thrown immediately.
-2. **Index Conversion:** The extracted index string is parsed into an `int` using `Integer.parseInt()`. If the string is non-numeric, a `NumberFormatException` is caught and re-thrown as a `BitbitesException`. The index is then converted from 1-based (user-facing) to 0-based (internal).
-3. **Defensive Programming:** An `assert` statement verifies that the converted index is non-negative before passing it to `FoodList`.
-4. **Deletion:** `foodList.deleteFood(index)` is called. Inside `FoodList`, bounds checking is performed — if the index is out of range, a `BitbitesException` is thrown. Otherwise, the item is removed from the internal `ArrayList` and returned.
-5. **Postcondition Check:** An `assert` statement verifies that `foodList.size()` has decreased by exactly 1 after deletion.
-6. **Confirmation:** `ui.showDeletedFood(removed, foodList.size())` is called to print the removed item and the updated list size.
+![delete sequence diagram](uml/delete.png)
 
+### 5. Editing a Food Item `edit`
+The `edit` feature allows users to update one or more fields of an existing food item
+without deleting and re-adding it. Only the specified fields are changed.
+**Format:** `edit INDEX [n/NAME] [c/CALORIES] [p/PROTEIN] [d/DATE]`
+At least one field must be provided.
+
+#### 5.1 Implementation Details
+**Executing `edit INDEX [fields]`:**
+1. **Parsing:** The command is split into three parts: keyword, index, and fields string.
+2. **Index Conversion:** Same as `DeleteCommand`.
+3. **Field Detection:** The fields string is checked for `n/`, `c/`, `p/`, `d/`.
+   At least one must be present or a `BitbitesException` is thrown.
+4. **In-place Update:** `FoodList.getFood(index)` returns a reference to the existing
+   `Food` object. Each field is extracted using `extractField()` which stops at the
+   next prefix, then applied via the corresponding setter.
+5. **Validation:** Calories and protein must be non-negative. Date must match
+   `\d{2}-\d{2}-\d{4}`.
+6. **Confirmation:** `ui.showEditedFood()` prints the updated food item.
+7. **Persistence:** `foodStorage.save(foods)` is called in the main loop.
+
+![edit sequence diagram](uml/edit.png)
+
+### 6. Help Command `help`
+The `help` command displays a summary of all available commands and their formats.
+**Format:** `help`
+
+#### 6.1 Implementation Details
+`HelpCommand.execute()` delegates entirely to `ui.showHelp()`, which prints `BitbitesResponses.helpMessage`. No data access or modification occurs.
+
+### 7. Summary Commands `summary`
+The `summary` feature provides nutritional breakdowns for logged food items. It supports four sub-commands.
+
+| Command | Description |
+|---------|-------------|
+| `summary d/DATE` | Summary for a specific date |
+| `summary from/DATE1 to/DATE2` | Trend across a date range |
+| `summary compare d/DATE1 d/DATE2` | Comparison of two days |
+
+#### 7.1 Implementation Details
+Each sub-command is a dedicated Command class. All retrieve `NutritionSummary` objects from `FoodList` and pass them to `UserInterface`.
+
+`NutritionSummary` stores aggregated `totalCalories`, `totalProtein`, `itemCount`, and the list of `Food` items. `ProgressBar.generateSegmented()` generates a bar
+where each segment's width represents that meal's calorie share of the day's total.
+
+**`summary d/DATE`:**
+1. The date is extracted after `d/`.
+2. If no items exist for the date, a message is shown and execution stops.
+3. Goal values are retrieved from `GoalsCommand.getDailyCalorieGoal()` and `getDailyProteinGoal()`.
+4. `ui.showSummary(summary, calorieGoal, proteinGoal)` prints the breakdown and goal status.
+
+![summary by date sequence diagram](uml/summaryByDate.png)
+
+**`summary from/DATE1 to/DATE2`:**
+1. Both `from/` and `to/` prefixes must be present.
+2. Dates are parsed using `LocalDate.parse()` with `dd-MM-yyyy` formatter.
+3. If `from` is after `to`, a `BitbitesException` is thrown.
+4. `FoodList.getSummariesInRange()` returns daily summaries within the range.
+5. If no summaries found, a message is shown and execution stops.
+6. `ui.showSummaryRange()` displays each day's bar scaled to the highest-calorie day.
+
+**`summary compare d/DATE1 d/DATE2`:**
+1. The command is split by `d/` — at least 3 parts must exist.
+2. Both dates are extracted and checked for emptiness.
+3. If either date has no items, a message is shown and execution stops early.
+4. `FoodList.getSummaryByDate()` is called for each date.
+5. `ui.showSummaryCompare()` displays both days side by side with calorie and protein differences.
+
+### 8. History Commands `history`
+The `history` feature shows a chronological log of all recorded days. It supports
+four sub-commands.
+
+| Command | Description |
+|---------|-------------|
+| `history` | All recorded days with breakdown bars |
+| `history /top N` | Top N highest calorie days |
+| `history /best N` | Top N days closest to daily calorie goal |
+| `history streak` | Current and longest consecutive recording streak |
+
+#### 8.1 Implementation Details
+**`history` and `history /top N`:**
+
+`HistoryCommand` and `HistoryTopCommand` retrieve `NutritionSummary` lists from
+`FoodList`. Each day's bar in `showHistory()` is scaled relative to the
+highest-calorie day — the busiest day fills the full bar width and others are
+proportionally shorter.
+
+**`history`:**
+`HistoryCommand` checks whether any food has been logged today using
+`LocalDate.now()`. It retrieves all daily summaries and passes them with a
+`recordedToday` flag to `ui.showHistory()`, which appends a reminder if today
+has not been logged.
+
+**`history /top N`:**
+`HistoryTopCommand` splits the command by `/top` to extract `N`. It calls
+`foodList.getTopDaysByCalories(N)` which sorts summaries by total calories
+descending and returns the top N.
+
+**`history /best N`:**
+`HistoryBestCommand` calls `foodList.getDaysClosestToGoal(n, calorieGoal)`, which
+sorts summaries by `|totalCalories - dailyCalorieGoal|` ascending, surfacing the
+days where intake was closest to the user's target.
+
+**`history streak`:**
+`HistoryStreakCommand` calls `getCurrentStreak()` and `getLongestStreak()`.
+Streak calculation uses `LocalDate.parse()` with `dd-MM-yyyy` format to compare
+consecutive dates. `getCurrentStreak()` also checks whether the last recorded date
+is today or yesterday using `LocalDate.now()` — if neither, the streak returns 0.
+
+![history streak sequence diagram](uml/historyStreak.png)
 ## Product scope
 ### Target user profile
 
@@ -106,3 +223,4 @@ When the user inputs the `delete` command followed by an index (e.g., `delete 2`
 ## Instructions for manual testing
 
 {Give instructions on how to do a manual product testing e.g., how to load sample data to be used for testing}
+'
