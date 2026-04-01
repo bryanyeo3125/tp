@@ -125,4 +125,24 @@ public class BitbitesResponses {
             + "  Thumb-sized fat portion    ~100-120 kcal\n"
             + "  Daily protein target       ~0.8-1g per kg of body weight\n"
             + "  Daily calorie target       ~2000 kcal (general guideline)\n";
+
+    // ── Motivation Messages ───────────────────────────────
+    public static final String[] motivationRandomMessages = {
+        "🌟 Every small step counts towards your health goals! Keep going 💪",
+        "💪 You're doing amazing! Consistency beats intensity every single time.",
+        "📈 Progress, not perfection. You're on the right track!",
+        "✨ Great work showing up today. That's what matters most!",
+        "🎯 One good choice at a time. You've got this!",
+        "🔥 Keep pushing! Your future self will thank you.",
+        "💯 Stay committed. You're building a healthier version of yourself.",
+        "🚀 Remember why you started. You can do this!",
+        "🏆 Every meal logged is a victory. Keep it up!",
+        "❤️ Taking care of your nutrition is taking care of YOU.",
+        "⭐ You're stronger than your excuses. Push forward!",
+        "🌈 Progress looks different for everyone. Trust the process.",
+        "💪 Your dedication is inspiring. Keep going!",
+        "🎉 Celebrate every win, no matter how small!",
+        "🌱 Growth takes time. Be patient with yourself and keep going!"
+    };
 }
+
