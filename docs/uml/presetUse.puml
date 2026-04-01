@@ -1,0 +1,63 @@
+@startuml
+skinparam ArrowFontStyle normal
+
+participant ":Bitbites" as Bitbites
+participant ":Parser" as Parser
+participant "c:PresetCommand" as PresetCommand
+
+participant "presets:PresetList" as PresetList
+participant "template:Food" as TemplateFood
+participant "newFood:Food" as NewFood
+participant "foods:FoodList" as FoodList
+
+participant "ui:UserInterface" as Ui
+
+-> Bitbites : "preset use 1"
+activate Bitbites
+
+Bitbites -> Parser : parse("preset use 1")
+activate Parser
+
+create PresetCommand
+Parser -> PresetCommand : PresetCommand("preset use 1")
+activate PresetCommand
+PresetCommand --> Parser : c
+deactivate PresetCommand
+
+Parser --> Bitbites : c
+deactivate Parser
+
+Bitbites -> PresetCommand : execute(context)
+activate PresetCommand
+
+PresetCommand -> PresetCommand : handleUse("1", presetList, foodList)
+activate PresetCommand
+
+PresetCommand -> PresetList : getPreset(0)
+activate PresetList
+PresetList --> PresetCommand : template
+deactivate PresetList
+
+create NewFood
+PresetCommand -> NewFood : Food(name, calories, protein, date)
+activate NewFood
+NewFood --> PresetCommand : newFood
+deactivate NewFood
+
+PresetCommand -> FoodList : addFood(newFood)
+activate FoodList
+FoodList --> PresetCommand
+deactivate FoodList
+
+PresetCommand -> Ui : println("Successfully logged...")
+activate Ui
+Ui --> PresetCommand
+deactivate Ui
+
+PresetCommand --> PresetCommand
+deactivate PresetCommand
+
+PresetCommand --> Bitbites : isExit = false
+deactivate PresetCommand
+
+@enduml

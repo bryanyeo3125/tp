@@ -268,6 +268,33 @@ class BitbitesTest {
         assertThrows(BitbitesException.class, () -> Parser.parse("list d/").execute(context));
     }
 
+    @Test
+    void listByDate_mixedDates_coversBothBranches() {
+        FoodList testFoods = new FoodList();
+        testFoods.addFood(new Food("Apple", 95, 0.5, "15-04-2026"));
+        testFoods.addFood(new Food("Banana", 105, 1.3, "16-04-2026"));
+
+        AppContext context = new AppContext(testFoods, new PresetList(), new UserInterface());
+
+        ListByDateCommand command = new ListByDateCommand("list d/15-04-2026");
+        boolean isExit = command.execute(context);
+
+        assertFalse(isExit);
+    }
+
+    @Test
+    void listByDate_noMatches_executesSafely() {
+        FoodList testFoods = new FoodList();
+        testFoods.addFood(new Food("Pizza", 300, 12.0, "20-04-2026"));
+
+        AppContext context = new AppContext(testFoods, new PresetList(), new UserInterface());
+
+        ListByDateCommand command = new ListByDateCommand("list d/01-01-2026");
+        boolean isExit = command.execute(context);
+
+        assertFalse(isExit);
+    }
+
     // ── Storage ───────────────────────────────────────────
     @Test
     void storage_load_missingFile() throws FileNotFoundException {
