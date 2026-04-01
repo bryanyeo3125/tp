@@ -1,3 +1,4 @@
+//@@author rayminQAQ
 /**
  * BitbitesResponses.java
  * <p>
@@ -72,6 +73,7 @@ public class BitbitesResponses {
             + "  profile set n/NAME a/AGE w/WEIGHT h/HEIGHT - Set up your profile\n"
             + "  profile clear                           - Clear your profile\n"
             + "  (Date format: DD-MM-YYYY)";
+    //@@author
     //Tip Message
     public static String tipsMessage = "Here are some tips to estimate calories and protein:\n"
             + "\n"

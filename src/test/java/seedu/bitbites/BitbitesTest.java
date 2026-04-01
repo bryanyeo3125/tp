@@ -187,8 +187,8 @@ class BitbitesTest {
 
     @Test
     void editCommand_changeDate_correct() {
-        Parser.parse("edit 1 d/2026-01-01").execute(context);
-        assertEquals("2026-01-01", foodList.get(0).getDate());
+        Parser.parse("edit 1 d/01-01-2026").execute(context);
+        assertEquals("01-01-2026", foodList.get(0).getDate());
     }
 
     @Test
@@ -268,6 +268,33 @@ class BitbitesTest {
     @Test
     void listByDateCommand_missingDate_throwsException() {
         assertThrows(BitbitesException.class, () -> Parser.parse("list d/").execute(context));
+    }
+
+    @Test
+    void listByDate_mixedDates_coversBothBranches() {
+        FoodList testFoods = new FoodList();
+        testFoods.addFood(new Food("Apple", 95, 0.5, "15-04-2026"));
+        testFoods.addFood(new Food("Banana", 105, 1.3, "16-04-2026"));
+
+        AppContext context = new AppContext(testFoods, new PresetList(), new UserInterface());
+
+        ListByDateCommand command = new ListByDateCommand("list d/15-04-2026");
+        boolean isExit = command.execute(context);
+
+        assertFalse(isExit);
+    }
+
+    @Test
+    void listByDate_noMatches_executesSafely() {
+        FoodList testFoods = new FoodList();
+        testFoods.addFood(new Food("Pizza", 300, 12.0, "20-04-2026"));
+
+        AppContext context = new AppContext(testFoods, new PresetList(), new UserInterface());
+
+        ListByDateCommand command = new ListByDateCommand("list d/01-01-2026");
+        boolean isExit = command.execute(context);
+
+        assertFalse(isExit);
     }
 
     // ── Storage ───────────────────────────────────────────

@@ -91,7 +91,7 @@ public class GoalsCommand extends Command {
      *
      * @param name The name of the current user session.
      */
-    private static void loadGoalsIfNeeded(String name) {
+    public static void loadGoalsIfNeeded(String name) {
         double[] goals = GoalsStorage.loadGoals(name);
         if (goals != null) {
             dailyCalorieGoal = (int) goals[0];
