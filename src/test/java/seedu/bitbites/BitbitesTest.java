@@ -1003,7 +1003,7 @@ class BitbitesTest {
     }
 
     @Test
-    void profileCommand_set_invalidPrefix_doesNotThrow() {
+    void profileCommand_invalidPrefix_doesNotThrow() {
         assertDoesNotThrow(() ->
                 Parser.parse("profile set xx/Bryan").execute(context)
         );

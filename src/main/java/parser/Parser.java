@@ -46,7 +46,7 @@ public class Parser {
             return new AddCommand(fullCommand);
         } else if (fullCommand.equals("help")) {
             return new HelpCommand();
-        } else if (fullCommand.equals("goals") || fullCommand.startsWith("goals set")) {
+        } else if (fullCommand.startsWith("goals")) {
             return new GoalsCommand(fullCommand);
         } else if (fullCommand.startsWith("delete")) {
             return new DeleteCommand(fullCommand);
@@ -70,8 +70,7 @@ public class Parser {
             return new HistoryCommand();
         } else if (fullCommand.equals("tips")) {
             return new TipsCommand();
-        } else if (fullCommand.equals("profile") || fullCommand.startsWith("profile set")
-                || fullCommand .equals("profile clear")) {
+        } else if (fullCommand.startsWith("profile")) {
             return new ProfileCommand(fullCommand);
         } else if (fullCommand.equals("exit")) {
             logger.log(Level.INFO, "Attempting to exit application");
