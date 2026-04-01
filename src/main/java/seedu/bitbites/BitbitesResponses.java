@@ -66,12 +66,12 @@ public class BitbitesResponses {
             + "  history /top N                          - Show top N highest calorie days\n"
             + "  history /best N                         - Show top N lowest calorie days\n"
             + "  history streak                          - Show tracking streak\n"
+            + "  profile                                 - View your profile, BMI and BMR\n"
+            + "  profile set n/NAME g/GENDER a/AGE w/WEIGHT h/HEIGHT - Set up your profile\n"
+            + "  profile clear                           - Clear your profile\n"
             + "  tips                                    - Show tips for estimating calories and protein\n"
             + "  help                                    - Show help message\n"
             + "  exit                                    - Exit the application\n"
-            + "  profile                                 - View your profile, BMI and BMR\n"
-            + "  profile set n/NAME a/AGE w/WEIGHT h/HEIGHT - Set up your profile\n"
-            + "  profile clear                           - Clear your profile\n"
             + "  (Date format: DD-MM-YYYY)";
     //@@author
     //Tip Message

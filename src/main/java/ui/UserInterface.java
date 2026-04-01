@@ -144,9 +144,9 @@ public class UserInterface {
             int calorieGoal = GoalsCommand.getDailyCalorieGoal();
             int diff = Math.abs(s.getTotalCalories() - calorieGoal);
             boolean nearGoal = diff <= calorieGoal * 0.2; // 20% 以内
-            String goalTag = nearGoal ? " ✓" : "";
+            String goalTag = nearGoal ? " GOAL reached!" : "";
 
-            System.out.printf("    %-12s  %-10s  %-10s  %s%s",
+            System.out.printf("    %-12s  %-10s  %-10s  %s%s\n",
                     s.getDate(),
                     s.getTotalCalories() + " kcal",
                     String.format("%.1fg", s.getTotalProtein()),
