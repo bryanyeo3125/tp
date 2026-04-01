@@ -19,6 +19,8 @@ import command.SummaryByDateCommand;
 import command.SummaryCompareCommand;
 import command.SummaryRangeCommand;
 import command.TipsCommand;
+import command.GoalsCommand;
+import command.ProfileCommand;
 import model.NutritionSummary;
 import ui.ProgressBar;
 
@@ -57,6 +59,7 @@ class BitbitesTest {
         foodList = new FoodList();
         presetList = new PresetList();
         ui = new UserInterface();
+        ui.setCurrentUser("testuser");
         context = new AppContext(foodList, presetList, ui);
         foodList.addFood(new Food("Burger", 450, 30, "27-03-2026"));
         foodList.addFood(new Food("Salad", 200, 10, "28-03-2026"));
@@ -883,13 +886,195 @@ class BitbitesTest {
         assertEquals(1, nonConsecutive.getLongestStreak());
     }
 
+    // ── GoalsCommand ──────────────────────────────────────
+    // @@author bryanyeo3125
+    @Test
+    void parser_goals_returnsCorrectCommand() {
+        Command command = Parser.parse("goals");
+        assertInstanceOf(GoalsCommand.class, command);
+    }
+
+    @Test
+    void goalsCommand_execute_returnsFalse() {
+        boolean isExit = Parser.parse("goals").execute(context);
+        assertFalse(isExit);
+    }
+
+    @Test
+    void goalsCommand_doesNotModifyFoodList() {
+        int sizeBefore = foodList.size();
+        Parser.parse("goals").execute(context);
+        assertEquals(sizeBefore, foodList.size());
+    }
+
+    @Test
+    void goalsCommand_set_validDailyCalories() {
+        boolean isExit = Parser.parse("goals set dc/2500").execute(context);
+        assertFalse(isExit);
+    }
+
+    @Test
+    void goalsCommand_set_validAllPrefixes() {
+        boolean isExit = Parser.parse("goals set dc/2500 dp/60 wc/17500 wp/420").execute(context);
+        assertFalse(isExit);
+    }
+
+    @Test
+    void goalsCommand_missingPrefixes_doesNotThrow() {
+        assertDoesNotThrow(() ->
+                Parser.parse("goals set").execute(context)
+        );
+    }
+
+    @Test
+    void goalsCommand_invalidPrefix_doesNotThrow() {
+        assertDoesNotThrow(() ->
+                Parser.parse("goals set xx/100").execute(context)
+        );
+    }
+
+    @Test
+    void goalsCommand_negativeValue_doesNotThrow() {
+        assertDoesNotThrow(() ->
+                Parser.parse("goals set dc/-100").execute(context)
+        );
+    }
+
+    @Test
+    void goalsCommand_nonNumericValue_doesNotThrow() {
+        assertDoesNotThrow(() ->
+                Parser.parse("goals set dc/abc").execute(context)
+        );
+    }
+
+    @Test
+    void goalsCommand_unknownSubcommand_doesNotThrow() {
+        assertDoesNotThrow(() ->
+                Parser.parse("goals unknown").execute(context)
+        );
+    }
+
+    // ── ProfileCommand ────────────────────────────────────
+    @Test
+    void parser_profile_returnsCorrectCommand() {
+        Command command = Parser.parse("profile");
+        assertInstanceOf(ProfileCommand.class, command);
+    }
+
+    @Test
+    void profileCommand_execute_returnsFalse() {
+        boolean isExit = Parser.parse("profile").execute(context);
+        assertFalse(isExit);
+    }
+
+    @Test
+    void profileCommand_noProfile_doesNotThrow() {
+        assertDoesNotThrow(() ->
+                Parser.parse("profile").execute(context)
+        );
+    }
+
+    @Test
+    void profileCommand_set_validAllFields() {
+        assertDoesNotThrow(() ->
+                Parser.parse("profile set n/Bryan g/male a/22 w/80 h/181").execute(context)
+        );
+    }
+
+    @Test
+    void profileCommand_missingFields_doesNotThrow() {
+        assertDoesNotThrow(() ->
+                Parser.parse("profile set").execute(context)
+        );
+    }
+
+    @Test
+    void profileCommand_invalidGender_doesNotThrow() {
+        assertDoesNotThrow(() ->
+                Parser.parse("profile set n/Bryan g/unknown a/22 w/80 h/181").execute(context)
+        );
+    }
+
+    @Test
+    void profileCommand_negativeAge_doesNotThrow() {
+        assertDoesNotThrow(() ->
+                Parser.parse("profile set n/Bryan g/male a/-1 w/80 h/181").execute(context)
+        );
+    }
+
+    @Test
+    void profileCommand_invalidPrefix_doesNotThrow() {
+        assertDoesNotThrow(() ->
+                Parser.parse("profile set xx/Bryan").execute(context)
+        );
+    }
+
+    @Test
+    void profileCommand_clear_doesNotThrow() {
+        assertDoesNotThrow(() ->
+                Parser.parse("profile clear").execute(context)
+        );
+    }
+
+    @Test
+    void profileCommand_unknownSubcommand_doesNotThrow() {
+        assertDoesNotThrow(() ->
+                Parser.parse("profile unknown").execute(context)
+        );
+    }
+
+    // ── Profile Model ─────────────────────────────────────
+    @Test
+    void profile_bmi_correctValue() {
+        model.Profile profile = new model.Profile("Bryan", "male", 22, 80, 181);
+        assertEquals(24.4, profile.getBmi(), 0.1);
+    }
+
+    @Test
+    void profile_bmrMale_correct() {
+        model.Profile profile = new model.Profile("Bryan", "male", 22, 80, 181);
+        assertEquals(1826, profile.getBmr());
+    }
+
+    @Test
+    void profile_bmrFemale_correct() {
+        model.Profile profile = new model.Profile("Alice", "female", 22, 60, 165);
+        assertEquals(1360, profile.getBmr());
+    }
+
+    @Test
+    void profile_bmiCategory_normal() {
+        model.Profile profile = new model.Profile("Bryan", "male", 22, 70, 175);
+        assertEquals("Normal", profile.getBmiCategory());
+    }
+
+    @Test
+    void profile_bmiCategory_underweight() {
+        model.Profile profile = new model.Profile("Bryan", "male", 22, 45, 175);
+        assertEquals("Underweight", profile.getBmiCategory());
+    }
+
+    @Test
+    void profile_bmiCategory_overweight() {
+        model.Profile profile = new model.Profile("Bryan", "male", 22, 85, 175);
+        assertEquals("Overweight", profile.getBmiCategory());
+    }
+
+    @Test
+    void profile_bmiCategory_obese() {
+        model.Profile profile = new model.Profile("Bryan", "male", 22, 110, 175);
+        assertEquals("Obese", profile.getBmiCategory());
+    }
+
+    @Test
+    void profile_toString_containsName() {
+        model.Profile profile = new model.Profile("Bryan", "male", 22, 80, 181);
+        assertTrue(profile.toString().contains("Bryan"));
+    }
+    // @@author
+
     @Test
     public void sampleExit() {
         assertTrue(true);
     }
 }
-
-/*
-Bryan: Added some comments in the JUnit code
- */
-
