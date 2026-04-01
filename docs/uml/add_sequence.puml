@@ -1,0 +1,73 @@
+@startuml
+skinparam arrowThickness 1.1
+skinparam maxMessageSize 150
+
+box "Logic" #LightBlue
+participant "parser:Parser" as Parser
+participant "cmd:AddCommand" as Add
+end box
+
+box "Data" #LightYellow
+participant "foodList:FoodList" as FoodList
+participant "goals:GoalsCommand" as Goals
+end box
+
+box "UI" #LightGreen
+participant "ui:UserInterface" as UI
+end box
+
+-> Parser : parse("add n/NAME c/CAL p/PROT d/DATE", context)
+activate Parser
+
+Parser -> Add ** : new AddCommand(fullCommand)
+Parser -> Add : execute(context)
+activate Add
+
+alt missing prefix OR empty field
+    Add -> UI : print(correctFormat)
+    activate UI
+    UI --> Add
+    deactivate UI
+    Add --> Parser : return false
+end
+
+Add -> Add : extractFields(n/, c/, p/, d/)
+note right : extracts name, caloriesStr,\nproteinStr, date via substring
+
+alt invalid calories / protein format
+    Add -> UI : print("Calories must be integer...")
+    activate UI
+    UI --> Add
+    deactivate UI
+    Add --> Parser : return false
+end
+
+alt date not matching \\d{2}-\\d{2}-\\d{4}
+    Add -> UI : print("Date must be in DD-MM-YYYY format.")
+    activate UI
+    UI --> Add
+    deactivate UI
+    Add --> Parser : return false
+end
+
+Add -> FoodList : addFood(new Food(name, calories, protein, date))
+activate FoodList
+FoodList --> Add
+deactivate FoodList
+
+Add -> UI : print(BitbitesResponses.addMessage)
+activate UI
+UI --> Add
+deactivate UI
+
+Add -> Goals : showDailyProgress(foodList)
+activate Goals
+Goals --> Add : prints today's calorie + protein progress
+deactivate Goals
+
+Add --> Parser : return false
+deactivate Add
+
+<-- Parser
+deactivate Parser
+@enduml

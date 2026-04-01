@@ -1,0 +1,60 @@
+@startuml command_class
+skinparam arrowThickness 1.1
+skinparam classBackgroundColor #F1EFE8
+skinparam classBorderColor #888780
+skinparam roundcorner 8
+skinparam linetype ortho
+
+abstract class Command {
+    + {abstract} execute(context : AppContext) : boolean
+    # extractValue(command, prefix, nextPfx) : String
+    # nextPrefix(command, currentPrefix, prefixes[]) : String
+}
+
+class AppContext {
+    - foodList : FoodList
+    - presetList : PresetList
+    - ui : UserInterface
+    + getFoodList() : FoodList
+    + getPresetList() : PresetList
+    + getUi() : UserInterface
+}
+
+class AddCommand {
+    + execute(context : AppContext) : boolean
+}
+
+class ProfileCommand {
+    + execute(context : AppContext) : boolean
+}
+
+class GoalsCommand {
+    + execute(context : AppContext) : boolean
+    + {static} showDailyProgress(foodList : FoodList) : void
+    + {static} autoSetGoalsFromBmr(name, bmr) : void
+}
+
+class "XYZCommand\n(e.g. Delete, List,\nHelp, Edit, History...)" as OtherCmd {
+    + execute(context : AppContext) : boolean
+}
+
+class ProfileStorage {
+    + {static} saveProfile(profile) : void
+    + {static} loadProfile(name) : Profile
+    + {static} deleteProfile(name) : void
+}
+
+class GoalsStorage {
+    + {static} saveGoals(...) : void
+    + {static} loadGoals(name) : double[]
+}
+
+Command <|-- AddCommand
+Command <|-- ProfileCommand
+Command <|-- GoalsCommand
+Command <|-- OtherCmd
+
+Command ..> AppContext : uses
+ProfileCommand ..> ProfileStorage : uses
+GoalsCommand ..> GoalsStorage : uses
+@enduml
