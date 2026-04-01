@@ -20,7 +20,7 @@ import seedu.bitbites.AppContext;
  * Usage:
  *   login: Prompts for a username and switches to that user's profile
  */
-// @@author RayminQAQ
+//@@author RayminQAQ
 public class LoginCommand extends Command {
     private static final Logger logger = Logger.getLogger(LoginCommand.class.getName());
 
@@ -93,4 +93,4 @@ public class LoginCommand extends Command {
         System.out.println("-----------------------");
     }
 }
-// @@author
+//@@author
