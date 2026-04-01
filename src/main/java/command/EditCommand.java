@@ -93,10 +93,10 @@ public class EditCommand extends Command {
 
             if (args.contains("d/")) {
                 String date = extractField(args, "d/").trim();
-                if (!date.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                    throw new BitbitesException("Date must be in YYYY-MM-DD format.");
+                if (!date.matches("\\d{2}-\\d{2}-\\d{4}")) {
+                    throw new BitbitesException("Date must be in DD-MM-YYYY format.");
                 }
-                assert date.matches("\\d{4}-\\d{2}-\\d{2}") : "Date format should be YYYY-MM-DD";
+                assert date.matches("\\d{2}-\\d{2}-\\d{4}") : "Date format should be DD-MM-YYYY";
                 food.setDate(date);
                 logger.log(Level.INFO, "Updated date to: " + date);
             }
