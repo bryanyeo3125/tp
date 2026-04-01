@@ -142,9 +142,6 @@ public class PresetCommand extends Command {
 
     private String extractField(String args, String prefix) {
         int start = args.indexOf(prefix) + prefix.length();
-        if (args.indexOf(prefix) == -1) {
-            return "";
-        }
         int end = args.length();
 
         String[] prefixes = {"n/", "c/", "p/", "d/"};

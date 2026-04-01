@@ -24,6 +24,15 @@ public class Storage {
         this.filePath = filePath;
     }
 
+    private void ensureDirectoryExists() {
+        File file = new File(filePath);
+        File parentDir = file.getParentFile();
+
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs();
+        }
+    }
+
     public ArrayList<Food> load() throws FileNotFoundException {
         ArrayList<Food> loadedFoods = new ArrayList<>();
         File file = new File(filePath);
@@ -58,6 +67,8 @@ public class Storage {
     }
 
     public void save(FoodList foodList) {
+        ensureDirectoryExists();
+
         try (FileWriter fw = new FileWriter(filePath)) {
             for (int i = 0; i < foodList.size(); i++) {
                 Food food = foodList.getFood(i);
@@ -74,6 +85,8 @@ public class Storage {
     }
 
     public void save(PresetList presetList) {
+        ensureDirectoryExists();
+
         try (FileWriter fw = new FileWriter(filePath)) {
             for (int i = 0; i < presetList.size(); i++) {
                 Food preset = presetList.getPreset(i);
