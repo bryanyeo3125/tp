@@ -6,7 +6,7 @@ import model.FoodList;
 import ui.UserInterface;
 import seedu.bitbites.AppContext;
 
-// @@author RayminQAQ
+//@@author RayminQAQ
 public class ExitCommand extends Command {
     private static final Logger logger = Logger.getLogger(ExitCommand.class.getName());
 
@@ -20,4 +20,4 @@ public class ExitCommand extends Command {
         return true;
     }
 }
-// @@author
+//@@author
