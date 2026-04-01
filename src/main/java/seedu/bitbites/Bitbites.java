@@ -57,13 +57,14 @@ public class Bitbites {
 
     public void run() {
         ui.showWelcome();
-
         boolean isExit = false;
         AppContext context = new AppContext(foods, presets, ui);
+
         while (!isExit) {
             try {
                 String fullCommand = ui.readCommand();
                 Command command = Parser.parse(fullCommand);
+
                 isExit = command.execute(context);
                 foodStorage.save(foods);
                 presetStorage.save(presets);
@@ -75,7 +76,7 @@ public class Bitbites {
 
     //@@author j-kennethh
     public static void main(String[] args) {
-        new Bitbites("./data.txt", "./presets.txt").run();
+        new Bitbites("./data/foods.txt", "./data/presets.txt").run();
     }
     //@@author
 }
