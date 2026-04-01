@@ -1,13 +1,13 @@
 package command;
 
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.FoodList;
 import model.NutritionSummary;
 import seedu.bitbites.AppContext;
-import ui.UserInterface;
 import seedu.bitbites.BitbitesException;
+import ui.UserInterface;
 
 public class HistoryBestCommand extends Command {
     private static final Logger logger = Logger.getLogger(HistoryBestCommand.class.getName());
@@ -33,8 +33,12 @@ public class HistoryBestCommand extends Command {
                 throw new BitbitesException("N must be a positive number.");
             }
             assert n > 0 : "N should be positive";
-            List<NutritionSummary> best = foodList.getBestDaysByCalories(n);
-            ui.showHistoryBest(best, n);
+
+            int calorieGoal = GoalsCommand.getDailyCalorieGoal();
+            double proteinGoal = GoalsCommand.getDailyProteinGoal();
+
+            List<NutritionSummary> best = foodList.getDaysClosestToGoal(n, calorieGoal);
+            ui.showHistoryBest(best, n, calorieGoal, proteinGoal);
         } catch (NumberFormatException e) {
             logger.log(Level.WARNING, "Invalid N in history /best: " + fullCommand);
             throw new BitbitesException("Please enter a valid number for N.");
