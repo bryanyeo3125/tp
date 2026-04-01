@@ -35,6 +35,10 @@ public class UserInterface {
         this.scanner = new Scanner(System.in);
     }
 
+    public void setCurrentUser(String name) {
+        this.currentUser = name;
+    }
+
     /// / READ section ////
     /* Reads a command from the user input. */
     public String readCommand() {

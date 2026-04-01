@@ -59,6 +59,7 @@ class BitbitesTest {
         foodList = new FoodList();
         presetList = new PresetList();
         ui = new UserInterface();
+        ui.setCurrentUser("testuser");
         context = new AppContext(foodList, presetList, ui);
         foodList.addFood(new Food("Burger", 450, 30, "27-03-2026"));
         foodList.addFood(new Food("Salad", 200, 10, "28-03-2026"));
@@ -886,7 +887,7 @@ class BitbitesTest {
     }
 
     // ── GoalsCommand ──────────────────────────────────────
-// @@author bryanyeo3125
+    // @@author bryanyeo3125
     @Test
     void parser_goals_returnsCorrectCommand() {
         Command command = Parser.parse("goals");
@@ -1038,7 +1039,7 @@ class BitbitesTest {
     @Test
     void profile_bmr_female_correctValue() {
         model.Profile profile = new model.Profile("Alice", "female", 22, 60, 165);
-        assertEquals(1382, profile.getBmr());
+        assertEquals(1360, profile.getBmr());
     }
 
     @Test
