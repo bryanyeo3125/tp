@@ -16,10 +16,20 @@ import model.PresetList;
 import seedu.bitbites.BitbitesException;
 
 //@@author j-kennethh
+/**
+ * Represents the file storage manager for the application.
+ * Handles the reading and writing of data (such as daily food logs and saved presets)
+ * to and from persistent text files on the local hard drive.
+ */
 public class Storage {
     private static final Logger logger = Logger.getLogger(Storage.class.getName());
     private final String filePath;
 
+    /**
+     * Constructs a {@code Storage} object that reads from and writes to the specified file path.
+     *
+     * @param filePath The relative or absolute path to the text file used for storage.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
@@ -33,6 +43,15 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads food data from the storage file.
+     * Parses each formatted line in the text file and converts it into a {@code Food} object.
+     * If the file does not exist, it returns an empty list and the file will be created upon saving.
+     *
+     * @return An {@code ArrayList} of {@code Food} objects loaded from the file.
+     * @throws FileNotFoundException If the file cannot be accessed or read by the Scanner.
+     * @throws BitbitesException If the data file is corrupted and numbers cannot be parsed properly.
+     */
     public ArrayList<Food> load() throws FileNotFoundException {
         ArrayList<Food> loadedFoods = new ArrayList<>();
         File file = new File(filePath);
@@ -66,6 +85,13 @@ public class Storage {
         return loadedFoods;
     }
 
+    /**
+     * Saves the current list of logged foods to the storage file.
+     * Automatically creates any necessary parent directories if they do not exist.
+     *
+     * @param foodList The {@code FoodList} containing the user's daily food entries to be saved.
+     * @throws BitbitesException If an I/O error occurs while writing data to the file.
+     */
     public void save(FoodList foodList) {
         ensureDirectoryExists();
 
@@ -84,6 +110,13 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves the current list of saved food presets to the storage file.
+     * Automatically creates any necessary parent directories if they do not exist.
+     *
+     * @param presetList The {@code PresetList} containing the user's saved food templates to be saved.
+     * @throws BitbitesException If an I/O error occurs while writing data to the file.
+     */
     public void save(PresetList presetList) {
         ensureDirectoryExists();
 

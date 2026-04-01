@@ -2,18 +2,12 @@
 skinparam arrowThickness 1.1
 skinparam maxMessageSize 150
 
-box "Logic" #LightBlue
-participant "parser:Parser" as Parser
-end box
+participant ":Parser" as Parser
 
-box "Data" #LightYellow
-participant "foodList:FoodList" as FoodList
-participant "foodItem:Food" as Food
-end box
+participant ":FoodList" as FoodList
+participant ":Food" as Food
 
-box "UI" #LightGreen
-participant "ui:UserInterface" as UI
-end box
+participant ":UserInterface" as UI
 
 -> Parser : handleListFromDate("list d/DATE", foodList, ui)
 activate Parser
