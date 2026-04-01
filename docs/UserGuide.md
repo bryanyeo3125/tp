@@ -108,14 +108,6 @@ Examples of usage:
 
 `preset use 2 d/28-03-2026` (Logs the second preset for 28 March 2026)
 
-### Automatically saving data
-BitBites handles your data safely and automatically. You never have to worry about manually saving your progress.
-
-* BitBites automatically saves your food items and presets to your computer's hard drive immediately after every successful command you type.
-* Your data is stored in the `data` folder located in the same directory as the application.
-* Your food items are saved in `foods.txt` and your presets are saved in `presets.txt`.
-* If you accidentally delete these files, BitBites will safely create new, empty ones the next time you start the app.
-
 ### Exiting the application: `exit`
 
 Exits the application and saves all your food tracking data.
@@ -135,6 +127,14 @@ Example of usage:
 `exit`
 
 The system will display: "Bye. Hope to see you again soon!"
+
+### Automatically saving data
+BitBites handles your data safely and automatically. You never have to worry about manually saving your progress.
+
+* BitBites automatically saves your food items and presets to your computer's hard drive immediately after every successful command you type.
+* Your data is stored in the `data` folder located in the same directory as the application.
+* Your food items are saved in `foods.txt` and your presets are saved in `presets.txt`.
+* If you accidentally delete these files, BitBites will safely create new, empty ones the next time you start the app.
 
 ---
 
