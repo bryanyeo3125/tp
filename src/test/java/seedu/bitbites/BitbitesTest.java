@@ -288,6 +288,70 @@ class BitbitesTest {
         assertEquals("01-04-2026", loadedFoods.get(0).getDate());
     }
 
+    @Test
+    void storage_load_ioError() {
+        Storage badStorage = new Storage(tempDir.toString());
+
+        assertThrows(BitbitesException.class, () -> {
+            badStorage.load();
+        });
+    }
+
+    @Test
+    void storage_save_foodIoError() {
+        Storage badStorage = new Storage(tempDir.toString());
+
+        FoodList dummyList = new FoodList();
+        dummyList.addFood(new Food("Apple", 95, 0.5, "2026-04-02"));
+
+        assertThrows(BitbitesException.class, () -> {
+            badStorage.save(dummyList);
+        });
+    }
+
+    @Test
+    void storage_load_invalidFormat() throws IOException {
+        FileWriter fw = new FileWriter(tempFilePath);
+        fw.write("Only Two Parts | 200\n");
+        fw.write("Way | Too | Many | Parts | Here | 2026-04-01\n");
+        fw.close();
+
+        ArrayList<Food> loadedFoods = storage.load();
+
+        assertTrue(loadedFoods.isEmpty());
+    }
+
+    @Test
+    void storage_save_presetValid() throws FileNotFoundException {
+        PresetList listToSave = new PresetList();
+        listToSave.addPreset(new Food("Banana", 105, 1.3, "PRESET"));
+        listToSave.addPreset(new Food("Eggs", 140, 12.0, "PRESET"));
+
+        storage.save(listToSave);
+
+        Storage verifyStorage = new Storage(tempFilePath);
+        ArrayList<Food> loadedPresets = verifyStorage.load();
+
+        assertEquals(2, loadedPresets.size());
+        assertEquals("Banana", loadedPresets.get(0).getName());
+        assertEquals(105, loadedPresets.get(0).getCalories());
+        assertEquals("Eggs", loadedPresets.get(1).getName());
+        assertEquals(12.0, loadedPresets.get(1).getProtein());
+        assertEquals("PRESET", loadedPresets.get(1).getDate());
+    }
+
+    @Test
+    void storage_save_presetIoError() {
+        Storage badStorage = new Storage(tempDir.toString());
+
+        PresetList dummyList = new PresetList();
+        dummyList.addPreset(new Food("Apple", 95, 0.5, "PRESET"));
+
+        assertThrows(BitbitesException.class, () -> {
+            badStorage.save(dummyList);
+        });
+    }
+
     // ── PresetCommand ─────────────────────────────────────────
     @Test
     void parser_preset_returnsCommand() {
