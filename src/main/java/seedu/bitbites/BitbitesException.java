@@ -1,3 +1,4 @@
+//@@author rayminQAQ
 /**
  * BitbitesException.java
  * 
@@ -18,3 +19,4 @@ public class BitbitesException extends RuntimeException {
         super(message);
     }
 }
+//@@author

@@ -55,6 +55,7 @@ public class Bitbites {
     }
     //@@author
 
+    //@@author rayminQAQ
     public void run() {
         ui.showWelcome();
         boolean isExit = false;
@@ -73,6 +74,7 @@ public class Bitbites {
             }
         }
     }
+    //@@author
 
     //@@author j-kennethh
     public static void main(String[] args) {
