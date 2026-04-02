@@ -1,4 +1,4 @@
-# Duke
+# BitBites
 
 {Give product intro here}
 
