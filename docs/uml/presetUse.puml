@@ -10,8 +10,6 @@ participant "template:Food" as TemplateFood
 participant "newFood:Food" as NewFood
 participant "foods:FoodList" as FoodList
 
-participant "ui:UserInterface" as Ui
-
 -> Bitbites : "preset use 1"
 activate Bitbites
 
@@ -30,7 +28,7 @@ deactivate Parser
 Bitbites -> PresetCommand : execute(context)
 activate PresetCommand
 
-PresetCommand -> PresetCommand : handleUse("1", presetList, foodList)
+PresetCommand -> PresetCommand : handleUse("1", presets, foods)
 activate PresetCommand
 
 PresetCommand -> PresetList : getPreset(0)
@@ -49,10 +47,7 @@ activate FoodList
 FoodList --> PresetCommand
 deactivate FoodList
 
-PresetCommand -> Ui : println("Successfully logged...")
-activate Ui
-Ui --> PresetCommand
-deactivate Ui
+PresetCommand -> PresetCommand : System.out.println("Successfully logged...")
 
 PresetCommand --> PresetCommand
 deactivate PresetCommand
@@ -60,4 +55,6 @@ deactivate PresetCommand
 PresetCommand --> Bitbites : isExit = false
 deactivate PresetCommand
 
+<-- Bitbites
+deactivate Bitbites
 @enduml

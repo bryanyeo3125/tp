@@ -18,12 +18,17 @@ FoodStorage --> FoodStorage
 deactivate FoodStorage
 
 create FileWriter
-FoodStorage -> FileWriter : FileWriter("data/foods.txt")
+FoodStorage -> FileWriter : FileWriter(filePath)
 activate FileWriter
 FileWriter --> FoodStorage : fw
 deactivate FileWriter
 
-loop i < foods.size()
+FoodStorage -> FoodList : size()
+activate FoodList
+FoodList --> FoodStorage : size
+deactivate FoodList
+
+loop i < size
     FoodStorage -> FoodList : getFood(i)
     activate FoodList
     FoodList --> FoodStorage : food
@@ -46,8 +51,10 @@ deactivate FoodStorage
 
 Bitbites -> PresetStorage : save(presets)
 activate PresetStorage
-note right of PresetStorage: Execution flow is identical\nto foodStorage.save()
+note right of PresetStorage: Execution flow is identical\nto foodStorage.save(foods)
 PresetStorage --> Bitbites
 deactivate PresetStorage
 
+<-- Bitbites
+deactivate Bitbites
 @enduml
