@@ -1,4 +1,0 @@
-dailyCalories=2500
-dailyProtein=50.0
-weeklyCalories=12782
-weeklyProtein=350.0
