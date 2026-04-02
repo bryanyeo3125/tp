@@ -16,7 +16,7 @@ package seedu.bitbites;
  */
 public class BitbitesResponses {
     // Greetings section
-    public static String WELCOME_MESSAGE = "Hello from\n"
+    public static final String WELCOME_MESSAGE = "Hello from\n"
             + "__________._____________________________.___.______________________\n"
             + "\\______   \\   \\__    ___/\\______   \\__  |   |\\__    ___/\\_   _____/\n"
             + " |    |  _/   | |    |    |    |  _//   |   |  |    |    |    __)_\n"
@@ -24,35 +24,36 @@ public class BitbitesResponses {
             + " |______  /___| |____|    |______  // ______|  |____|   /_______  /\n"
             + "        \\/                       \\/ \\/                          \\/\n";
     // Errors & Exceptions Handled by the chatbot section
-    public static String UNKNOWN_COMMAND = "OOPS!!! I'm sorry, but I don't know what that means :-( ";
-    public static String ERROR_MESSAGE = "OOPS!!! I'm sorry, but I don't know what that means :-( ";
-    public static String DELETE_ERROR_MESSAGE = "OOPS!!! Invalid index. Please provide a valid item number.";
+    public static final String UNKNOWN_COMMAND = "OOPS!!! I'm sorry, but I don't know what that means :-( ";
+    public static final String ERROR_MESSAGE = "OOPS!!! I'm sorry, but I don't know what that means :-( ";
+    public static final String DELETE_ERROR_MESSAGE = "OOPS!!! Invalid index. Please provide a valid item number.";
 
     // Features section
     // Add Messages
-    public static String ADD_MESSAGE = "Got it. I've added the food item!";
-    public static String ADD_FORMAT_REMINDER = "Please use the correct format: " +
+    public static final String ADD_MESSAGE = "Got it. I've added the food item!";
+    public static final String ADD_FORMAT_REMINDER = "Please use the correct format: " +
             "add n/NAME c/CALORIES_IN_KCAL p/PROTEIN_IN_G [d/DD-MM-YYYY]";
     // List Message
-    public static String LIST_MESSAGE = "Here are all the food items in your list:";
+    public static final String LIST_MESSAGE = "Here are all the food items in your list:";
     // List From Date Message
-    public static String LIST_FROM_DATE_MESSAGE = "Here are the food items from ";
+    public static final String LIST_FROM_DATE_MESSAGE = "Here are the food items from ";
     // Delete Message
-    public static String DELETE_MESSAGE = "Got it. I've removed the food item!";
+    public static final String DELETE_MESSAGE = "Got it. I've removed the food item!";
     // Edit Message
-    public static String EDIT_MESSAGE = "Got it. I've updated the food item!";
-    public static String EDIT_FORMAT_REMINDER = "Please use: edit INDEX [n/NAME] "
+    public static final String EDIT_MESSAGE = "Got it. I've updated the food item!";
+    public static final String EDIT_FORMAT_REMINDER = "Please use: edit INDEX [n/NAME] "
             + "[c/CALORIES] [p/PROTEIN] [d/DATE]";
     // Exit Message
-    public static String EXIT_MESSAGE = "Bye. Hope to see you again soon!";
+    public static final String EXIT_MESSAGE = "Bye. Hope to see you again soon!";
     // Help Message
-    public static String HELP_MESSAGE = "Here are the available commands:\n"
+    public static final String HELP_MESSAGE = "Here are the available commands:\n"
             + "  list                                    - List all food items\n"
             + "  list d/DATE                             - List food items for a specific date\n"
             + "  add n/NAME c/CALORIES p/PROTEIN d/DATE  - Add a food item\n"
             + "  delete INDEX                            - Delete a food item by index\n"
             + "  edit INDEX                              - Edit an existing food item\n"
             + "  (Optional: [n/NAME] [c/CALORIES] [p/PROTEIN] [d/DATE])\n"
+            + "  find [Food Name]                        - Search for food items by name\n"
             + "  preset add n/NAME c/CALORIES p/PROTEIN  - Save a new food preset\n"
             + "  preset list                             - View all saved presets\n"
             + "  preset delete INDEX                     - Delete a preset by index\n"
@@ -66,20 +67,19 @@ public class BitbitesResponses {
             + "  history /top N                          - Show top N highest calorie days\n"
             + "  history /best N                         - Show top N lowest calorie days\n"
             + "  history streak                          - Show tracking streak\n"
-            + "  tips                                    - Show tips for estimating calories and protein\n"
-            + "  help                                    - Show help message\n"
-            + "  exit                                    - Exit the application\n"
             + "  profile                                 - View your profile, BMI and BMR\n"
             + "  profile set n/NAME a/AGE w/WEIGHT h/HEIGHT - Set up your profile\n"
             + "  profile list                            - List all saved profiles\n"
             + "  profile switch NAME                     - Switch to another profile\n"
             + "  profile clear                           - Clear your profile\n"
-            + "  find [Food Name]                        - Search for food items by name\n"
+            + "  tips                                    - Show tips for estimating calories and protein\n"
+            + "  help                                    - Show help message\n"
+            + "  exit                                    - Exit the application\n"
             + "  (Date format: DD-MM-YYYY)";
     //@@author
 
     //Tip Message
-    public static String TIPS_MESSAGE = "Here are some tips to estimate calories and protein:\n"
+    public static final String TIPS_MESSAGE = "Here are some tips to estimate calories and protein:\n"
             + "\n"
             + "  CALORIES (kcal)\n"
             + "  ------------------------------------\n"
@@ -130,21 +130,21 @@ public class BitbitesResponses {
 
     // ── Motivation Messages ───────────────────────────────
     public static final String[] MOTIVATION_RANDOM_MESSAGES = {
-        "🌟 Every small step counts towards your health goals! Keep going 💪",
-        "💪 You're doing amazing! Consistency beats intensity every single time.",
-        "📈 Progress, not perfection. You're on the right track!",
-        "✨ Great work showing up today. That's what matters most!",
-        "🎯 One good choice at a time. You've got this!",
-        "🔥 Keep pushing! Your future self will thank you.",
-        "💯 Stay committed. You're building a healthier version of yourself.",
-        "🚀 Remember why you started. You can do this!",
-        "🏆 Every meal logged is a victory. Keep it up!",
-        "❤️ Taking care of your nutrition is taking care of YOU.",
-        "⭐ You're stronger than your excuses. Push forward!",
-        "🌈 Progress looks different for everyone. Trust the process.",
-        "💪 Your dedication is inspiring. Keep going!",
-        "🎉 Celebrate every win, no matter how small!",
-        "🌱 Growth takes time. Be patient with yourself and keep going!"
+        " Every small step counts towards your health goals! Keep going ",
+        " You're doing amazing! Consistency beats intensity every single time.",
+        " Progress, not perfection. You're on the right track!",
+        " Great work showing up today. That's what matters most!",
+        " One good choice at a time. You've got this!",
+        " Keep pushing! Your future self will thank you.",
+        " Stay committed. You're building a healthier version of yourself.",
+        " Remember why you started. You can do this!",
+        " Every meal logged is a victory. Keep it up!",
+        " Taking care of your nutrition is taking care of YOU.",
+        " You're stronger than your excuses. Push forward!",
+        " Progress looks different for everyone. Trust the process.",
+        " Your dedication is inspiring. Keep going!",
+        " Celebrate every win, no matter how small!",
+        " Growth takes time. Be patient with yourself and keep going!"
     };
 }
 
