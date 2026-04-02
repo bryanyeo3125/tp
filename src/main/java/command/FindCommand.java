@@ -89,12 +89,12 @@ public class FindCommand extends Command {
      */
     private void displayResults(java.util.List<Food> results, String keyword) {
         System.out.println();
-        System.out.println("════════════════════════════════════════════════════════");
-        System.out.println("🔍 Search Results for: \"" + keyword + "\"");
-        System.out.println("════════════════════════════════════════════════════════");
+        System.out.println("========================================================");
+        System.out.println("Search Results for: \"" + keyword + "\"");
+        System.out.println("========================================================");
         
         if (results.isEmpty()) {
-            System.out.println("   ❌ No food items found matching: " + keyword);
+            System.out.println("   No food items found matching: " + keyword);
         } else {
             System.out.println("   Found " + results.size() + " result" + (results.size() > 1 ? "s" : "") + ":\n");
             
@@ -108,7 +108,7 @@ public class FindCommand extends Command {
             }
         }
         
-        System.out.println("════════════════════════════════════════════════════════");
+        System.out.println("========================================================");
         System.out.println();
     }
 }
