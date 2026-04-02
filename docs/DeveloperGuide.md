@@ -421,35 +421,339 @@ Both `loadProfile()` and `loadGoals()` return `null` if the file does not exist 
 
 ### Target User Profile
 
-{Describe the target user profile}
+BitBites targets health-conscious individuals who want to track their daily food intake and nutritional progress. The ideal user:
+
+- Is comfortable using a command-line interface and prefers typing to clicking
+- Tracks calories and protein regularly as part of a fitness or dietary routine
 
 ### Value Proposition
 
-{Describe the value proposition: what problem does it solve?}
+Many people want to eat healthier but face a common set of barriers: they do not know how to estimate the calories or protein in their meals, they find existing
+food tracking apps too complex or high-friction to use consistently, and they lack the nutritional expertise to judge whether what they are eating is actually good for them.
+
+BitBites addresses these problems directly:
+
+- **Lowering the knowledge barrier.** The `tips` command provides quick reference data for common foods and portion sizes, helping users make reasonable estimates
+  even without a nutrition label in front of them.
+
+- **Reducing friction.** BitBites is a lightweight command-line tool with no account registration, no internet connection required, and no graphical interface
+  to navigate. Users can log a meal in a single line. The lower the effort to log, the more likely a user is to sustain the habit long-term.
+
+- **Personalised goal-setting.** By entering a basic profile (age, weight, height, gender), users receive an automatically calculated daily calorie target based on
+  their BMR. This removes the guesswork of deciding how much to eat.
+
+- **Visibility into patterns.** The `summary` and `history` commands let users see not just today's intake but trends over time — which days they overate, which days
+  they hit their goals, and whether their habits are improving.
+
+- **Accountability without complexity.** Daily progress is shown automatically after every meal is logged, and streak tracking encourages users to keep logging
+  consistently without gamifying the experience in an overwhelming way.
+
+In short, BitBites is designed for users who are motivated to eat better but need a tool that is fast to use, easy to understand.
 
 ---
 
 ## Appendix B: User Stories
 
-| Version | As a ... | I want to ... | So that I can ... |
-|---------|----------|---------------|-------------------|
-| v1.0 | new user | see usage instructions | refer to them when I forget how to use the application |
-| v2.0 | user | find a to-do item by name | locate a to-do without having to go through the entire list |
-
+| Version | As a ...                        | I want to ...                                              | So that I can ...                                             |
+|---------|---------------------------------|------------------------------------------------------------|---------------------------------------------------------------|
+| v1.0    | new user                        | see all available commands                                 | quickly learn how to use the application                      |
+| v1.0    | user                            | add a food item with its name, calories, protein and date  | track my daily nutritional intake                             |
+| v1.0    | user                            | view a list of all food items I have logged                | recall what I have consumed                                   |
+| v1.0    | user                            | view food items for a specific date                        | review what I ate on a particular day                         |
+| v1.0    | clumsy user                     | delete a specific food entry                               | remove items I added by mistake                               |
+| v1.0    | user                            | edit the details of an existing entry                      | correct mistakes without deleting and re-adding               |
+| v2.0    | gym goer                        | track my protein intake per day                            | see how much protein I am consuming                           |
+| v2.0    | user                            | set up my profile with my name                             | have the app feel personalised to me                          |
+| v2.0    | user                            | set a daily calorie and protein goal                       | track my progress against a personal target                   |
+| v2.0    | user                            | view my daily progress after logging a meal                | know how many calories I have left for the day                |
+| v2.0    | user                            | view a nutritional summary for a specific date             | see how my intake compares to my goals on that day            |
+| v2.0    | user                            | view a trend summary over a date range                     | identify patterns in my eating habits over time               |
+| v2.0    | user                            | compare two days side by side                              | understand how my intake varies between days                  |
+| v2.0    | user                            | view my full food history with visual breakdowns           | get a quick overview of my eating history                     |
+| v2.0    | user                            | see my top highest calorie days                            | identify my heaviest eating days                              |
+| v2.0    | user                            | see the days where I was closest to my calorie goal        | understand what a balanced day looks like for me              |
+| v2.0    | user                            | track my consecutive logging streak                        | stay motivated to log food every day                          |
+| v2.0    | user                            | save my height, weight, age and gender                     | get a personalised calorie goal based on my BMR automatically |
+| v2.0    | frequent user                   | save food presets for meals I eat often                    | log commonly eaten meals without retyping all the details     |
+| v2.0    | returning user                  | have my goals and profile saved between sessions           | not have to re-enter them every time I launch the app         |
+| v2.0    | user who forgets to use the app | fill in an entry for a missed meal on an earlier date      | keep my history complete and easy to review                   |
+| v2.0    | user                            | get tips on estimating calories and protein                | log food accurately even without exact nutritional data       |
 ---
 
 ## Appendix C: Non-Functional Requirements
 
-{Give non-functional requirements}
+1. **Portability:** The application should run on any system with Java 17 or later installed, without requiring additional software or internet access.
+2. **Performance:** All commands should respond within 1 second for a food list of up to 1000 entries.
+3. **Data integrity:** If the data file is missing or corrupted, the application should degrade gracefully by starting with an empty list rather than crashing.
+4. **Usability:** A user who has never used the application should be able to log their first meal within 2 minutes of launching it, using only the `help` command as a reference.
+5. **Persistence:** All food entries, goals, and profile data must be saved to disk automatically and restored on the next launch without any user action.
+
 
 ---
 
 ## Appendix D: Glossary
 
-* *glossary item* - Definition
+| Term | Definition |
+|------|-----------|
+| **BMI** | Body Mass Index. Calculated as weight (kg) divided by height (m) squared. Used to categorise a user's weight relative to their height. |
+| **BMR** | Basal Metabolic Rate. The number of calories the body needs at rest, calculated using the Mifflin-St Jeor formula based on gender, age, weight, and height. |
+| **Calorie goal** | The daily calorie intake target set by the user, either manually via `goals set` or automatically from the user's BMR via `profile set`. |
+| **Streak** | A count of consecutive days on which at least one food item was logged. The current streak resets to 0 if no food was logged today or yesterday. |
+| **Preset** | A saved food template that can be quickly added to the food list without re-entering all nutritional details. |
+| **DD-MM-YYYY** | The date format used throughout BitBites for all user-facing date input and display (e.g., `01-04-2026`). |
+
 
 ---
 
 ## Appendix E: Instructions for Manual Testing
 
-{Give instructions on how to do a manual product testing e.g., how to load sample data to be used for testing}
+The following instructions guide a tester through the main features of BitBites.
+This is not an exhaustive list — testers are encouraged to explore edge cases and
+variations beyond what is described here.
+
+### E.1 Initial Launch
+
+1. Ensure the `data/` folder does not exist or is empty.
+2. Run `java -jar bitbites.jar`.
+3. Enter any name when prompted (e.g., `James`).
+4. Verify that the application starts cleanly with no food items loaded.
+5. Run `list` and verify the list is empty.
+
+### E.2 Testing Basic Food Logging (v1.0)
+
+1. Add a food item:
+```
+   add n/Chicken Rice c/500 p/30 d/01-04-2026
+```
+Verify: Confirmation message is shown with a daily progress summary.
+
+2. Add a second item on the same date:
+```
+   add n/Salad c/200 p/10 d/01-04-2026
+```
+Verify: Both items appear when running `list d/01-04-2026`.
+
+3. Add an item on a different date:
+```
+   add n/Burger c/700 p/25 d/02-04-2026
+```
+
+4. List all items:
+```
+   list
+```
+Verify: All three items are shown with 1-based indices.
+
+5. List by date:
+```
+   list d/01-04-2026
+   list d/05-04-2026
+```
+Verify: First command shows only the two items on that date.
+Second command shows no results.
+
+### E.3 Testing Delete (v1.0)
+
+1. Delete an item:
+```
+   delete 1
+```
+Verify: Confirmation is shown. `list` reflects the removal. Daily progress
+summary is updated.
+
+2. Delete with an invalid index:
+```
+   delete 99
+   delete abc
+   delete
+```
+Verify: Each produces an appropriate error message.
+
+### E.4 Testing Edit (v2.0)
+
+1. Edit a single field:
+```
+   edit 1 n/Hainanese Chicken Rice
+```
+Verify: Only the name is updated. Calories, protein and date are unchanged.
+
+2. Edit multiple fields at once:
+```
+   edit 1 c/520 p/35
+```
+Verify: Calories and protein are updated. Name and date are unchanged.
+
+3. Edit with an invalid index:
+```
+   edit 99 n/Test
+```
+Verify: Error message is shown. No item is modified.
+
+### E.5 Testing Goals (v2.0)
+
+1. View default goals:
+```
+   goals
+```
+Verify: Default daily goal of 2000 kcal and 50.0g protein is shown.
+
+2. Set new goals:
+```
+   goals set dc/2500 dp/60
+```
+Verify: Updated goals are confirmed.
+
+3. View updated progress:
+```
+   goals
+```
+Verify: Progress is shown against the new targets.
+
+4. Set an invalid goal value:
+```
+   goals set dc/-100
+```
+Verify: Error message is shown. Goal is not updated.
+
+### E.6 Testing Profile (v2.0)
+
+1. Set a profile:
+```
+   profile set n/James g/male a/25 w/70 h/175
+```
+Verify: Profile is displayed with BMI and BMR values. Daily and weekly
+calorie goals are automatically updated to reflect the BMR.
+
+2. View the profile:
+```
+   profile
+```
+Verify: All five fields plus BMI and BMR are shown correctly.
+
+3. Update a single field:
+```
+   profile set w/75
+```
+Verify: Only weight is updated. All other fields are preserved.
+
+4. Set an invalid gender:
+```
+   profile set g/other
+```
+Verify: Error message is shown. Profile is not updated.
+
+5. Clear the profile:
+```
+   profile clear
+```
+Verify: Profile is deleted. Running `profile` shows the setup prompt.
+
+### E.7 Testing Summary Commands (v2.0)
+
+1. Summary for a specific date:
+```
+   summary d/01-04-2026
+```
+Verify: Total calories and protein shown. Per-item percentage breakdown
+displayed. Goal status shown (remaining or reached).
+
+2. Summary for a date with no data:
+```
+   summary d/05-04-2026
+```
+Verify: "No food items found" message is shown.
+
+3. Summary over a date range:
+```
+   summary from/01-04-2026 to/02-04-2026
+```
+Verify: Both dates shown with bars. Days within 20% of calorie goal
+are marked with `✓`.
+
+4. Summary range with start after end:
+```
+   summary from/02-04-2026 to/01-04-2026
+```
+Verify: Error message is shown.
+
+5. Compare two dates:
+```
+   summary compare d/01-04-2026 d/02-04-2026
+```
+Verify: Both days shown side by side with calorie and protein differences.
+
+6. Compare with a date that has no data:
+```
+   summary compare d/01-04-2026 d/05-04-2026
+```
+Verify: "No food items found" message for the empty date.
+
+### E.8 Testing History Commands (v2.0)
+
+First add food items across multiple consecutive and non-consecutive dates:
+```
+add n/Oats c/300 p/10 d/27-03-2026
+add n/Pasta c/600 p/20 d/28-03-2026
+add n/Steak c/800 p/50 d/29-03-2026
+add n/Soup c/250 p/15 d/31-03-2026
+```
+
+1. View full history:
+```
+   history
+```
+Verify: All four dates shown in chronological order with breakdown bars.
+A reminder is shown if today has no logged food.
+
+2. Top N highest calorie days:
+```
+   history /top 2
+```
+Verify: Top 2 days shown in descending calorie order.
+
+3. Top N closest to goal:
+```
+   history /best 2
+```
+Verify: 2 days shown whose calories are closest to the daily calorie goal.
+
+4. Invalid N values:
+```
+   history /top 0
+   history /top abc
+   history /best -1
+```
+Verify: Each produces an appropriate error message.
+
+5. Streak tracking:
+```
+   history streak
+```
+Verify: Current streak shown as 1 (since 31-03 is the last entry and
+there is a gap before it). Longest streak shown as 3 (27-03 to 29-03).
+
+### E.9 Testing Data Persistence
+
+1. Add a food item, then exit:
+```
+   add n/Apple c/95 p/0.5 d/01-04-2026
+   exit
+```
+
+2. Relaunch the application with the same name.
+
+3. Run `list`.
+   Verify: The apple entry is still present. Goals and profile are also
+   restored from the previous session.
+
+### E.10 Testing Help and Tips
+```
+help
+tips
+exit
+```
+
+Verify: `help` lists all available commands with their formats.
+`tips` shows calorie and protein reference data for common foods and
+Singaporean meals.
+`exit` shows a farewell message and closes the application.
