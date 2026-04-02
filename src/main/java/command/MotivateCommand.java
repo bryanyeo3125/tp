@@ -77,7 +77,7 @@ public class MotivateCommand extends Command {
      * Displays a random motivational message from the predefined list.
      */
     private void showRandomMotivation() {
-        String[] randomMessages = BitbitesResponses.motivationRandomMessages;
+        String[] randomMessages = BitbitesResponses.MOTIVATION_RANDOM_MESSAGES;
         String message = randomMessages[random.nextInt(randomMessages.length)];
         System.out.println("\n" + message + "\n");
         logger.log(Level.FINE, "Random motivation displayed");

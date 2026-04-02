@@ -40,7 +40,7 @@ public class FoodList {
 
     public Food deleteFood(int index) {
         if (index < 0 || index >= foodList.size()) {
-            throw new BitbitesException(BitbitesResponses.deleteErrorMessage);
+            throw new BitbitesException(BitbitesResponses.DELETE_ERROR_MESSAGE);
         }
         return foodList.remove(index);
     }
@@ -51,7 +51,7 @@ public class FoodList {
 
     public Food getFood(int index) {
         if (index < 0 || index >= foodList.size()) {
-            throw new BitbitesException(BitbitesResponses.deleteErrorMessage);
+            throw new BitbitesException(BitbitesResponses.DELETE_ERROR_MESSAGE);
         }
         assert index >= 0 && index < foodList.size() : "Index out of bounds: " + index;
         return foodList.get(index);

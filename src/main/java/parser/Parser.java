@@ -95,7 +95,7 @@ public class Parser {
             logger.log(Level.WARNING, "Unknown command received: " + fullCommand);
             logger.log(Level.WARNING, "Command does not match any recognized command patterns");
             logger.log(Level.FINE, "Throwing BitbitesException due to invalid command input");
-            throw new BitbitesException(BitbitesResponses.unknownCommand);
+            throw new BitbitesException(BitbitesResponses.UNKNOWN_COMMAND);
         }
     }
 }

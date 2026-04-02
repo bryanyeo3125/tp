@@ -57,6 +57,10 @@ public class ProfileCommand extends Command {
         } else if (fullCommand.equals("profile clear")) {
             ProfileStorage.deleteProfile(ui.getCurrentUser());
             System.out.println("Profile cleared.");
+        } else if (fullCommand.equals("profile list")) {
+            ProfileStorage.listProfiles();
+        } else if (fullCommand.startsWith("profile switch")) {
+            handleSwitchProfile(fullCommand, ui);
         } else {
             System.out.println("Unknown profile command.");
             System.out.println("Available commands:");
@@ -144,6 +148,30 @@ public class ProfileCommand extends Command {
         } catch (NumberFormatException e) {
             System.out.println("Invalid value. Age must be an integer, weight and height must be numbers.");
         }
+    }
+
+    /**
+     * Switches the current session to a different user's profile.
+     * Checks that the specified profile exists before switching.
+     * Updates the current user in UserInterface on success.
+     *
+     * @param command The full command string containing the name to switch to.
+     * @param ui      The UserInterface to update the current user.
+     */
+    private void handleSwitchProfile(String command, UserInterface ui) {
+        String[] parts = command.split("profile switch ", 2);
+        if (parts.length < 2 || parts[1].trim().isEmpty()) {
+            System.out.println("Please specify a name. Format: profile switch NAME");
+            return;
+        }
+        String name = parts[1].trim();
+        if (!ProfileStorage.profileExists(name)) {
+            System.out.println("No profile found for '" + name + "'. Use 'profile list' to see all profiles.");
+            return;
+        }
+        ui.setCurrentUser(name);
+        System.out.println("Switched to profile: " + name);
+        showProfile(name);
     }
 
     /**

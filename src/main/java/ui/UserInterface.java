@@ -48,7 +48,7 @@ public class UserInterface {
     /// / SHOW section ////
     /* Displays the welcome message and prompts the user for their name. */
     public void showWelcome() {
-        System.out.println(BitbitesResponses.welcomeMessage);
+        System.out.println(BitbitesResponses.WELCOME_MESSAGE);
         System.out.println("What is your name?");
         String name = this.scanner.nextLine();
         this.currentUser = name;
@@ -76,7 +76,7 @@ public class UserInterface {
     /* Show the edit message to the user. */
     public void showEditedFood(Food food) {
         assert food != null : "Food should not be null";
-        System.out.println(BitbitesResponses.editMessage);
+        System.out.println(BitbitesResponses.EDIT_MESSAGE);
         System.out.println("  " + food);
     }
 
@@ -249,22 +249,22 @@ public class UserInterface {
     }
 
     public void showTips() {
-        System.out.println(BitbitesResponses.tipsMessage);
+        System.out.println(BitbitesResponses.TIPS_MESSAGE);
     }
 
     //@@author rayminQAQ
     /* Show the exit message to the user. */
     public void showExit() {
-        System.out.println(BitbitesResponses.exitMessage);
+        System.out.println(BitbitesResponses.EXIT_MESSAGE);
     }
 
     public void showHelp() {
-        System.out.println(BitbitesResponses.helpMessage);
+        System.out.println(BitbitesResponses.HELP_MESSAGE);
     }
     //@@author
     
     public void showDeletedFood(Food food, int remaining) {
-        System.out.println(BitbitesResponses.deleteMessage);
+        System.out.println(BitbitesResponses.DELETE_MESSAGE);
         System.out.println("  " + food);
         System.out.println("Now you have " + remaining + " item(s) in the list.");
     }

@@ -50,7 +50,7 @@ public class ListByDateCommand extends Command {
         assert !words[1].isEmpty() : "Date should not be empty.";
 
         String date = words[1].trim();
-        System.out.println(BitbitesResponses.listFromDateMessage + date + ":");
+        System.out.println(BitbitesResponses.LIST_FROM_DATE_MESSAGE + date + ":");
 
         int count = 1;
         for (int i = 0; i < foodList.size(); i++) {

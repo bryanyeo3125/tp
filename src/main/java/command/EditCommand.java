@@ -53,7 +53,7 @@ public class EditCommand extends Command {
         // Must have at least one valid prefix
         if (!args.contains("n/") && !args.contains("c/")
                 && !args.contains("p/") && !args.contains("d/")) {
-            throw new BitbitesException(BitbitesResponses.editFormatReminder);
+            throw new BitbitesException(BitbitesResponses.EDIT_FORMAT_REMINDER);
         }
 
         // Get the food item to edit

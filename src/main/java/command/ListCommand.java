@@ -26,7 +26,7 @@ public class ListCommand extends Command {
     public boolean execute(AppContext context) {
         FoodList foodList = context.getFoodList();
 
-        System.out.println(BitbitesResponses.listMessage);
+        System.out.println(BitbitesResponses.LIST_MESSAGE);
 
         for (int i = 0; i < foodList.size(); i++) {
             System.out.println((i + 1) + ". " + foodList.get(i));
