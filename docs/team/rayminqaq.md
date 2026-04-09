@@ -20,5 +20,12 @@ My contributions focused on drafting the whole BitBites system including the hig
 ### Enhancements Implemented
 
 ### Contributions to the User Guide
+- Section: Motivational Quotes `motivate`
+- Section: Exiting the Application `exit`
+---
+
+### Contributions to the Developer Guide
 
 ### Contributions to Team-Based Tasks
+- Established the initial project structure and architecture that the rest of the team built on top of.
+- Pull Requests authored
