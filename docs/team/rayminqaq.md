@@ -41,3 +41,4 @@ I also implemented several commands such as `exit`, `login`, `motivate`, and `fi
 ### Contributions to Team-Based Tasks
 - Established the initial project structure and architecture that the rest of the team built on top of.
 - [Pull Requests authored](https://github.com/AY2526S2-CS2113-F14-2/tp/issues?q=is%3Apr%20author%3ARayminQAQ)
+- [Pull Requests reviewer](https://github.com/AY2526S2-CS2113-F14-2/tp/issues?q=is%3Apr%20reviewed-by%3ARayminQAQ)
