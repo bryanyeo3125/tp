@@ -11,16 +11,36 @@ import seedu.bitbites.AppContext;
 import seedu.bitbites.BitbitesException;
 import ui.UserInterface;
 
+/**
+ * Command to display nutrition summary for a date range.
+ * Parses from/ and to/ arguments and shows aggregated nutrition information
+ * for all food items between the specified dates (inclusive).
+ */
 public class SummaryRangeCommand extends Command {
     private static final Logger logger = Logger.getLogger(SummaryRangeCommand.class.getName());
     private static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private final String fullCommand;
 
+    /**
+     * Constructs a SummaryRangeCommand with the user's full input.
+     *
+     * @param fullCommand The raw command string containing from/ and to/ arguments
+     */
     public SummaryRangeCommand(String fullCommand) {
         this.fullCommand = fullCommand;
     }
 
+    /**
+     * Executes the summary range command.
+     * Parses the from/ and to/ dates, validates them, retrieves summaries
+     * for the date range, and displays them to the user.
+     *
+     * @param context The application context containing FoodList and UserInterface
+     * @return {@code false} always as this command does not terminate the application
+     * @throws BitbitesException If date format is invalid, start date is after end date,
+     *         or required arguments are missing
+     */
     @Override
     public boolean execute(AppContext context) {
         FoodList foodList = context.getFoodList();

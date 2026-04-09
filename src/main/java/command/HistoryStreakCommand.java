@@ -28,3 +28,4 @@ public class HistoryStreakCommand extends Command {
         return false;
     }
 }
+

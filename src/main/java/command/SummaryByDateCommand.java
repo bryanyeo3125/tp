@@ -9,14 +9,33 @@ import seedu.bitbites.AppContext;
 import seedu.bitbites.BitbitesException;
 import ui.UserInterface;
 
+/**
+ * Command to display nutrition summary for a specific date.
+ * Retrieves and shows aggregated nutrition information
+ * for all food items logged on the given date, comparing against daily goals.
+ */
 public class SummaryByDateCommand extends Command {
     private static final Logger logger = Logger.getLogger(SummaryByDateCommand.class.getName());
     private final String fullCommand;
 
+    /**
+     * Constructs a SummaryByDateCommand with the user's full input.
+     *
+     * @param fullCommand The raw command string containing the date after "d/"
+     */
     public SummaryByDateCommand(String fullCommand) {
         this.fullCommand = fullCommand;
     }
 
+    /**
+     * Executes the summary by date command.
+     * Parses the date from the command, validates that food items exist for that date,
+     * retrieves the daily nutrition summary, and displays it with goal comparisons.
+     *
+     * @param context The application context containing FoodList and UserInterface
+     * @return {@code false} always as this command does not terminate the application
+     * @throws BitbitesException If the date is missing from the command format
+     */
     @Override
     public boolean execute(AppContext context) {
         FoodList foodList = context.getFoodList();

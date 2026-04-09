@@ -113,7 +113,8 @@ public class AddCommand extends Command {
             logger.log(Level.INFO, "Successfully added food: " + name +
                     " | Calories: " + calories + " | Protein: " + protein);
             System.out.println(BitbitesResponses.ADD_MESSAGE);
-            String todayStr = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            String todayStr = java.time.LocalDate.now().format(
+                    java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             if (date.equals(todayStr)) {
                 GoalsCommand.showDailyProgress(foodList);
             }
