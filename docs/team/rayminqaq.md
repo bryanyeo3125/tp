@@ -29,4 +29,4 @@ My contributions focused on drafting the whole BitBites system including the hig
 
 ### Contributions to Team-Based Tasks
 - Established the initial project structure and architecture that the rest of the team built on top of.
-- Pull Requests authored
+- [Pull Requests authored](https://github.com/AY2526S2-CS2113-F14-2/tp/issues?q=is%3Apr%20author%3ARayminQAQ)
