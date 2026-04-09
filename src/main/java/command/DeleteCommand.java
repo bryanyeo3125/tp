@@ -45,7 +45,12 @@ public class DeleteCommand extends Command {
         assert foodList.size() == sizeBefore - 1 : "FoodList size should decrease by 1";
         logger.log(Level.INFO, "Successfully deleted food: " + removed.getName());
         ui.showDeletedFood(removed, foodList.size());
-        GoalsCommand.showDailyProgress(foodList);
+
+        String todayStr = java.time.LocalDate.now().format(
+                java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        if (removed.getDate().equals(todayStr)) {
+            GoalsCommand.showDailyProgress(foodList);
+        }
         return false;
     }
 }

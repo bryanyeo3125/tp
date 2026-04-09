@@ -113,7 +113,10 @@ public class AddCommand extends Command {
             logger.log(Level.INFO, "Successfully added food: " + name +
                     " | Calories: " + calories + " | Protein: " + protein);
             System.out.println(BitbitesResponses.ADD_MESSAGE);
-            GoalsCommand.showDailyProgress(foodList);
+            String todayStr = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            if (date.equals(todayStr)) {
+                GoalsCommand.showDailyProgress(foodList);
+            }
 
         } catch (NumberFormatException e) {
             logger.log(Level.WARNING, "Invalid number format in: " + fullCommand);
