@@ -59,7 +59,9 @@ public class ListByDateCommand extends Command {
                 count++;
             }
         }
-
+        if (count == 1) {
+            System.out.println("No food items found for " + date + ".");
+        }
         return false;
     }
 }

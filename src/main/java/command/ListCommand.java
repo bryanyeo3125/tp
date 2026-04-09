@@ -28,6 +28,11 @@ public class ListCommand extends Command {
 
         System.out.println(BitbitesResponses.LIST_MESSAGE);
 
+        if (foodList.size() == 0) {
+            System.out.println("No items in your list.");
+            return false;
+        }
+
         for (int i = 0; i < foodList.size(); i++) {
             System.out.println((i + 1) + ". " + foodList.get(i));
         }
