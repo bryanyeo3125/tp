@@ -31,12 +31,15 @@ I also implemented several commands such as `exit`, `login`, `motivate`, and `fi
 ### Enhancements Implemented
 
 ### Contributions to the User Guide
-- Section: Motivational Quotes `motivate`
-- Section: Exiting the Application `exit`
-- Section: Finding Food Items `find`
+- Section: [Getting motivated](../UserGuide.md#getting-motivated--motivate) — `motivate` command
+- Section: [Exiting the application](../UserGuide.md#exiting-the-application--exit) — `exit` command
+- Section: [Finding food items](../UserGuide.md#finding-food-items--find) — `find` command 
 ---
 
 ### Contributions to the Developer Guide
+- Section: [6. Exiting the Application `exit`](../DeveloperGuide.md#6-exiting-the-application-exit)
+- Section: [8. Motivational Messages `motivate`](../DeveloperGuide.md#8-motivational-messages-motivate)
+- Section: [9. Finding Food Items `find`](../DeveloperGuide.md#9-finding-food-items-find) 
 
 ### Contributions to Team-Based Tasks
 - Established the initial project structure and architecture that the rest of the team built on top of.
