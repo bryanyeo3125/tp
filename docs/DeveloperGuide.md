@@ -4,6 +4,11 @@
 
 {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
 
+The following resources, libraries, and tools were instrumental in the development of this project:
+Java Standard Library: Leveraged as the foundational framework for core logic implementation, efficient data structure management, and stream-based I/O operations.
+Gradle Build Tool: Used as the primary build automation system.
+Checkstyle: Integrated to ensure strict adherence to the Google Java Style Guide.
+
 ---
 
 ## Design & Implementation
