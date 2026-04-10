@@ -516,31 +516,32 @@ In short, BitBites is designed for users who are motivated to eat better but nee
 
 ## Appendix B: User Stories
 
-| Version | As a ...                        | I want to ...                                              | So that I can ...                                             |
-|---------|---------------------------------|------------------------------------------------------------|---------------------------------------------------------------|
-| v1.0    | new user                        | see all available commands                                 | quickly learn how to use the application                      |
-| v1.0    | user                            | add a food item with its name, calories, protein and date  | track my daily nutritional intake                             |
-| v1.0    | user                            | view a list of all food items I have logged                | recall what I have consumed                                   |
-| v1.0    | user                            | view food items for a specific date                        | review what I ate on a particular day                         |
-| v1.0    | clumsy user                     | delete a specific food entry                               | remove items I added by mistake                               |
-| v1.0    | user                            | edit the details of an existing entry                      | correct mistakes without deleting and re-adding               |
-| v1.0    | gym goer                        | track my protein intake per day                            | see how much protein I am consuming                           |
-| v1.0    | user who forgets to use the app | fill in an entry for a missed meal on an earlier date      | keep the record complete and easy to review                   |
-| v2.0    | user                            | set up my profile with my name                             | have the app feel personalised to me                          |
-| v2.0    | user                            | set a daily calorie and protein goal                       | track my progress against a personal target                   |
-| v2.0    | user                            | view my daily progress after logging a meal                | know how many calories I have left for the day                |
-| v2.0    | user                            | view a nutritional summary for a specific date             | see how my intake compares to my goals on that day            |
-| v2.0    | user                            | view a trend summary over a date range                     | identify patterns in my eating habits over time               |
-| v2.0    | user                            | compare two days side by side                              | understand how my intake varies between days                  |
-| v2.0    | user                            | view my full food history with visual breakdowns           | get a quick overview of my eating history                     |
-| v2.0    | user                            | see my top highest calorie days                            | identify my heaviest eating days                              |
-| v2.0    | user                            | see the days where I was closest to my calorie goal        | understand what a balanced day looks like for me              |
-| v2.0    | user                            | track my consecutive logging streak                        | stay motivated to log food every day                          |
-| v2.0    | user                            | save my height, weight, age and gender                     | get a personalised calorie goal based on my BMR automatically |
-| v2.0    | frequent user                   | save food presets for meals I eat often                    | log commonly eaten meals without retyping all the details     |
-| v2.0    | returning user                  | have my goals and profile saved between sessions           | not have to re-enter them every time I launch the app         |
-| v2.0    | user who forgets to use the app | fill in an entry for a missed meal on an earlier date      | keep my history complete and easy to review                   |
-| v2.0    | user                            | get tips on estimating calories and protein                | log food accurately even without exact nutritional data       |
+| Version | As a ...                        | I want to ...                                             | So that I can ...                                             |
+|---------|---------------------------------|-----------------------------------------------------------|---------------------------------------------------------------|
+| v1.0    | new user                        | see all available commands                                | quickly learn how to use the application                      |
+| v1.0    | user                            | add a food item with its name, calories, protein and date | track my daily nutritional intake                             |
+| v1.0    | user                            | view a list of all food items I have logged               | recall what I have consumed                                   |
+| v1.0    | user                            | view food items for a specific date                       | review what I ate on a particular day                         |
+| v1.0    | clumsy user                     | delete a specific food entry                              | remove items I added by mistake                               |
+| v1.0    | user                            | edit the details of an existing entry                     | correct mistakes without deleting and re-adding               |
+| v1.0    | gym goer                        | track my protein intake per day                           | see how much protein I am consuming                           |
+| v1.0    | user who forgets to use the app | fill in an entry for a missed meal on an earlier date     | keep the record complete and easy to review                   |
+| v2.0    | user                            | set up my profile with my name                            | have the app feel personalised to me                          |
+| v2.0    | user                            | set a daily calorie and protein goal                      | track my progress against a personal target                   |
+| v2.0    | user                            | view my daily progress after logging a meal               | know how many calories I have left for the day                |
+| v2.0    | user                            | view a nutritional summary for a specific date            | see how my intake compares to my goals on that day            |
+| v2.0    | user                            | view a trend summary over a date range                    | identify patterns in my eating habits over time               |
+| v2.0    | user                            | compare two days side by side                             | understand how my intake varies between days                  |
+| v2.0    | user                            | view my full food history with visual breakdowns          | get a quick overview of my eating history                     |
+| v2.0    | user                            | see my top highest calorie days                           | identify my heaviest eating days                              |
+| v2.0    | user                            | see the days where I was closest to my calorie goal       | understand what a balanced day looks like for me              |
+| v2.0    | user                            | track my consecutive logging streak                       | stay motivated to log food every day                          |
+| v2.0    | user                            | save my height, weight, age and gender                    | get a personalised calorie goal based on my BMR automatically |
+| v2.0    | frequent user                   | save food presets for meals I eat often                   | log commonly eaten meals without retyping all the details     |
+| v2.0    | returning user                  | have my goals and profile saved between sessions          | not have to re-enter them every time I launch the app         |
+| v2.0    | user who forgets to use the app | fill in an entry for a missed meal on an earlier date     | keep my history complete and easy to review                   |
+| v2.0    | user                            | get tips on estimating calories and protein               | log food accurately even without exact nutritional data       |
+
 ---
 
 ## Appendix C: Non-Functional Requirements
@@ -554,6 +555,7 @@ In short, BitBites is designed for users who are motivated to eat better but nee
 ---
 
 ## Appendix D: Glossary
+
 
 | Term                     | Definition                                                                                                                                                                                                                                                             |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
