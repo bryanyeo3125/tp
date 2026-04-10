@@ -555,8 +555,6 @@ In short, BitBites is designed for users who are motivated to eat better but nee
 
 ## Appendix D: Glossary
 
-|## Appendix D: Glossary
-
 | Term                     | Definition                                                                                                                                                                                                                                                             |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Command Pattern**      | A software design pattern where each user action is encapsulated as a separate class with an `execute()` method. Used in BitBites so that `Parser` only creates Command objects, and `Bitbites` calls `execute()` — separating parsing from execution.                 |
