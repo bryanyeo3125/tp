@@ -541,6 +541,7 @@ In short, BitBites is designed for users who are motivated to eat better but nee
 | v2.0    | returning user                  | have my goals and profile saved between sessions          | not have to re-enter them every time I launch the app         |
 | v2.0    | user who forgets to use the app | fill in an entry for a missed meal on an earlier date     | keep my history complete and easy to review                   |
 | v2.0    | user                            | get tips on estimating calories and protein               | log food accurately even without exact nutritional data       |
+
 ---
 
 ## Appendix C: Non-Functional Requirements
