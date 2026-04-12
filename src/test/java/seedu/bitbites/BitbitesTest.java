@@ -681,6 +681,16 @@ class BitbitesTest {
     }
 
     /**
+     * Verifies that a date field in preset add throws BitbitesException.
+     */
+    @Test
+    void preset_add_withDate() {
+        assertThrows(BitbitesException.class, () ->
+                Parser.parse("preset add n/Oats c/150 p/5.0 d/25-04-2026").execute(context)
+        );
+    }
+
+    /**
      * Verifies that listing an empty preset list executes without error.
      */
     @Test
@@ -759,6 +769,22 @@ class BitbitesTest {
         presetList.addPreset(new Food("Oats", 150, 5.0, "PRESET"));
         assertThrows(BitbitesException.class, () ->
                 Parser.parse("preset use 1 d/2026/05/15").execute(context)
+        );
+    }
+
+    /**
+     * Verifies that an invalid date in preset use throws BitbitesException.
+     */
+    @Test
+    void preset_use_impossibleCalendarDate() {
+        presetList.addPreset(new Food("Test", 100, 5.0, "PRESET"));
+
+        assertThrows(BitbitesException.class, () ->
+                Parser.parse("preset use 1 d/32-01-2026").execute(context)
+        );
+
+        assertThrows(BitbitesException.class, () ->
+                Parser.parse("preset use 1 d/29-02-2026").execute(context)
         );
     }
 
