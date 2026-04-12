@@ -45,7 +45,13 @@ public class AddCommand extends Command {
         String correctFormat = BitbitesResponses.ADD_FORMAT_REMINDER;
         logger.log(Level.INFO, "Attempting to add food: " + fullCommand);
 
-        // Check that all required prefixes exist
+        // Check for reserved delimiter character
+        if (fullCommand.contains("|")) {
+            System.out.println("Input must not contain '|' as it is a reserved character.");
+            return false;
+        }
+
+        // Check that all required prefixes exist (d/ is optional)
         if (!fullCommand.contains("n/") || !fullCommand.contains("c/") ||
                 !fullCommand.contains("p/")) {
             logger.log(Level.WARNING, "Missing required fields in add command");
@@ -64,17 +70,20 @@ public class AddCommand extends Command {
                     fullCommand.indexOf("p/")
             ).trim();
 
-            String proteinStr = fullCommand.substring(
-                    fullCommand.indexOf("p/") + 2,
-                    fullCommand.indexOf("d/")
-            ).trim();
-
-            String date = fullCommand.substring(
-                    fullCommand.indexOf("d/") + 2
-            ).trim();
-
-            // Default to today if date is empty
-            if (date.isEmpty()) {
+            String proteinStr;
+            String date;
+            if (fullCommand.contains("d/")) {
+                proteinStr = fullCommand.substring(
+                        fullCommand.indexOf("p/") + 2,
+                        fullCommand.indexOf("d/")
+                ).trim();
+                date = fullCommand.substring(
+                        fullCommand.indexOf("d/") + 2
+                ).trim();
+            } else {
+                proteinStr = fullCommand.substring(
+                        fullCommand.indexOf("p/") + 2
+                ).trim();
                 date = java.time.LocalDate.now().format(
                         java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             }
@@ -99,6 +108,18 @@ public class AddCommand extends Command {
             // Ensures date format DD-MM-YYYY
             if (!date.matches("\\d{2}-\\d{2}-\\d{4}")) {
                 System.out.println("Date must be in DD-MM-YYYY format.");
+                return false;
+            }
+
+            // Ensures date is a real calendar date (e.g. rejects 32-13-2026)
+            java.time.format.DateTimeFormatter strictFormatter = java.time.format.DateTimeFormatter
+                    .ofPattern("dd-MM-uuuu")
+                    .withResolverStyle(java.time.format.ResolverStyle.STRICT);
+
+            try {
+                java.time.LocalDate.parse(date, strictFormatter);
+            } catch (java.time.format.DateTimeParseException e) {
+                System.out.println("Invalid date: " + date + ". Please enter a real date in DD-MM-YYYY format.");
                 return false;
             }
 
