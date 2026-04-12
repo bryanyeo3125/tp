@@ -208,12 +208,31 @@ public class GoalsCommand extends Command {
      */
     private void handleSetGoals(String fullCommand) {
         String[] prefixes = {"dc/", "dp/", "wc/", "wp/"};
+
+        // Detect unknown prefixes first
+        String afterSet = fullCommand.substring(fullCommand.indexOf("goals set") + 9).trim();
+        String[] tokens = afterSet.split("\\s+");
+        for (String token : tokens) {
+            if (token.contains("/")) {
+                String prefix = token.substring(0, token.indexOf("/") + 1);
+                if (!prefix.equals("dc/") && !prefix.equals("dp/") &&
+                        !prefix.equals("wc/") && !prefix.equals("wp/")) {
+                    System.out.println("Unknown goal prefix: " + prefix);
+                    System.out.println("Valid prefixes: dc/ (daily calories), dp/ (daily protein), " +
+                            "wc/ (weekly calories), wp/ (weekly protein)");
+                    return;
+                }
+            }
+        }
+
         try {
             if (fullCommand.contains("dc/")) {
                 int val = Integer.parseInt(extractValue(fullCommand, "dc/", nextPrefix(fullCommand,
                         "dc/", prefixes)));
-                if (val < 0) {
-                    throw new NumberFormatException();
+                // Reject non positive values
+                if (val <= 0) {
+                    System.out.println("Daily calorie goal must be greater than 0.");
+                    return;
                 }
                 dailyCalorieGoal = val;
                 System.out.println("Daily calorie goal set to " + val + " kcal.");
@@ -221,8 +240,10 @@ public class GoalsCommand extends Command {
             if (fullCommand.contains("dp/")) {
                 double val = Double.parseDouble(extractValue(fullCommand, "dp/", nextPrefix(fullCommand,
                         "dp/", prefixes)));
-                if (val < 0) {
-                    throw new NumberFormatException();
+                // Reject non positive values
+                if (val <= 0) {
+                    System.out.println("Daily protein goal must be greater than 0.");
+                    return;
                 }
                 dailyProteinGoal = val;
                 System.out.println("Daily protein goal set to " + val + "g.");
@@ -230,8 +251,10 @@ public class GoalsCommand extends Command {
             if (fullCommand.contains("wc/")) {
                 int val = Integer.parseInt(extractValue(fullCommand, "wc/", nextPrefix(fullCommand,
                         "wc/", prefixes)));
-                if (val < 0) {
-                    throw new NumberFormatException();
+                // Reject non positive values
+                if (val <= 0) {
+                    System.out.println("Weekly calorie goal must be greater than 0.");
+                    return;
                 }
                 weeklyCalorieGoal = val;
                 System.out.println("Weekly calorie goal set to " + val + " kcal.");
@@ -239,8 +262,10 @@ public class GoalsCommand extends Command {
             if (fullCommand.contains("wp/")) {
                 double val = Double.parseDouble(extractValue(fullCommand, "wp/", nextPrefix(fullCommand,
                         "wp/", prefixes)));
-                if (val < 0) {
-                    throw new NumberFormatException();
+                // Reject non positive values
+                if (val <= 0) {
+                    System.out.println("Weekly protein goal must be greater than 0.");
+                    return;
                 }
                 weeklyProteinGoal = val;
                 System.out.println("Weekly protein goal set to " + val + "g.");
@@ -248,7 +273,7 @@ public class GoalsCommand extends Command {
             GoalsStorage.saveGoals(currentUser, dailyCalorieGoal, dailyProteinGoal,
                     weeklyCalorieGoal, weeklyProteinGoal);
         } catch (NumberFormatException e) {
-            System.out.println("Invalid value. Goals must be non-negative numbers.");
+            System.out.println("Invalid value. Goals must be positive numbers.");
         }
     }
 
