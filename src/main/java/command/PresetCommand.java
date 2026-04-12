@@ -83,6 +83,10 @@ public class PresetCommand extends Command {
             throw new BitbitesException("Format: preset add n/NAME c/CALORIES p/PROTEIN");
         }
 
+        if (args.contains("d/")) {
+            throw new BitbitesException("Preset templates do not take a date field. Format: preset add n/NAME c/CALORIES p/PROTEIN");
+        }
+
         try {
             String name = extractField(args, "n/");
             int calories = Integer.parseInt(extractField(args, "c/"));
