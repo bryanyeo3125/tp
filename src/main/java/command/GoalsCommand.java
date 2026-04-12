@@ -141,6 +141,7 @@ public class GoalsCommand extends Command {
         LocalDate now = LocalDate.now();
         LocalDate weekStart = now.minusDays(now.getDayOfWeek().getValue() - 1);
         LocalDate weekEnd = weekStart.plusDays(6);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         int dailyCalories = 0;
         double dailyProtein = 0.0;
@@ -149,7 +150,15 @@ public class GoalsCommand extends Command {
 
         for (int i = 0; i < foodList.size(); i++) {
             Food food = foodList.get(i);
-            LocalDate foodDate = LocalDate.parse(food.getDate(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+            // ✅ Skip food items with invalid dates instead of crashing
+            LocalDate foodDate;
+            try {
+                foodDate = LocalDate.parse(food.getDate(), formatter);
+            } catch (Exception e) {
+                System.out.println("Warning: Skipping food item with invalid date: " + food.getDate());
+                continue;
+            }
 
             if (food.getDate().equals(today)) {
                 dailyCalories += food.getCalories();
