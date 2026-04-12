@@ -1,5 +1,0 @@
-name=Bryan
-gender=male
-age=22
-weight=80.0
-height=181.0

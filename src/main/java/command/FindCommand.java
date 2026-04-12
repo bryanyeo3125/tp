@@ -97,14 +97,15 @@ public class FindCommand extends Command {
             System.out.println("   No food items found matching: " + keyword);
         } else {
             System.out.println("   Found " + results.size() + " result" + (results.size() > 1 ? "s" : "") + ":\n");
-            
+
             for (int i = 0; i < results.size(); i++) {
                 Food food = results.get(i);
-                System.out.printf("   %d. %-25s | %4d kcal | %.1fg protein%n",
+                System.out.printf("   %d. %-25s | %4d kcal | %.1fg protein | %s%n",
                         i + 1,
                         food.getName(),
                         food.getCalories(),
-                        food.getProtein());
+                        food.getProtein(),
+                        food.getDate());
             }
         }
         

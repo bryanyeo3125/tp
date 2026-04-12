@@ -132,8 +132,8 @@ public class ProfileCommand extends Command {
                 height = Double.parseDouble(extractValue(command, "h/", nextPrefix(command, "h/", prefixes)));
             }
 
-            if (age < 0 || weight < 0 || height < 0) {
-                System.out.println("Age, weight, and height must be non-negative.");
+            if (age <= 0 || weight <= 0 || height <= 0) {
+                System.out.println("Age, weight, and height must be positive.");
                 return;
             }
 

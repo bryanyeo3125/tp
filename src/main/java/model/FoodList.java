@@ -51,9 +51,8 @@ public class FoodList {
 
     public Food getFood(int index) {
         if (index < 0 || index >= foodList.size()) {
-            throw new BitbitesException(BitbitesResponses.DELETE_ERROR_MESSAGE);
+            throw new BitbitesException("OOPS!!! Invalid index. Please provide a valid item number.");
         }
-        assert index >= 0 && index < foodList.size() : "Index out of bounds: " + index;
         return foodList.get(index);
     }
 

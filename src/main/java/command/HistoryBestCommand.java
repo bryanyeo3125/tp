@@ -9,14 +9,34 @@ import seedu.bitbites.AppContext;
 import seedu.bitbites.BitbitesException;
 import ui.UserInterface;
 
+/**
+ * Command to display the top N days closest to calorie and protein goals.
+ * Finds days where the user's intake was nearest to their daily targets.
+ */
 public class HistoryBestCommand extends Command {
     private static final Logger logger = Logger.getLogger(HistoryBestCommand.class.getName());
     private final String fullCommand;
 
+    /**
+     * Constructs a HistoryBestCommand with the user's full input.
+     *
+     * @param fullCommand The raw command string containing the number N after "/best"
+     */
     public HistoryBestCommand(String fullCommand) {
         this.fullCommand = fullCommand;
     }
 
+    /**
+     * Executes the history best command.
+     * Parses the number N from the command, validates it, retrieves the N days
+     * where calorie intake was closest to the daily goal, and displays them
+     * along with protein goal comparison.
+     *
+     * @param context The application context containing FoodList and UserInterface
+     * @return {@code false} always as this command does not terminate the application
+     * @throws BitbitesException If the format is invalid, N is not a positive number,
+     *         or N is not a valid integer
+     */
     @Override
     public boolean execute(AppContext context) {
         FoodList foodList = context.getFoodList();

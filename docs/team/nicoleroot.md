@@ -22,51 +22,33 @@ My contributions focused on the summary and history features, including nutritio
 #### 1. Summary Commands (`summary d/DATE`, `summary from/to`, `summary compare`)
 
 Implemented a full suite of nutritional summary commands:
-- `summary d/DATE` — per-day breakdown with a segmented ASCII progress bar showing
-  each meal's proportion of the day's total calories, plus goal status showing
-  remaining or exceeded calories/protein against the user's daily goals
-- `summary from/DATE1 to/DATE2` — trend view across a date range, with each day's
-  bar scaled relative to the highest-calorie day; days within 20% of the daily
-  calorie goal are marked with `GOAL reached!`
-- `summary compare d/DATE1 d/DATE2` — side-by-side comparison of two days showing
-  calorie and protein differences
+- `summary d/DATE` — per-day breakdown with a segmented ASCII progress bar showing each meal's proportion of the day's total calories, plus goal status showing remaining or exceeded calories/protein against the user's daily goals
+- `summary from/DATE1 to/DATE2` — trend view across a date range, with each day's bar scaled relative to the highest-calorie day; days within 20% of the daily calorie goal are marked with `GOAL reached!`
+- `summary compare d/DATE1 d/DATE2` — side-by-side comparison of two days showing calorie and protein differences
 
-The date comparison logic in `SummaryRangeCommand` uses `java.time.LocalDate` to
-correctly handle chronological ordering of `DD-MM-YYYY` dates, avoiding the
-lexicographic comparison bug that would incorrectly flag valid date ranges.
+The date comparison logic in `SummaryRangeCommand` uses `java.time.LocalDate` to correctly handle chronological ordering of `DD-MM-YYYY` dates, avoiding the lexicographic comparison bug that would incorrectly flag valid date ranges.
 
 #### 2. History Commands (`history`, `history /top N`, `history /best N`, `history streak`)
 
 Implemented a full history feature:
-- `history` — chronological log of all recorded days with segmented breakdown bars
-  and a reminder if today has not been logged
+- `history` — log of all recorded days with segmented breakdown bars and a reminder if today has not been logged
 - `history /top N` — top N highest calorie days
-- `history /best N` — top N days closest to the user's daily calorie goal, using
-  `|totalCalories - dailyCalorieGoal|` as the ranking metric rather than simply
-  lowest calories
-- `history streak` — current and longest consecutive recording streak, using
-  `LocalDate.now()` to correctly detect broken streaks when the user has not logged
-  today or yesterday
+- `history /best N` — top N days closest to the user's daily calorie goal, using `|totalCalories - dailyCalorieGoal|` as the ranking metric rather than simply lowest calories
+- `history streak` — current and longest consecutive recording streak, using `LocalDate.now()` to correctly detect broken streaks when the user has not logged today or yesterday
 
 #### 3. `NutritionSummary` and `ProgressBar` classes
 
 Designed and implemented:
-- `NutritionSummary` — encapsulates aggregated nutritional data per day, keeping
-  `FoodList` responsible for computation and `UserInterface` responsible for display
-- `ProgressBar` — generates segmented ASCII bars where each `=` segment represents
-  one meal's calorie share, with total bar width scaled relative to a maximum value
-  for trend comparisons
+- `NutritionSummary` — encapsulates aggregated nutritional data per day, keeping `FoodList` responsible for computation and `UserInterface` responsible for display
+- `ProgressBar` — generates segmented ASCII bars where each `=` segment represents one meal's calorie share, with total bar width scaled relative to a maximum value for trend comparisons
 
 #### 4. `delete` Command
 
-Implemented `DeleteCommand` with index validation, bounds checking delegated to
-`FoodList`, and automatic display of daily goal progress after deletion via
-`GoalsCommand.showDailyProgress()`.
+Implemented `DeleteCommand` with index validation, bounds checking delegated to `FoodList`, and automatic display of daily goal progress after deletion via `GoalsCommand.showDailyProgress()`.
 
 #### 5. `edit` Command
 
-Implemented `EditCommand` supporting partial field updates — users can edit any
-combination of `n/`, `c/`, `p/`, `d/` without re-entering unchanged fields.
+Implemented `EditCommand` supporting partial field updates — users can edit any combination of `n/`, `c/`, `p/`, `d/` without re-entering unchanged fields.
 
 #### 6. `help` Command
 
@@ -91,17 +73,24 @@ Implemented `TipsCommand` which displays tips for estimating calories and protei
 
 ### Contributions to the Developer Guide
 
+- Acknowledgements
 - Section 4: Delete command — implementation details, sequence diagram
 - Section 5: Edit command — implementation details, sequence diagram
 - Section 7: Help command — implementation details, sequence diagram
 - Section 10: Summary commands — implementation details and sequence diagrams
 - Section 11: History commands — implementation details and sequence
+- Appendix
 
 **UML diagrams added:**
 - `delete.png` — sequence diagram
 - `edit.png` — sequence diagram
-- `summaryByDate.png` — sequence diagram
-- `historyStreak.png` — sequence diagram
+- `summary_date.png` — sequence diagram
+- `summary_range.png` — sequence diagram
+- `summary_compare.png` — sequence diagram
+- `history_streak.png` — sequence diagram
+- `history.png` — sequence diagram
+- `history_best.png` — sequence diagram
+- `history_top` — sequence diagram
 
 ---
 

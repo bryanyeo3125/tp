@@ -1,0 +1,53 @@
+@startuml
+actor User
+participant ":Bitbites" as Bitbites
+participant ":Parser" as Parser
+participant ":SummaryByDateCommand" as Cmd
+participant ":FoodList" as FoodList
+participant ":GoalsCommand" as Goals
+participant ":UserInterface" as UI
+
+User -> Bitbites : input "summary d/01-04-2026"
+activate Bitbites
+
+Bitbites -> Parser : parse(...)
+activate Parser
+Parser --> Bitbites : SummaryByDateCommand
+deactivate Parser
+
+Bitbites -> Cmd : execute(context)
+activate Cmd
+
+Cmd -> FoodList : getItemCountByDate(date)
+activate FoodList
+FoodList --> Cmd : count
+deactivate FoodList
+
+alt count == 0
+    Cmd --> User : "No food items found"
+else count > 0
+    Cmd -> FoodList : getSummaryByDate(date)
+    activate FoodList
+    FoodList --> Cmd : NutritionSummary
+    deactivate FoodList
+
+    Cmd -> Goals : getDailyCalorieGoal()
+    activate Goals
+    Goals --> Cmd : int
+    deactivate Goals
+
+    Cmd -> Goals : getDailyProteinGoal()
+    activate Goals
+    Goals --> Cmd : double
+    deactivate Goals
+
+    Cmd -> UI : showSummary(summary, calorieGoal, proteinGoal)
+    activate UI
+    UI --> Cmd
+    deactivate UI
+end
+
+Cmd --> Bitbites : false
+deactivate Cmd
+deactivate Bitbites
+@enduml

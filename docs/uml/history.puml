@@ -1,0 +1,38 @@
+@startuml
+actor User
+participant ":Bitbites" as Bitbites
+participant ":Parser" as Parser
+participant ":HistoryCommand" as Cmd
+participant ":FoodList" as FoodList
+participant ":UserInterface" as UI
+
+User -> Bitbites : input "history"
+activate Bitbites
+
+Bitbites -> Parser : parse("history")
+activate Parser
+Parser --> Bitbites : HistoryCommand
+deactivate Parser
+
+Bitbites -> Cmd : execute(context)
+activate Cmd
+
+Cmd -> FoodList : getItemCountByDate(today)
+activate FoodList
+FoodList --> Cmd : count
+deactivate FoodList
+
+Cmd -> FoodList : getAllDailySummaries()
+activate FoodList
+FoodList --> Cmd : List<NutritionSummary>
+deactivate FoodList
+
+Cmd -> UI : showHistory(summaries, recordedToday)
+activate UI
+UI --> Cmd
+deactivate UI
+
+Cmd --> Bitbites : false
+deactivate Cmd
+deactivate Bitbites
+@enduml

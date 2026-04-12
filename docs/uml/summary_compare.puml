@@ -1,0 +1,62 @@
+@startuml summary_compare
+skinparam arrowThickness 1.1
+skinparam maxMessageSize 150
+
+participant ":Bitbites" as Bitbites
+participant ":Parser" as Parser
+participant "c:SummaryCompareCommand" as Cmd
+participant "foods:FoodList" as FoodList
+participant "ui:UserInterface" as UI
+
+-> Bitbites : "summary compare d/27-03-2026 d/28-03-2026"
+activate Bitbites
+
+Bitbites -> Parser : parse(fullCommand)
+activate Parser
+Parser --> Bitbites : SummaryCompareCommand
+deactivate Parser
+
+Bitbites -> Cmd : execute(context)
+activate Cmd
+
+alt less than 3 parts after split by d/
+    Cmd --> Bitbites : throws BitbitesException
+else
+    Cmd -> FoodList : getItemCountByDate(date1)
+    activate FoodList
+    FoodList --> Cmd : count1
+    deactivate FoodList
+
+    alt count1 == 0
+        Cmd -> Cmd : print "No food items found for date1"
+    else
+        Cmd -> FoodList : getItemCountByDate(date2)
+        activate FoodList
+        FoodList --> Cmd : count2
+        deactivate FoodList
+
+        alt count2 == 0
+            Cmd -> Cmd : print "No food items found for date2"
+        else
+            Cmd -> FoodList : getSummaryByDate(date1)
+            activate FoodList
+            FoodList --> Cmd : NutritionSummary
+            deactivate FoodList
+
+            Cmd -> FoodList : getSummaryByDate(date2)
+            activate FoodList
+            FoodList --> Cmd : NutritionSummary
+            deactivate FoodList
+
+            Cmd -> UI : showSummaryCompare(summary1, summary2)
+            activate UI
+            UI --> Cmd
+            deactivate UI
+        end
+    end
+end
+
+Cmd --> Bitbites : false
+deactivate Cmd
+deactivate Bitbites
+@enduml

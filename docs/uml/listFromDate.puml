@@ -2,40 +2,49 @@
 skinparam arrowThickness 1.1
 skinparam maxMessageSize 150
 
+participant ":Bitbites" as Bitbites
 participant ":Parser" as Parser
+participant "c:ListByDateCommand" as ListByDateCommand
+participant "foods:FoodList" as FoodList
+participant "foodItem:Food" as Food
 
-participant ":FoodList" as FoodList
-participant ":Food" as Food
+-> Bitbites : "list d/DATE"
+activate Bitbites
 
-participant ":UserInterface" as UI
-
--> Parser : handleListFromDate("list d/DATE", foodList, ui)
+Bitbites -> Parser : parse("list d/DATE")
 activate Parser
 
-Parser -> UI : print(BitbitesResponses.listFromDateMessage + date)
-activate UI
-UI --> Parser
-deactivate UI
+create ListByDateCommand
+Parser -> ListByDateCommand : ListByDateCommand("list d/DATE")
+activate ListByDateCommand
+ListByDateCommand --> Parser : c
+deactivate ListByDateCommand
 
-loop for i = 0 to foodList.size() - 1
-    Parser -> FoodList : get(i)
+Parser --> Bitbites : c
+deactivate Parser
+
+Bitbites -> ListByDateCommand : execute(context)
+activate ListByDateCommand
+
+loop for i = 0 to foods.size() - 1
+    ListByDateCommand -> FoodList : get(i)
     activate FoodList
-    FoodList --> Parser : foodItem
+    FoodList --> ListByDateCommand : foodItem
     deactivate FoodList
 
-    Parser -> Food : getDate()
+    ListByDateCommand -> Food : getDate()
     activate Food
-    Food --> Parser : itemDate
+    Food --> ListByDateCommand : itemDate
     deactivate Food
 
     opt itemDate.equals(date)
-        Parser -> UI : print(count + ". " + foodItem)
-        activate UI
-        UI --> Parser
-        deactivate UI
+        ListByDateCommand -> ListByDateCommand : System.out.println(foodItem)
     end
 end
 
-<-- Parser
-deactivate Parser
+ListByDateCommand --> Bitbites : isExit = false
+deactivate ListByDateCommand
+
+<-- Bitbites
+deactivate Bitbites
 @enduml

@@ -4,19 +4,41 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Food;
 import model.FoodList;
+import seedu.bitbites.AppContext;
 import seedu.bitbites.BitbitesException;
 import seedu.bitbites.BitbitesResponses;
 import ui.UserInterface;
-import seedu.bitbites.AppContext;
 
+/**
+ * Command to edit an existing food entry in the food list.
+ * Allows updating name, calories, protein, and/or date of a specific food item by index.
+ * Fields are optional but at least one must be provided.
+ */
 public class EditCommand extends Command {
     private static final Logger logger = Logger.getLogger(EditCommand.class.getName());
     private final String fullCommand;
 
+    /**
+     * Constructs an EditCommand with the user's full input.
+     *
+     * @param fullCommand The raw command string containing the index and fields to edit
+     */
     public EditCommand(String fullCommand) {
         this.fullCommand = fullCommand;
     }
 
+    /**
+     * Executes the edit command.
+     * Parses the index and field arguments from the command, validates them,
+     * retrieves the food item at the specified index, updates the provided fields,
+     * and displays the updated food item to the user.
+     *
+     * @param context The application context containing FoodList and UserInterface
+     * @return {@code false} always as this command does not terminate the application
+     * @throws BitbitesException If the index is invalid, no fields are provided,
+     *                           field values are invalid (negative numbers, empty name, wrong date format),
+     *                           or the food item does not exist at the given index
+     */
     @Override
     public boolean execute(AppContext context) {
         FoodList foodList = context.getFoodList();
@@ -113,6 +135,11 @@ public class EditCommand extends Command {
 
     /**
      * Extracts the value after a given prefix, stopping at the next prefix or end of string.
+     * This allows parsing of fields like "n/Apple c/100" to correctly extract "Apple".
+     *
+     * @param args   The full argument string containing multiple fields
+     * @param prefix The prefix to extract the value for (e.g., "n/", "c/", "p/", "d/")
+     * @return The extracted value as a trimmed string
      */
     private String extractField(String args, String prefix) {
         int start = args.indexOf(prefix) + prefix.length();

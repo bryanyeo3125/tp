@@ -1,0 +1,50 @@
+@startuml summary_range
+skinparam arrowThickness 1.1
+skinparam maxMessageSize 150
+
+participant ":Bitbites" as Bitbites
+participant ":Parser" as Parser
+participant "c:SummaryRangeCommand" as Cmd
+participant "foods:FoodList" as FoodList
+participant "ui:UserInterface" as UI
+
+-> Bitbites : "summary from/27-03-2026 to/01-04-2026"
+activate Bitbites
+
+Bitbites -> Parser : parse(fullCommand)
+activate Parser
+Parser --> Bitbites : SummaryRangeCommand
+deactivate Parser
+
+Bitbites -> Cmd : execute(context)
+activate Cmd
+
+alt missing from/ or to/
+    Cmd --> Bitbites : throws BitbitesException
+else dates present
+    Cmd -> Cmd : parse fromDate, toDate with LocalDate
+    alt invalid date format
+        Cmd --> Bitbites : throws BitbitesException
+    else from isAfter to
+        Cmd --> Bitbites : throws BitbitesException
+    else valid range
+        Cmd -> FoodList : getSummariesInRange(fromDate, toDate)
+        activate FoodList
+        FoodList --> Cmd : List<NutritionSummary>
+        deactivate FoodList
+
+        alt summaries empty
+            Cmd -> Cmd : print "No food items found"
+        else
+            Cmd -> UI : showSummaryRange(summaries, fromDate, toDate)
+            activate UI
+            UI --> Cmd
+            deactivate UI
+        end
+    end
+end
+
+Cmd --> Bitbites : false
+deactivate Cmd
+deactivate Bitbites
+@enduml

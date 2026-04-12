@@ -1,5 +1,0 @@
-name=John
-gender=Male
-age=22
-weight=55.0
-height=173.0

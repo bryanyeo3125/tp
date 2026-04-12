@@ -1,0 +1,43 @@
+@startuml
+actor User
+participant ":Bitbites" as Bitbites
+participant ":Parser" as Parser
+participant ":HistoryStreakCommand" as Cmd
+participant ":FoodList" as FoodList
+participant ":UserInterface" as UI
+
+User -> Bitbites : input "history streak"
+activate Bitbites
+
+Bitbites -> Parser : parse("history streak")
+activate Parser
+Parser --> Bitbites : HistoryStreakCommand
+deactivate Parser
+
+Bitbites -> Cmd : execute(context)
+activate Cmd
+
+Cmd -> FoodList : getCurrentStreak()
+activate FoodList
+FoodList --> Cmd : int
+deactivate FoodList
+
+Cmd -> FoodList : getLongestStreak()
+activate FoodList
+FoodList --> Cmd : int
+deactivate FoodList
+
+Cmd -> FoodList : getItemCountByDate(today)
+activate FoodList
+FoodList --> Cmd : int
+deactivate FoodList
+
+Cmd -> UI : showStreak(current, longest, recordedToday)
+activate UI
+UI --> Cmd
+deactivate UI
+
+Cmd --> Bitbites : false
+deactivate Cmd
+deactivate Bitbites
+@enduml
