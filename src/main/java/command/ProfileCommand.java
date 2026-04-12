@@ -114,9 +114,13 @@ public class ProfileCommand extends Command {
 
             // Disallow name changes via profile set
             if (command.contains("n/")) {
-                System.out.println("Name cannot be changed via 'profile set'.");
-                System.out.println("Please log in with a different username to use a different name.");
-                return;
+                String newName = extractValue(command, "n/", nextPrefix(command, "n/", prefixes));
+                if (!newName.equalsIgnoreCase(name)) {
+                    System.out.println("Name cannot be changed via 'profile set'.");
+                    System.out.println("Please log in with a different username to use a different name.");
+                    return;
+                }
+                // Same name as current user — silently ignore and continue
             }
 
             if (command.contains("g/")) {
