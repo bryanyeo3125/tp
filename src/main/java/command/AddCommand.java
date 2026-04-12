@@ -95,13 +95,42 @@ public class AddCommand extends Command {
                 return false;
             }
 
-            int calories = Integer.parseInt(caloriesStr);
-            double protein = Double.parseDouble(proteinStr);
+            // Parse and validate calories
+            long caloriesLong;
+            try {
+                caloriesLong = Long.parseLong(caloriesStr);
+            } catch (NumberFormatException e) {
+                System.out.println("Calories must be a whole number.");
+                return false;
+            }
+            if (caloriesLong < 0) {
+                logger.log(Level.WARNING, "Negative calories in add command");
+                System.out.println("Calories must be non-negative.");
+                return false;
+            }
+            if (caloriesLong > 10000) {
+                logger.log(Level.WARNING, "Calories value too large in add command");
+                System.out.println("Calories value is too large. Please enter a realistic value (max 10000 kcal).");
+                return false;
+            }
+            int calories = (int) caloriesLong;
 
-            // Ensures non-negative values
-            if (calories < 0 || protein < 0) {
-                logger.log(Level.WARNING, "Negative values in add command");
-                System.out.println("Calories and protein must be non-negative.");
+            // Parse and validate protein
+            double protein;
+            try {
+                protein = Double.parseDouble(proteinStr);
+            } catch (NumberFormatException e) {
+                System.out.println("Protein must be a number.");
+                return false;
+            }
+            if (protein < 0) {
+                logger.log(Level.WARNING, "Negative protein in add command");
+                System.out.println("Protein must be non-negative.");
+                return false;
+            }
+            if (protein > 1000) {
+                logger.log(Level.WARNING, "Protein value too large in add command");
+                System.out.println("Protein value is too large. Please enter a realistic value (max 1000g).");
                 return false;
             }
 
@@ -140,10 +169,7 @@ public class AddCommand extends Command {
                 GoalsCommand.showDailyProgress(foodList);
             }
 
-        } catch (NumberFormatException e) {
-            logger.log(Level.WARNING, "Invalid number format in: " + fullCommand);
-            System.out.println("Calories must be an integer and protein must be a number.");
-        } catch (StringIndexOutOfBoundsException e) {
+        } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
             System.out.println(correctFormat);
         }
         return false;

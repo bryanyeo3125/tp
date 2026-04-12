@@ -56,7 +56,7 @@ With Bitbites you can:
 ## Notes on Command Format
 
 - Words in `UPPER_CASE` are parameters to be supplied by you.
-    - e.g., in `add n/NAME c/CALORIES p/PROTEIN d/DATE`, `NAME`, `CALORIES`, `PROTEIN`, and `DATE` are parameters you fill in.
+    - e.g., in `add n/NAME c/CALORIES p/PROTEIN [d/DATE]`, `NAME`, `CALORIES`, `PROTEIN`, and `DATE` are parameters you fill in.
 - Parameters with a prefix (e.g., `n/`, `c/`) can be provided in any order, unless otherwise stated.
 - Parameters in square brackets `[...]` are optional.
 - All dates must be in `DD-MM-YYYY` format (e.g., `25-12-2024`).
@@ -515,33 +515,33 @@ Data is saved after every successfully executed command. Only changes made in a 
 
 ## Command Summary
 
-| Command | Format |
-|---|---|
-| Help | `help` |
-| Add food | `add n/NAME c/CALORIES p/PROTEIN d/DATE` |
-| List all food | `list` |
-| List by date | `list d/DATE` |
-| Delete food | `delete INDEX` |
-| Edit food | `edit INDEX [n/NAME] [c/CALORIES] [p/PROTEIN] [d/DATE]` |
-| Find food | `find KEYWORD` |
-| Summary by date | `summary d/DATE` |
-| Summary compare | `summary compare d/DATE1 d/DATE2` |
-| Summary range | `summary from/DATE1 to/DATE2` |
-| History | `history` |
-| History top N | `history /top N` |
-| History best N | `history /best N` |
-| History streak | `history streak` |
-| Add preset | `preset add n/NAME c/CALORIES p/PROTEIN` |
-| List presets | `preset list` |
-| Delete preset | `preset delete INDEX` |
-| Use preset | `preset use INDEX [d/DATE]` |
-| View goals | `goals` |
-| Set goals | `goals set [dc/CAL] [dp/PROT] [wc/CAL] [wp/PROT]` |
-| View profile | `profile` |
+| Command | Format                                                          |
+|---|-----------------------------------------------------------------|
+| Help | `help`                                                          |
+| Add food | `add n/NAME c/CALORIES p/PROTEIN [d/DATE]`                      |
+| List all food | `list`                                                          |
+| List by date | `list d/DATE`                                                   |
+| Delete food | `delete INDEX`                                                  |
+| Edit food | `edit INDEX [n/NAME] [c/CALORIES] [p/PROTEIN] [d/DATE]`         |
+| Find food | `find KEYWORD`                                                  |
+| Summary by date | `summary d/DATE`                                                |
+| Summary compare | `summary compare d/DATE1 d/DATE2`                               |
+| Summary range | `summary from/DATE1 to/DATE2`                                   |
+| History | `history`                                                       |
+| History top N | `history /top N`                                                |
+| History best N | `history /best N`                                               |
+| History streak | `history streak`                                                |
+| Add preset | `preset add n/NAME c/CALORIES p/PROTEIN`                        |
+| List presets | `preset list`                                                   |
+| Delete preset | `preset delete INDEX`                                           |
+| Use preset | `preset use INDEX [d/DATE]`                                     |
+| View goals | `goals`                                                         |
+| Set goals | `goals set [dc/CAL] [dp/PROT] [wc/CAL] [wp/PROT]`               |
+| View profile | `profile`                                                       |
 | Set profile | `profile set [n/NAME] [g/GENDER] [a/AGE] [w/WEIGHT] [h/HEIGHT]` |
-| List profiles | `profile list` |
-| Clear profile | `profile clear` |
-| Login | `login` |
-| Tips | `tips` |
-| Motivate | `motivate` |
-| Exit | `exit` |
+| List profiles | `profile list`                                                  |
+| Clear profile | `profile clear`                                                 |
+| Login | `login`                                                         |
+| Tips | `tips`                                                          |
+| Motivate | `motivate`                                                      |
+| Exit | `exit`                                                          |
