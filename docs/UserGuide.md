@@ -477,7 +477,7 @@ Bitbites saves your data automatically to the `data/` folder in the same directo
 | Profile (per user)| `data/<username>_profile.txt`          |
 | Goals (per user)  | `data/<username>_goals.txt`            |
 
-> **Editing data files directly:** The data files are plain text and can be edited manually. However, corrupted or incorrectly formatted entries will be rejected when the application next loads, and affected data may be lost. As such, manual editing is not reccomended.
+> **Editing data files directly:** The data files are plain text and can be edited manually. However, corrupted or incorrectly formatted entries will be rejected when the application next loads, and affected data may be lost. As such, manual editing is not recommended.
 
 ---
 
