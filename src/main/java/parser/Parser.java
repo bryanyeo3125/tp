@@ -44,6 +44,9 @@ public class Parser {
             return new ListByDateCommand(fullCommand);
         } else if (fullCommand.equals("list")) {
             return new ListCommand();
+        } else if (fullCommand.equals("add")) {
+            throw new BitbitesException("Please specify food details.\n" +
+                    "  Format: add n/NAME c/CALORIES p/PROTEIN [d/DATE]");
         } else if (fullCommand.startsWith("add ")) {
             return new AddCommand(fullCommand);
         } else if (fullCommand.equals("help")) {
@@ -62,6 +65,11 @@ public class Parser {
             return new SummaryCompareCommand(fullCommand);
         } else if (fullCommand.startsWith("summary d/")) {
             return new SummaryByDateCommand(fullCommand);
+        } else if (fullCommand.equals("summary") || fullCommand.startsWith("summary ")) {
+            throw new BitbitesException("Please specify a summary type.\n" +
+                    "  summary d/DATE\n" +
+                    "  summary compare d/DATE1 d/DATE2\n" +
+                    "  summary from/DATE1 to/DATE2");
         } else if (fullCommand.startsWith("history /top")) {
             return new HistoryTopCommand(fullCommand);
         } else if (fullCommand.startsWith("history /best")) {
@@ -70,6 +78,12 @@ public class Parser {
             return new HistoryStreakCommand();
         } else if (fullCommand.equals("history")) {
             return new HistoryCommand();
+        } else if (fullCommand.startsWith("history ")) {
+            throw new BitbitesException("Unknown history command.\n" +
+                    "  history\n" +
+                    "  history /top N\n" +
+                    "  history /best N\n" +
+                    "  history streak");
         } else if (fullCommand.equals("tips")) {
             return new TipsCommand();
         } else if (fullCommand.startsWith("profile")) {
