@@ -1,6 +1,7 @@
 package seedu.bitbites;
 
 import java.io.FileNotFoundException;
+import java.util.logging.LogManager;
 
 import command.Command;
 import command.GoalsCommand;
@@ -61,6 +62,9 @@ public class Bitbites {
      */
     //@@author rayminQAQ
     public void run() {
+        // Disable logging
+        LogManager.getLogManager().reset();
+
         ui.showWelcome();
         String username = ui.getCurrentUser();
         GoalsCommand.loadGoalsIfNeeded(username);
