@@ -6,17 +6,19 @@ import model.Profile;
 import storage.ProfileStorage;
 import ui.UserInterface;
 import seedu.bitbites.AppContext;
+import java.util.ArrayList;
+import model.Food;
+import model.FoodList;
+import storage.Storage;
+import model.PresetList;
 
 /**
  * LoginCommand.java
- *
  * Handles user login functionality. Allows users to switch profiles
  * or initiate a new user profile setup.
- *
  * The login command prompts the user for their name and loads their
  * associated profile if it exists. If no profile is found, the user
  * is guided to create a new one.
- *
  * Usage:
  *   login: Prompts for a username and switches to that user's profile
  */
@@ -50,25 +52,70 @@ public class LoginCommand extends Command {
 
         logger.log(Level.INFO, "Login attempt for user: " + username);
 
-        // Check if profile exists
+        // @@author bryanyeo3125
+        // Save current user's food list before switching
+        String currentUser = ui.getCurrentUser();
+        if (currentUser != null && !currentUser.isEmpty()) {
+            Storage oldStorage = Storage.forUser(currentUser);
+            oldStorage.save(context.getFoodList());
+            logger.log(Level.INFO, "Saved food list for user: " + currentUser);
+        }
+
+        // Switch to new user
+        ui.setCurrentUser(username);
+        GoalsCommand.loadGoalsIfNeeded(username);
+
+        // Load new user's food list
+        FoodList newFoodList = new FoodList();
+        try {
+            Storage newStorage = Storage.forUser(username);
+            ArrayList<Food> foods = newStorage.load();
+            for (Food f : foods) {
+                newFoodList.addFood(f);
+            }
+            logger.log(Level.INFO, "Loaded food list for user: " + username);
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "No food list found for user: " + username + ", starting fresh.");
+        }
+        context.setFoodList(newFoodList);
+
+        // Save current user's preset list before switching
+        if (currentUser != null && !currentUser.isEmpty()) {
+            Storage oldPresetStorage = Storage.forUserPresets(currentUser);
+            oldPresetStorage.save(context.getPresetList());
+            logger.log(Level.INFO, "Saved preset list for user: " + currentUser);
+        }
+
+        // Load new user's preset list
+        PresetList newPresetList = new PresetList();
+        try {
+            Storage newPresetStorage = Storage.forUserPresets(username);
+            ArrayList<Food> presets = newPresetStorage.load();
+            for (Food f : presets) {
+                newPresetList.addPreset(f);
+            }
+            logger.log(Level.INFO, "Loaded preset list for user: " + username);
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "No preset list found for user: " + username + ", starting fresh.");
+        }
+        context.setPresetList(newPresetList);
+
+        // Display welcome message
         Profile profile = ProfileStorage.loadProfile(username);
         if (profile != null) {
             logger.log(Level.INFO, "Existing profile found for user: " + username);
-            ui.setCurrentUser(username);                          // ADD THIS
-            GoalsCommand.loadGoalsIfNeeded(username);             // ADD THIS
             System.out.println("Welcome back, " + username + "!");
             displayProfile(profile);
         } else {
             logger.log(Level.INFO, "No existing profile found for user: " + username);
-            ui.setCurrentUser(username);                          // ADD THIS
-            GoalsCommand.loadGoalsIfNeeded(username);             // ADD THIS
             System.out.println("Hello, " + username + "!");
             System.out.println("No profile found. Let's set up your profile:");
-            System.out.println("  profile set n/" + username + " g/GENDER a/AGE w/WEIGHT h/HEIGHT");
+            System.out.println("  profile set g/GENDER a/AGE w/WEIGHT h/HEIGHT");
             System.out.println();
             System.out.println("Example:");
-            System.out.println("  profile set n/" + username + " g/male a/25 w/70 h/180");
+            System.out.println("  profile set g/male a/25 w/70 h/180");
         }
+        //@@author
 
         System.out.println("Type 'help' for available commands.");
         System.out.println("==========================");

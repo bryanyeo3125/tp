@@ -83,23 +83,23 @@ Adds a new food entry to your food log for a given date.
 
 **Format:** `add n/NAME c/CALORIES p/PROTEIN [d/DATE]`
 
-| Parameter   | Description                                  |
-|-------------|----------------------------------------------|
-| `NAME`      | Name of the food item.                       |
-| `CALORIES`  | Calorie count in kcal (must be a whole number ≥ 0). |
-| `PROTEIN`   | Protein content in grams (decimal allowed, ≥ 0). |
-| `DATE`      | Date of consumption in `DD-MM-YYYY` format.  |
+| Parameter   | Description                                                      |
+|-------------|------------------------------------------------------------------|
+| `NAME`      | Name of the food item.                                           |
+| `CALORIES`  | Calorie count in kcal (must be a whole number from 0 to 10,000). |
+| `PROTEIN`   | Protein content in grams (decimal allowed, from 0 to 1000).      |
+| `DATE`      | Date of consumption in `DD-MM-YYYY` format.                      |
 
-Date is optional and will use today's date if left empty. After a successful add, Bitbites will display your updated progress toward today's daily calorie and protein goals.
+Date is optional and will use today's date if left empty. Parameters can be provided in any order. After a successful add, Bitbites will display your updated progress toward today's daily calorie and protein goals.
 
 **Examples:**
 ```
 add n/Chicken Rice c/500 p/30 d/01-04-2025
 add n/Banana c/105 p/1.3 d/01-04-2025
 ```
-
 > **Note:** Calories must be a whole integer, protein may be a decimal. Both must be non-negative. The date must strictly follow `DD-MM-YYYY` format.
 
+> **Note:** Input cannot contain the character "|", as it is a reserved character used in data storage.
 ---
 
 ### Listing food items : `list`
@@ -317,7 +317,7 @@ Displays your daily and weekly goals alongside your current intake for today and
 
 **Format:** `goals set [dc/DAILY_CALORIES] [dp/DAILY_PROTEIN] [wc/WEEKLY_CALORIES] [wp/WEEKLY_PROTEIN]`
 
-At least one prefix must be provided. Values must be non-negative numbers.
+At least one prefix must be provided. Values must be non-negative, non-zero numbers.
 
 | Prefix | Goal                        |
 |--------|-----------------------------|
@@ -370,23 +370,34 @@ Displays your name, gender, age, weight, height, BMI (with category), and BMR.
 
 #### Setting or updating your profile
 
-**Format:** `profile set n/NAME g/GENDER a/AGE w/WEIGHT h/HEIGHT`
+**Format:** `profile set [g/GENDER] [a/AGE] [w/WEIGHT] [h/HEIGHT]`
 
 | Parameter | Description                                      |
 |-----------|--------------------------------------------------|
-| `NAME`    | Your name.                                       |
 | `GENDER`  | `male` or `female` (case-insensitive).           |
-| `AGE`     | Your age in whole years.                         |
-| `WEIGHT`  | Your weight in kilograms (decimals allowed).     |
-| `HEIGHT`  | Your height in centimetres (decimals allowed).   |
+| `AGE`     | Your age in whole years (1–120).                 |
+| `WEIGHT`  | Your weight in kilograms (20–500 kg).            |
+| `HEIGHT`  | Your height in centimetres (80–250 cm).          |
 
-You may provide any subset of fields to update only those values; existing fields are preserved. Age, weight, and height must be non-negative.
+You may provide any subset of fields to update only those values; existing fields are preserved.
+At least one field must be provided.
 
-After saving, your calorie goals are automatically updated to match your BMR.
+After saving, your daily and weekly calorie goals are automatically updated to match your BMR.
+
+> **Note:** Name cannot be changed via `profile set`. Your profile name is set to your login
+> username. To use a different name, use `login` to switch to a different username.
+
+> **Note:** Age must be between 1 and 120, weight between 20 and 500 kg, and height between
+> 80 and 250 cm. Values outside these ranges will be rejected.
+
+> **Note:** Gender must be explicitly set when creating a new profile. If no profile exists
+> yet, `g/` is required.
 
 **Example:**
 ```
-profile set n/Alice g/female a/25 w/55 h/165
+profile set g/female a/25 w/55 h/165
+profile set a/30
+profile set w/70 h/175
 ```
 
 #### Listing all saved profiles
@@ -426,7 +437,7 @@ Alice
 > ...
 ```
 
-> **Note:** Switching users with `login` updates goals and profile operations immediately. However, the food log and presets are currently shared across all users on the same system.
+> **Note:** Switching users with `login` updates goals, profile, preset, and list operations to the operations associated with the chosen username.
 
 ---
 
@@ -459,12 +470,12 @@ Saves all data and exits Bitbites.
 
 Bitbites saves your data automatically to the `data/` folder in the same directory as the JAR file after every command. You do not need to save manually.
 
-| Data              | File location                          |
-|-------------------|----------------------------------------|
-| Food log          | `data/foods.txt`                       |
-| Presets           | `data/presets.txt`                     |
-| Profile (per user)| `data/<username>_profile.txt`          |
-| Goals (per user)  | `data/<username>_goals.txt`            |
+| Data              | File location                 |
+|-------------------|-------------------------------|
+| Food log          | `data/<username>_foods.txt`   |
+| Presets           | `data/<username>_presets.txt` |
+| Profile (per user)| `data/<username>_profile.txt` |
+| Goals (per user)  | `data/<username>_goals.txt`   |
 
 > **Editing data files directly:** The data files are plain text and can be edited manually. However, corrupted or incorrectly formatted entries will be rejected when the application next loads, and affected data may be lost. As such, manual editing is not recommended.
 
@@ -496,7 +507,6 @@ Data is saved after every successfully executed command. Only changes made in a 
 
 ## Known Issues
 
-- The food log and presets are shared across all users on the same system. Switching profiles via `login` does not load a different food log for that user.
 - `find` performs exact name matching only. Searching for a partial name (e.g., `find Chicken`) will not match `Chicken Rice`.
 - The weekly goal progress in `goals` is calculated based on the current calendar week (Monday to Sunday). Entries from the previous week are not included even if they are recent.
 

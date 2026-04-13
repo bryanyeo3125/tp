@@ -134,5 +134,29 @@ public class Storage {
             throw new BitbitesException("An error occurred while saving data.");
         }
     }
+
+    // @@author bryanyeo3125
+    /**
+     * Returns a Storage instance pointing to the given user's food file.
+     *
+     * @param username The current user's name.
+     * @return A Storage instance for that user's food file.
+     */
+    public static Storage forUser(String username) {
+        String safeName = username.toLowerCase().replaceAll("\\s+", "_");
+        return new Storage("data/" + safeName + "_foods.txt");
+    }
+
+    /**
+     * Returns a Storage instance pointing to the given user's presets file.
+     *
+     * @param username The current user's name.
+     * @return A Storage instance for that user's presets file.
+     */
+    public static Storage forUserPresets(String username) {
+        String safeName = username.toLowerCase().replaceAll("\\s+", "_");
+        return new Storage("data/" + safeName + "_presets.txt");
+    }
+    // @@author
 }
 //@@author
