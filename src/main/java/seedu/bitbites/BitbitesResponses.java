@@ -68,7 +68,7 @@ public class BitbitesResponses {
             + "  history /best N                         - Show top N calorie closest to goal days\n"
             + "  history streak                          - Show tracking streak\n"
             + "  profile                                 - View your profile, BMI and BMR\n"
-            + "  profile set n/NAME a/AGE w/WEIGHT h/HEIGHT - Set up your profile\n"
+            + "  profile set n/NAME a/AGE w/WEIGHT_KG h/HEIGHT_CM g/GENDER - Set up your profile\n"
             + "  profile list                            - List all saved profiles\n"
             + "  profile clear                           - Clear your profile\n"
             + "  login                                   - Switch between profiles\n"
