@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import command.AddCommand;
 import command.Command;
 import command.DeleteCommand;
@@ -963,16 +964,6 @@ class BitbitesTest {
     }
 
     /**
-     * Verifies that getBestDaysByCalories returns days in ascending calorie order.
-     */
-    @Test
-    void getBestDaysByCalories_correctOrder() {
-        java.util.List<NutritionSummary> best = foodList.getBestDaysByCalories(2);
-        assertEquals(2, best.size());
-        assertTrue(best.get(0).getTotalCalories() <= best.get(1).getTotalCalories());
-    }
-
-    /**
      * Verifies that the current streak is 0 when last entry is not today or yesterday.
      */
     @Test
@@ -1007,6 +998,110 @@ class BitbitesTest {
     @Test
     void getLongestStreak_emptyList_returnsZero() {
         assertEquals(0, new FoodList().getLongestStreak());
+    }
+
+    // ── Future date filtering ─────────────────────────────
+
+    /**
+     * Verifies that future dates are excluded from current streak calculation.
+     */
+    @Test
+    void getCurrentStreak_futureDates_excluded() {
+        FoodList testFoods = new FoodList();
+        testFoods.addFood(new Food("A", 100, 10.0, "15-04-2026")); // future
+        testFoods.addFood(new Food("B", 100, 10.0, "16-04-2026")); // future
+        assertEquals(0, testFoods.getCurrentStreak());
+    }
+
+    /**
+     * Verifies that future dates are excluded from longest streak calculation.
+     */
+    @Test
+    void getLongestStreak_futureDates_excluded() {
+        FoodList testFoods = new FoodList();
+        testFoods.addFood(new Food("A", 100, 10.0, "15-04-2026")); // future
+        testFoods.addFood(new Food("B", 100, 10.0, "16-04-2026")); // future
+        assertEquals(0, testFoods.getLongestStreak());
+    }
+
+    /**
+     * Verifies that future dates do not inflate the longest streak
+     * when mixed with past dates.
+     */
+    @Test
+    void getLongestStreak_mixedPastAndFuture_onlyCountsPast() {
+        FoodList testFoods = new FoodList();
+        testFoods.addFood(new Food("A", 100, 10.0, "27-03-2026")); // past
+        testFoods.addFood(new Food("B", 100, 10.0, "28-03-2026")); // past
+        testFoods.addFood(new Food("C", 100, 10.0, "15-04-2026")); // future
+        testFoods.addFood(new Food("D", 100, 10.0, "16-04-2026")); // future
+        assertEquals(2, testFoods.getLongestStreak());
+    }
+
+    /**
+     * Verifies that getPastAndTodaySummaries excludes future dates.
+     */
+    @Test
+    void getPastAndTodaySummaries_excludesFutureDates() {
+        FoodList testFoods = new FoodList();
+        testFoods.addFood(new Food("A", 100, 10.0, "27-03-2026")); // past
+        testFoods.addFood(new Food("B", 100, 10.0, "15-04-2026")); // future
+        List<NutritionSummary> summaries = testFoods.getPastAndTodaySummaries();
+        assertEquals(1, summaries.size());
+        assertEquals("27-03-2026", summaries.get(0).getDate());
+    }
+
+    /**
+     * Verifies that getTopDaysByCalories excludes future dates.
+     */
+    @Test
+    void getTopDaysByCalories_excludesFutureDates() {
+        FoodList testFoods = new FoodList();
+        testFoods.addFood(new Food("A", 100, 10.0, "27-03-2026")); // past
+        testFoods.addFood(new Food("B", 9999, 10.0, "15-04-2026")); // future, high cal
+        List<NutritionSummary> top = testFoods.getTopDaysByCalories(2);
+        assertEquals(1, top.size());
+        assertEquals(100, top.get(0).getTotalCalories());
+    }
+
+    /**
+     * Verifies that getDaysClosestToGoal excludes future dates.
+     */
+    @Test
+    void getDaysClosestToGoal_excludesFutureDates() {
+        FoodList testFoods = new FoodList();
+        testFoods.addFood(new Food("A", 2000, 10.0, "27-03-2026")); // past, on goal
+        testFoods.addFood(new Food("B", 2000, 10.0, "15-04-2026")); // future
+        List<NutritionSummary> best = testFoods.getDaysClosestToGoal(2, 2000);
+        assertEquals(1, best.size());
+        assertEquals("27-03-2026", best.get(0).getDate());
+    }
+
+    /**
+     * Verifies that history command executes without error when list has future dates.
+     */
+    @Test
+    void historyCommand_futureDates_doesNotThrow() {
+        foodList.addFood(new Food("Future", 100, 10.0, "15-04-2026"));
+        assertDoesNotThrow(() -> Parser.parse("history").execute(context));
+    }
+
+    /**
+     * Verifies that history /top excludes future dates.
+     */
+    @Test
+    void historyTopCommand_futureDates_doesNotThrow() {
+        foodList.addFood(new Food("Future", 9999, 10.0, "15-04-2026"));
+        assertDoesNotThrow(() -> Parser.parse("history /top 3").execute(context));
+    }
+
+    /**
+     * Verifies that history /best excludes future dates.
+     */
+    @Test
+    void historyBestCommand_futureDates_doesNotThrow() {
+        foodList.addFood(new Food("Future", 9999, 10.0, "15-04-2026"));
+        assertDoesNotThrow(() -> Parser.parse("history /best 3").execute(context));
     }
 
     // ── Summary Commands ──────────────────────────────────

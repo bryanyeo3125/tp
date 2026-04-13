@@ -48,11 +48,13 @@ public class SummaryByDateCommand extends Command {
             throw new BitbitesException("Please specify a date. Format: summary d/DATE");
         }
         String date = parts[1].trim();
+
+        validateDate(date);
+
         if (foodList.getItemCountByDate(date) == 0) {
             System.out.println("No food items found for " + date + ".");
             return false;
         }
-
         int calorieGoal = GoalsCommand.getDailyCalorieGoal();
         double proteinGoal = GoalsCommand.getDailyProteinGoal();
 

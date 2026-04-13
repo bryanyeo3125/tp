@@ -44,8 +44,6 @@ public class EditCommand extends Command {
         FoodList foodList = context.getFoodList();
         UserInterface ui = context.getUi();
 
-        assert foodList != null : "FoodList should not be null";
-
         // Format: edit INDEX [n/NAME] [c/CALORIES] [p/PROTEIN] [d/DATE]
         String[] parts = fullCommand.split(" ", 3);
         if (parts.length < 2 || parts[1].trim().isEmpty()) {
@@ -58,7 +56,8 @@ public class EditCommand extends Command {
             index = Integer.parseInt(parts[1].trim()) - 1;
         } catch (NumberFormatException e) {
             logger.log(Level.WARNING, "Invalid index format in edit command: " + parts[1]);
-            throw new BitbitesException("Invalid index format. Please enter a number.");
+            throw new BitbitesException("Invalid index format. Please enter a number."
+                            + "Format: edit INDEX [n/NAME] [c/CALORIES] [p/PROTEIN] [d/DATE]");
         }
 
         assert index >= 0 : "Index should be non-negative after conversion";
@@ -71,6 +70,11 @@ public class EditCommand extends Command {
         }
 
         String args = parts[2].trim();
+
+        // Avoid affecting storing
+        if (fullCommand.contains("|")) {
+            throw new BitbitesException("Input must not contain '|' as it is a reserved character.");
+        }
 
         // Must have at least one valid prefix
         if (!args.contains("n/") && !args.contains("c/")
@@ -94,31 +98,45 @@ public class EditCommand extends Command {
 
             if (args.contains("c/")) {
                 String caloriesStr = extractField(args, "c/").trim();
-                int calories = Integer.parseInt(caloriesStr);
-                if (calories < 0) {
+                long caloriesLong;
+                try {
+                    caloriesLong = Long.parseLong(caloriesStr);
+                } catch (NumberFormatException e) {
+                    throw new BitbitesException("Calories must be a whole number.");
+                }
+                if (caloriesLong < 0) {
                     throw new BitbitesException("Calories must be non-negative.");
                 }
-                food.setCalories(calories);
-                logger.log(Level.INFO, "Updated calories to: " + calories);
+                if (caloriesLong > 10000) {
+                    throw new BitbitesException("Calories value is too large. " +
+                            "Please enter a realistic value (max 10000 kcal).");
+                }
+                food.setCalories((int) caloriesLong);
+                logger.log(Level.INFO, "Updated calories to: " + caloriesLong);
             }
 
             if (args.contains("p/")) {
                 String proteinStr = extractField(args, "p/").trim();
-                double protein = Double.parseDouble(proteinStr);
+                double protein;
+                try {
+                    protein = Double.parseDouble(proteinStr);
+                } catch (NumberFormatException e) {
+                    throw new BitbitesException("Protein must be a number.");
+                }
                 if (protein < 0) {
                     throw new BitbitesException("Protein must be non-negative.");
                 }
-                assert protein >= 0 : "Protein should not be negative";
+                if (protein > 1000) {
+                    throw new BitbitesException("Protein value is too large. " +
+                            "Please enter a realistic value (max 1000g).");
+                }
                 food.setProtein(protein);
                 logger.log(Level.INFO, "Updated protein to: " + protein);
             }
 
             if (args.contains("d/")) {
                 String date = extractField(args, "d/").trim();
-                if (!date.matches("\\d{2}-\\d{2}-\\d{4}")) {
-                    throw new BitbitesException("Date must be in DD-MM-YYYY format.");
-                }
-                assert date.matches("\\d{2}-\\d{2}-\\d{4}") : "Date format should be DD-MM-YYYY";
+                validateDate(date);
                 food.setDate(date);
                 logger.log(Level.INFO, "Updated date to: " + date);
             }

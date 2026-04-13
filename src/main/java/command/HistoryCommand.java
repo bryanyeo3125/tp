@@ -35,7 +35,7 @@ public class HistoryCommand extends Command {
         String today = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         boolean recordedToday = foodList.getItemCountByDate(today) > 0;
 
-        List<NutritionSummary> summaries = foodList.getAllDailySummaries();
+        List<NutritionSummary> summaries = foodList.getPastAndTodaySummaries();
         java.util.Collections.reverse(summaries);
         logger.log(Level.INFO, "Showing history, total days: " + summaries.size());
         ui.showHistory(summaries, recordedToday);

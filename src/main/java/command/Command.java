@@ -1,6 +1,7 @@
 package command;
 
 import seedu.bitbites.AppContext;
+import seedu.bitbites.BitbitesException;
 
 /**
  * Command.java
@@ -62,6 +63,28 @@ public abstract class Command {
             }
         }
         return nearestPrefix;
+    }
+
+    /**
+     * Validates that the given date string is in DD-MM-YYYY format and represents
+     * a real calendar date. Throws BitbitesException if validation fails.
+     *
+     * @param date The date string to validate.
+     * @throws BitbitesException If the format is wrong or the date is not a real date.
+     */
+    protected static void validateDate(String date) {
+        if (!date.matches("\\d{2}-\\d{2}-\\d{4}")) {
+            throw new BitbitesException("Date must be in DD-MM-YYYY format.");
+        }
+        java.time.format.DateTimeFormatter strictFormatter = java.time.format.DateTimeFormatter
+                .ofPattern("dd-MM-uuuu")
+                .withResolverStyle(java.time.format.ResolverStyle.STRICT);
+        try {
+            java.time.LocalDate.parse(date, strictFormatter);
+        } catch (java.time.format.DateTimeParseException e) {
+            throw new BitbitesException("Invalid date: " + date +
+                    ". Please enter a real date in DD-MM-YYYY format.");
+        }
     }
 }
 // @@author

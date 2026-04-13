@@ -19,7 +19,7 @@ import ui.UserInterface;
 public class SummaryRangeCommand extends Command {
     private static final Logger logger = Logger.getLogger(SummaryRangeCommand.class.getName());
     private static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            DateTimeFormatter.ofPattern("dd-MM-uuuu").withResolverStyle(java.time.format.ResolverStyle.STRICT);;
     private final String fullCommand;
 
     /**
@@ -67,14 +67,11 @@ public class SummaryRangeCommand extends Command {
                         "Please use the correct format: summary from/DATE1 to/DATE2");
             }
 
-            LocalDate from;
-            LocalDate to;
-            try {
-                from = LocalDate.parse(fromDate, FORMATTER);
-                to = LocalDate.parse(toDate, FORMATTER);
-            } catch (Exception e) {
-                throw new BitbitesException("Invalid date format. Please use DD-MM-YYYY.");
-            }
+            validateDate(fromDate);
+            validateDate(toDate);
+
+            LocalDate from = LocalDate.parse(fromDate, FORMATTER);
+            LocalDate to = LocalDate.parse(toDate, FORMATTER);
 
             if (from.isAfter(to)) {
                 throw new BitbitesException("Start date must not be after end date.");
