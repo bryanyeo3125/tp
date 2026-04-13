@@ -11,6 +11,40 @@ The following resources, libraries, and tools were instrumental in the developme
 
 ---
 
+## Setting Up, Getting Started
+
+### Prerequisites
+
+Before setting up BitBites, ensure you have the following installed:
+- **JDK 17** (or later): Required to compile and run the application.
+- **Git**: Required to clone the repository.
+
+### Setup Instructions
+
+#### 1. Cloning the Repository
+
+Clone the BitBites repository to your local machine:
+
+```bash
+git clone https://github.com/AY2526S2-CS2113-F14-2/tp.git
+cd tp
+```
+
+#### 2. Downloading and Running BitBites
+
+1. Download the latest `bitbites.jar` file from the milestone releases page.
+2. Open a terminal and navigate to the directory where you downloaded the JAR file.
+3. Run the application using:
+   ```bash
+   java -jar bitbites.jar
+   ```
+
+#### 3. First Launch
+
+Upon first launch, the application will prompt you to enter your name. This personalizes your session and is used to identify your profile and goals data.
+
+---
+
 ## Design & Implementation
 
 {Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
@@ -425,7 +459,7 @@ The `history` feature shows a chronological log of all recorded days. It support
 
 ---
 
-### 13. Storage Components
+### 14. Storage Components
 
 BitBites uses two independent storage classes — `ProfileStorage` and `GoalsStorage` — both located in the `storage` package. Each class reads and writes plain-text key-value files stored in the `data/` directory.
 

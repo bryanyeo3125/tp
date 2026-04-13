@@ -66,6 +66,7 @@ These architectural decisions provided a stable foundation that the team extende
 - Section: [Exiting the application](../UserGuide.md#exiting-the-application--exit) — `exit` command for safe termination
 - Section: [Finding food items](../UserGuide.md#finding-food-items--find) — `find` command for search functionality
 - Section: [Switching users](../UserGuide.md#switching-users--login) — `login` command for multi-user session management 
+
 ---
 
 ### Contributions to the Developer Guide
