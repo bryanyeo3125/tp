@@ -92,7 +92,7 @@ public class NutritionSummary {
                     : (double) food.getCalories() / totalCalories * 100;
             double proteinPercent = totalProtein == 0 ? 0
                     : food.getProtein() / totalProtein * 100;
-            sb.append(String.format("  %d. %-20s %4d kcal (%.1f%%) | %.1fg protein (%.1f%%)\n",
+            sb.append(String.format("  %d. %-20s %4d kcal (%.2f%%) | %.1fg protein (%.2f%%)\n",
                     i + 1, food.getName(),
                     food.getCalories(), calPercent,
                     food.getProtein(), proteinPercent));

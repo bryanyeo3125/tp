@@ -963,16 +963,6 @@ class BitbitesTest {
     }
 
     /**
-     * Verifies that getBestDaysByCalories returns days in ascending calorie order.
-     */
-    @Test
-    void getBestDaysByCalories_correctOrder() {
-        java.util.List<NutritionSummary> best = foodList.getBestDaysByCalories(2);
-        assertEquals(2, best.size());
-        assertTrue(best.get(0).getTotalCalories() <= best.get(1).getTotalCalories());
-    }
-
-    /**
      * Verifies that the current streak is 0 when last entry is not today or yesterday.
      */
     @Test

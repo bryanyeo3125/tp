@@ -67,7 +67,7 @@ public class FoodList {
     //@@author
 
 
-    // ── Summary ───────────────────────────────────────────
+    // ── Summary and History ───────────────────────────────────────────
     public List<Food> getItemsByDate(String date) {
         assert date != null && !date.isEmpty() : "Date should not be null or empty";
         List<Food> result = new ArrayList<>();
@@ -138,6 +138,20 @@ public class FoodList {
         return new NutritionSummary(date, totalCalories, totalProtein, items.size(), items);
     }
 
+    /**
+     * Returns daily summaries for all dates up to and including today.
+     * Future dates are excluded from the history view.
+     *
+     * @return A list of NutritionSummary objects for past and present dates only.
+     */
+    public List<NutritionSummary> getPastAndTodaySummaries() {
+        List<NutritionSummary> summaries = new ArrayList<>();
+        for (String date : getPastAndTodayDates()) {
+            summaries.add(getSummaryByDate(date));
+        }
+        return summaries;
+    }
+
     public List<NutritionSummary> getAllDailySummaries() {
         List<NutritionSummary> summaries = new ArrayList<>();
         for (String date : getUniqueDates()) {
@@ -164,7 +178,7 @@ public class FoodList {
 
     public List<NutritionSummary> getDaysClosestToGoal(int n, int calorieGoal) {
         assert n > 0 : "N should be positive";
-        List<NutritionSummary> summaries = new ArrayList<>(getAllDailySummaries());
+        List<NutritionSummary> summaries = new ArrayList<>(getPastAndTodaySummaries());
         summaries.sort((a, b) -> {
             int diffA = Math.abs(a.getTotalCalories() - calorieGoal);
             int diffB = Math.abs(b.getTotalCalories() - calorieGoal);
@@ -174,19 +188,13 @@ public class FoodList {
     }
 
     public List<NutritionSummary> getTopDaysByCalories(int n) {
-        List<NutritionSummary> summaries = new ArrayList<>(getAllDailySummaries());
+        List<NutritionSummary> summaries = new ArrayList<>(getPastAndTodaySummaries());
         summaries.sort((a, b) -> b.getTotalCalories() - a.getTotalCalories());
         return summaries.subList(0, Math.min(n, summaries.size()));
     }
 
-    public List<NutritionSummary> getBestDaysByCalories(int n) {
-        List<NutritionSummary> summaries = new ArrayList<>(getAllDailySummaries());
-        summaries.sort((a, b) -> a.getTotalCalories() - b.getTotalCalories());
-        return summaries.subList(0, Math.min(n, summaries.size()));
-    }
-
     public int getLongestStreak() {
-        List<String> dates = getUniqueDates();
+        List<String> dates = getPastAndTodayDates();
         if (dates.isEmpty()) {
             return 0;
         }
@@ -200,12 +208,11 @@ public class FoodList {
                 currentStreak = 1;
             }
         }
-        assert longestStreak >= 1 : "Streak should be at least 1 if dates exist";
         return longestStreak;
     }
 
     public int getCurrentStreak() {
-        List<String> dates = getUniqueDates();
+        List<String> dates = getPastAndTodayDates();
         if (dates.isEmpty()) {
             return 0;
         }
@@ -229,6 +236,21 @@ public class FoodList {
             }
         }
         return currentStreak;
+    }
+
+    /**
+     * Returns a list of unique dates up to and including today, sorted chronologically.
+     * Future dates are excluded to prevent them from affecting streak calculations.
+     *
+     * @return A sorted list of date strings in DD-MM-YYYY format, excluding future dates.
+     */
+    private List<String> getPastAndTodayDates() {
+        java.time.LocalDate today = java.time.LocalDate.now();
+        java.time.format.DateTimeFormatter formatter =
+                java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return getUniqueDates().stream()
+                .filter(d -> !java.time.LocalDate.parse(d, formatter).isAfter(today))
+                .collect(java.util.stream.Collectors.toList());
     }
 
     private boolean isConsecutive(String date1, String date2) {

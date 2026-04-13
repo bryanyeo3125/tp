@@ -150,7 +150,7 @@ public class UserInterface {
             boolean nearGoal = diff <= calorieGoal * 0.2;
             String goalTag = nearGoal ? " GOAL reached!" : "";
 
-            System.out.printf("    %-12s  %-10s  %-10s  %s%s\n",
+            System.out.printf("  %-12s  %-10s  %-10s  %s%s\n",
                     s.getDate(),
                     s.getTotalCalories() + " kcal",
                     String.format("%.1fg", s.getTotalProtein()),
