@@ -501,12 +501,12 @@ The `history` feature shows a chronological log of all recorded days. It support
 ![history sequence diagram](uml/history.png)
 
 **`history /top N`:**
-`HistoryTopCommand` splits the command by `/top` to extract `N`. It calls `foodList.getTopDaysByCalories(N)` which uses `getPastAndTodaySummaries()` to exclude future-dated entries before sorting summaries by total calories descending and returns the top N.
+`HistoryTopCommand` splits the command by `/top` to extract `N`. It calls `foodList.getTopDaysByCalories(N)` and sorts summaries by total calories descending and returns the top N.
 
 ![history top sequence diagram](uml/history_top.png)
 
 **`history /best N`:**
-`HistoryBestCommand` splits the command by `/top` to extract `N`. It calls `foodList.getDaysClosestToGoal(n, calorieGoal)`,  which uses `getPastAndTodaySummaries()` to exclude future-dated entries before sorting summaries by `|totalCalories - dailyCalorieGoal|` ascending, surfacing the days where intake was closest to the user's target.
+`HistoryBestCommand` splits the command by `/top` to extract `N`. It calls `foodList.getDaysClosestToGoal(n, calorieGoal)` and sorts summaries by `|totalCalories - dailyCalorieGoal|` ascending, surfacing the days where intake was closest to the user's target.
 
 ![history best sequence diagram](uml/history_best.png)
 

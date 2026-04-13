@@ -2,52 +2,60 @@
 actor User
 participant ":Bitbites" as Bitbites
 participant ":Parser" as Parser
-participant ":SummaryByDateCommand" as Cmd
+participant ":SummaryByDateCommand" as SummaryByDateCommand
 participant ":FoodList" as FoodList
-participant ":GoalsCommand" as Goals
+participant ":GoalsCommand" as GoalsCommand
 participant ":UserInterface" as UI
 
 User -> Bitbites : input "summary d/01-04-2026"
 activate Bitbites
 
-Bitbites -> Parser : parse(...)
+Bitbites -> Parser : parse("summary d/01-04-2026")
 activate Parser
 Parser --> Bitbites : SummaryByDateCommand
 deactivate Parser
 
-Bitbites -> Cmd : execute(context)
-activate Cmd
+Bitbites -> SummaryByDateCommand : execute(context)
+activate SummaryByDateCommand
 
-Cmd -> FoodList : getItemCountByDate(date)
-activate FoodList
-FoodList --> Cmd : count
-deactivate FoodList
+alt [* missing or empty date]
+  SummaryByDateCommand --> Bitbites : throws BitbitesException
+else [* invalid date format or impossible date]
+  SummaryByDateCommand --> Bitbites : throws BitbitesException
+else [* valid date]
+  SummaryByDateCommand -> FoodList : getItemCountByDate(date)
+  activate FoodList
+  FoodList --> SummaryByDateCommand : count
+  deactivate FoodList
 
-alt count == 0
-    Cmd --> User : "No food items found"
-else count > 0
-    Cmd -> FoodList : getSummaryByDate(date)
+  alt [* count == 0]
+    SummaryByDateCommand -> SummaryByDateCommand : print "No food items found"
+  else [* count > 0]
+    SummaryByDateCommand -> GoalsCommand : getDailyCalorieGoal()
+    activate GoalsCommand
+    GoalsCommand --> SummaryByDateCommand : calorieGoal
+    deactivate GoalsCommand
+
+    SummaryByDateCommand -> GoalsCommand : getDailyProteinGoal()
+    activate GoalsCommand
+    GoalsCommand --> SummaryByDateCommand : proteinGoal
+    deactivate GoalsCommand
+
+    SummaryByDateCommand -> FoodList : getSummaryByDate(date)
     activate FoodList
-    FoodList --> Cmd : NutritionSummary
+    FoodList --> SummaryByDateCommand : NutritionSummary
     deactivate FoodList
 
-    Cmd -> Goals : getDailyCalorieGoal()
-    activate Goals
-    Goals --> Cmd : int
-    deactivate Goals
-
-    Cmd -> Goals : getDailyProteinGoal()
-    activate Goals
-    Goals --> Cmd : double
-    deactivate Goals
-
-    Cmd -> UI : showSummary(summary, calorieGoal, proteinGoal)
+    SummaryByDateCommand -> UI : showSummary(summary, calorieGoal, proteinGoal)
     activate UI
-    UI --> Cmd
+    UI --> SummaryByDateCommand
     deactivate UI
+  end
 end
 
-Cmd --> Bitbites : false
-deactivate Cmd
+SummaryByDateCommand --> Bitbites : false
+deactivate SummaryByDateCommand
+
+Bitbites --> User
 deactivate Bitbites
 @enduml

@@ -18,11 +18,11 @@ deactivate Parser
 Bitbites -> HistoryBestCommand : execute(context)
 activate HistoryBestCommand
 
-alt [N missing or non-numeric]
+alt [* N missing or non-numeric]
   HistoryBestCommand --> Bitbites : throws BitbitesException
-else [N <= 0]
+else [* N <= 0]
   HistoryBestCommand --> Bitbites : throws BitbitesException
-else [valid N]
+else [* valid N]
   HistoryBestCommand -> GoalsCommand : getDailyCalorieGoal()
   activate GoalsCommand
   GoalsCommand --> HistoryBestCommand : calorieGoal

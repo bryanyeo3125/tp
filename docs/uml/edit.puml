@@ -27,10 +27,6 @@ EditCommand -> UI : showEditedFood(food)
 EditCommand --> Bitbites : false
 deactivate EditCommand
 
-Bitbites -> Bitbites : foodStorage.save(foods)
-activate Bitbites
-deactivate Bitbites
-
 Bitbites --> User
 deactivate Bitbites
 @enduml

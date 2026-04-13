@@ -9,7 +9,7 @@ participant ":UserInterface" as UI
 User -> Bitbites : input "summary compare d/27-03-2026 d/28-03-2026"
 activate Bitbites
 
-Bitbites -> Parser : parse(fullCommand)
+Bitbites -> Parser : parse("summary compare d/27-03-2026 d/28-03-2026")
 activate Parser
 Parser --> Bitbites : SummaryCompareCommand
 deactivate Parser
@@ -17,48 +17,46 @@ deactivate Parser
 Bitbites -> SummaryCompareCommand : execute(context)
 activate SummaryCompareCommand
 
-alt [less than 3 parts after split by d/]
+alt [* less than 3 parts after split by d/]
   SummaryCompareCommand --> Bitbites : throws BitbitesException
+else [* empty date1 or date2]
+  SummaryCompareCommand --> Bitbites : throws BitbitesException
+else [* invalid date format or impossible date]
+  SummaryCompareCommand --> Bitbites : throws BitbitesException
+else [* valid dates]
+  SummaryCompareCommand -> FoodList : getItemCountByDate(date1)
+  activate FoodList
+  FoodList --> SummaryCompareCommand : count1
+  deactivate FoodList
+
+  alt [* count1 == 0]
+    SummaryCompareCommand -> SummaryCompareCommand : print "No food items found for date1"
+  else
+    SummaryCompareCommand -> FoodList : getItemCountByDate(date2)
+    activate FoodList
+    FoodList --> SummaryCompareCommand : count2
+    deactivate FoodList
+
+    alt [* count2 == 0]
+      SummaryCompareCommand -> SummaryCompareCommand : print "No food items found for date2"
+    else
+      SummaryCompareCommand -> FoodList : getSummaryByDate(date1)
+      activate FoodList
+      FoodList --> SummaryCompareCommand : NutritionSummary
+      deactivate FoodList
+
+      SummaryCompareCommand -> FoodList : getSummaryByDate(date2)
+      activate FoodList
+      FoodList --> SummaryCompareCommand : NutritionSummary
+      deactivate FoodList
+
+      SummaryCompareCommand -> UI : showSummaryCompare(summary1, summary2)
+      activate UI
+      UI --> SummaryCompareCommand
+      deactivate UI
+    end
+  end
 end
-
-SummaryCompareCommand -> FoodList : getItemCountByDate(date1)
-activate FoodList
-FoodList --> SummaryCompareCommand : count1
-deactivate FoodList
-
-alt [count1 == 0]
-  SummaryCompareCommand -> UI : print "No food items found for date1"
-  activate UI
-  UI --> SummaryCompareCommand
-  deactivate UI
-end
-
-SummaryCompareCommand -> FoodList : getItemCountByDate(date2)
-activate FoodList
-FoodList --> SummaryCompareCommand : count2
-deactivate FoodList
-
-alt [count2 == 0]
-  SummaryCompareCommand -> UI : print "No food items found for date2"
-  activate UI
-  UI --> SummaryCompareCommand
-  deactivate UI
-end
-
-SummaryCompareCommand -> FoodList : getSummaryByDate(date1)
-activate FoodList
-FoodList --> SummaryCompareCommand : NutritionSummary
-deactivate FoodList
-
-SummaryCompareCommand -> FoodList : getSummaryByDate(date2)
-activate FoodList
-FoodList --> SummaryCompareCommand : NutritionSummary
-deactivate FoodList
-
-SummaryCompareCommand -> UI : showSummaryCompare(summary1, summary2)
-activate UI
-UI --> SummaryCompareCommand
-deactivate UI
 
 SummaryCompareCommand --> Bitbites : false
 deactivate SummaryCompareCommand
