@@ -98,19 +98,35 @@ public class EditCommand extends Command {
 
             if (args.contains("c/")) {
                 String caloriesStr = extractField(args, "c/").trim();
-                int calories = Integer.parseInt(caloriesStr);
-                if (calories < 0) {
+                long caloriesLong;
+                try {
+                    caloriesLong = Long.parseLong(caloriesStr);
+                } catch (NumberFormatException e) {
+                    throw new BitbitesException("Calories must be a whole number.");
+                }
+                if (caloriesLong < 0) {
                     throw new BitbitesException("Calories must be non-negative.");
                 }
-                food.setCalories(calories);
-                logger.log(Level.INFO, "Updated calories to: " + calories);
+                if (caloriesLong > 10000) {
+                    throw new BitbitesException("Calories value is too large. Please enter a realistic value (max 10000 kcal).");
+                }
+                food.setCalories((int) caloriesLong);
+                logger.log(Level.INFO, "Updated calories to: " + caloriesLong);
             }
 
             if (args.contains("p/")) {
                 String proteinStr = extractField(args, "p/").trim();
-                double protein = Double.parseDouble(proteinStr);
+                double protein;
+                try {
+                    protein = Double.parseDouble(proteinStr);
+                } catch (NumberFormatException e) {
+                    throw new BitbitesException("Protein must be a number.");
+                }
                 if (protein < 0) {
                     throw new BitbitesException("Protein must be non-negative.");
+                }
+                if (protein > 1000) {
+                    throw new BitbitesException("Protein value is too large. Please enter a realistic value (max 1000g).");
                 }
                 food.setProtein(protein);
                 logger.log(Level.INFO, "Updated protein to: " + protein);
@@ -118,18 +134,7 @@ public class EditCommand extends Command {
 
             if (args.contains("d/")) {
                 String date = extractField(args, "d/").trim();
-                if (!date.matches("\\d{2}-\\d{2}-\\d{4}")) {
-                    throw new BitbitesException("Date must be in DD-MM-YYYY format.");
-                }
-                java.time.format.DateTimeFormatter strictFormatter = java.time.format.DateTimeFormatter
-                        .ofPattern("dd-MM-uuuu")
-                        .withResolverStyle(java.time.format.ResolverStyle.STRICT);
-                try {
-                    java.time.LocalDate.parse(date, strictFormatter);
-                } catch (java.time.format.DateTimeParseException e) {
-                    throw new BitbitesException("Invalid date: " + date +
-                            ". Please enter a real date in DD-MM-YYYY format.");
-                }
+                validateDate(date);
                 food.setDate(date);
                 logger.log(Level.INFO, "Updated date to: " + date);
             }

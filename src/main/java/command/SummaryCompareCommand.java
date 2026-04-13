@@ -55,6 +55,9 @@ public class SummaryCompareCommand extends Command {
                     "Please use the correct format: summary compare d/DATE1 d/DATE2");
         }
 
+        validateDate(date1);
+        validateDate(date2);
+
         if (foodList.getItemCountByDate(date1) == 0) {
             System.out.println("No food items found for " + date1 + ".");
             return false;
