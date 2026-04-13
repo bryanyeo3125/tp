@@ -370,23 +370,34 @@ Displays your name, gender, age, weight, height, BMI (with category), and BMR.
 
 #### Setting or updating your profile
 
-**Format:** `profile set n/NAME g/GENDER a/AGE w/WEIGHT h/HEIGHT`
+**Format:** `profile set [g/GENDER] [a/AGE] [w/WEIGHT] [h/HEIGHT]`
 
 | Parameter | Description                                      |
 |-----------|--------------------------------------------------|
-| `NAME`    | Your name.                                       |
 | `GENDER`  | `male` or `female` (case-insensitive).           |
-| `AGE`     | Your age in whole years.                         |
-| `WEIGHT`  | Your weight in kilograms (decimals allowed).     |
-| `HEIGHT`  | Your height in centimetres (decimals allowed).   |
+| `AGE`     | Your age in whole years (1–120).                 |
+| `WEIGHT`  | Your weight in kilograms (20–500 kg).            |
+| `HEIGHT`  | Your height in centimetres (80–250 cm).          |
 
-You may provide any subset of fields to update only those values; existing fields are preserved. Age, weight, and height must be non-negative.
+You may provide any subset of fields to update only those values; existing fields are preserved.
+At least one field must be provided.
 
-After saving, your calorie goals are automatically updated to match your BMR.
+After saving, your daily and weekly calorie goals are automatically updated to match your BMR.
+
+> **Note:** Name cannot be changed via `profile set`. Your profile name is set to your login
+> username. To use a different name, use `login` to switch to a different username.
+
+> **Note:** Age must be between 1 and 120, weight between 20 and 500 kg, and height between
+> 80 and 250 cm. Values outside these ranges will be rejected.
+
+> **Note:** Gender must be explicitly set when creating a new profile. If no profile exists
+> yet, `g/` is required.
 
 **Example:**
 ```
-profile set n/Alice g/female a/25 w/55 h/165
+profile set g/female a/25 w/55 h/165
+profile set a/30
+profile set w/70 h/175
 ```
 
 #### Listing all saved profiles
