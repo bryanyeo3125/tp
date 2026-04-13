@@ -51,7 +51,7 @@ public class FoodList {
 
     public Food getFood(int index) {
         if (index < 0 || index >= foodList.size()) {
-            throw new BitbitesException("OOPS!!! Invalid index. Please provide a valid item number.");
+            throw new BitbitesException("Invalid index. Please provide a valid item number.");
         }
         return foodList.get(index);
     }

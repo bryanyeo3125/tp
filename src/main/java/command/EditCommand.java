@@ -44,8 +44,6 @@ public class EditCommand extends Command {
         FoodList foodList = context.getFoodList();
         UserInterface ui = context.getUi();
 
-        assert foodList != null : "FoodList should not be null";
-
         // Format: edit INDEX [n/NAME] [c/CALORIES] [p/PROTEIN] [d/DATE]
         String[] parts = fullCommand.split(" ", 3);
         if (parts.length < 2 || parts[1].trim().isEmpty()) {
@@ -58,7 +56,8 @@ public class EditCommand extends Command {
             index = Integer.parseInt(parts[1].trim()) - 1;
         } catch (NumberFormatException e) {
             logger.log(Level.WARNING, "Invalid index format in edit command: " + parts[1]);
-            throw new BitbitesException("Invalid index format. Please enter a number.");
+            throw new BitbitesException("Invalid index format. Please enter a number."
+                            + "Format: edit INDEX [n/NAME] [c/CALORIES] [p/PROTEIN] [d/DATE]");
         }
 
         assert index >= 0 : "Index should be non-negative after conversion";
@@ -71,6 +70,11 @@ public class EditCommand extends Command {
         }
 
         String args = parts[2].trim();
+
+        // Avoid affecting storing
+        if (fullCommand.contains("|")) {
+            throw new BitbitesException("Input must not contain '|' as it is a reserved character.");
+        }
 
         // Must have at least one valid prefix
         if (!args.contains("n/") && !args.contains("c/")
@@ -108,7 +112,6 @@ public class EditCommand extends Command {
                 if (protein < 0) {
                     throw new BitbitesException("Protein must be non-negative.");
                 }
-                assert protein >= 0 : "Protein should not be negative";
                 food.setProtein(protein);
                 logger.log(Level.INFO, "Updated protein to: " + protein);
             }
@@ -118,7 +121,15 @@ public class EditCommand extends Command {
                 if (!date.matches("\\d{2}-\\d{2}-\\d{4}")) {
                     throw new BitbitesException("Date must be in DD-MM-YYYY format.");
                 }
-                assert date.matches("\\d{2}-\\d{2}-\\d{4}") : "Date format should be DD-MM-YYYY";
+                java.time.format.DateTimeFormatter strictFormatter = java.time.format.DateTimeFormatter
+                        .ofPattern("dd-MM-uuuu")
+                        .withResolverStyle(java.time.format.ResolverStyle.STRICT);
+                try {
+                    java.time.LocalDate.parse(date, strictFormatter);
+                } catch (java.time.format.DateTimeParseException e) {
+                    throw new BitbitesException("Invalid date: " + date +
+                            ". Please enter a real date in DD-MM-YYYY format.");
+                }
                 food.setDate(date);
                 logger.log(Level.INFO, "Updated date to: " + date);
             }
