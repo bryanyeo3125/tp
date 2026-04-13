@@ -68,6 +68,13 @@ public class FoodList {
 
 
     // ── Summary and History ───────────────────────────────────────────
+    /**
+     * Returns all Food items recorded on a specific date.
+     *
+     * @param date The date string in "dd-MM-yyyy" format to filter by
+     * @return A List of Food objects that were consumed on the specified date
+     * @throws AssertionError If date is null or empty
+     */
     public List<Food> getItemsByDate(String date) {
         assert date != null && !date.isEmpty() : "Date should not be null or empty";
         List<Food> result = new ArrayList<>();
@@ -79,6 +86,13 @@ public class FoodList {
         return result;
     }
 
+    /**
+     * Calculates the total calories consumed on a specific date.
+     *
+     * @param date The date string in "dd-MM-yyyy" format to calculate for
+     * @return The sum of calories from all food items on the specified date
+     * @throws AssertionError If date is null or empty, or if total is negative
+     */
     public int getTotalCaloriesByDate(String date) {
         assert date != null && !date.isEmpty() : "Date should not be null or empty";
         int total = 0;
@@ -91,6 +105,13 @@ public class FoodList {
         return total;
     }
 
+    /**
+     * Calculates the total protein consumed on a specific date.
+     *
+     * @param date The date string in "dd-MM-yyyy" format to calculate for
+     * @return The sum of protein (in grams) from all food items on the specified date
+     * @throws AssertionError If date is null or empty, or if total is negative
+     */
     public double getTotalProteinByDate(String date) {
         assert date != null && !date.isEmpty() : "Date should not be null or empty";
         double total = 0;
@@ -103,6 +124,13 @@ public class FoodList {
         return total;
     }
 
+    /**
+     * Counts the number of food items recorded on a specific date.
+     *
+     * @param date The date string in "dd-MM-yyyy" format to count for
+     * @return The number of Food objects associated with the specified date
+     * @throws AssertionError If date is null or empty
+     */
     public int getItemCountByDate(String date) {
         assert date != null && !date.isEmpty() : "Date should not be null or empty";
         int count = 0;
@@ -114,6 +142,12 @@ public class FoodList {
         return count;
     }
 
+    /**
+     * Returns all unique dates present in the food list, sorted chronologically.
+     * Dates are returned in ascending order from earliest to latest.
+     *
+     * @return A List of unique date strings in "dd-MM-yyyy" format, sorted chronologically
+     */
     public List<String> getUniqueDates() {
         List<String> dates = new ArrayList<>();
         for (Food food : foodList) {
@@ -131,6 +165,14 @@ public class FoodList {
         return dates;
     }
 
+    /**
+     * Creates a comprehensive nutritional summary for a specific date.
+     * Includes total calories, total protein, item count, and the list of food items.
+     *
+     * @param date The date string in "dd-MM-yyyy" format to summarize
+     * @return A NutritionSummary object containing all nutritional data for the date
+     * @see NutritionSummary
+     */
     public NutritionSummary getSummaryByDate(String date) {
         List<Food> items = getItemsByDate(date);
         int totalCalories = getTotalCaloriesByDate(date);
@@ -152,14 +194,14 @@ public class FoodList {
         return summaries;
     }
 
-    public List<NutritionSummary> getAllDailySummaries() {
-        List<NutritionSummary> summaries = new ArrayList<>();
-        for (String date : getUniqueDates()) {
-            summaries.add(getSummaryByDate(date));
-        }
-        return summaries;
-    }
-
+    /**
+     * Returns nutritional summaries for dates falling within a specified range.
+     * Both start and end dates are inclusive in the range.
+     *
+     * @param fromDate The start date in "dd-MM-yyyy" format
+     * @param toDate The end date in "dd-MM-yyyy" format
+     * @return A list of NutritionSummary objects for dates between fromDate and toDate
+     */
     public List<NutritionSummary> getSummariesInRange(String fromDate, String toDate) {
         java.time.format.DateTimeFormatter formatter =
                 java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -176,6 +218,15 @@ public class FoodList {
         return summaries;
     }
 
+    /**
+     * Returns the N days where total calories were closest to the specified goal.
+     * Days are sorted by the absolute difference from the calorie goal.
+     *
+     * @param n The maximum number of days to return
+     * @param calorieGoal The target calorie value to compare against
+     * @return A list of the N days whose calorie totals are closest to the goal
+     * @throws AssertionError If n is not positive
+     */
     public List<NutritionSummary> getDaysClosestToGoal(int n, int calorieGoal) {
         assert n > 0 : "N should be positive";
         List<NutritionSummary> summaries = new ArrayList<>(getPastAndTodaySummaries());
@@ -187,12 +238,25 @@ public class FoodList {
         return summaries.subList(0, Math.min(n, summaries.size()));
     }
 
+    /**
+     * Returns the top N days with the highest total calorie consumption.
+     * Days are sorted in descending order of calorie count.
+     *
+     * @param n The maximum number of days to return
+     * @return A list of the N days with the highest calorie totals
+     */
     public List<NutritionSummary> getTopDaysByCalories(int n) {
         List<NutritionSummary> summaries = new ArrayList<>(getPastAndTodaySummaries());
         summaries.sort((a, b) -> b.getTotalCalories() - a.getTotalCalories());
         return summaries.subList(0, Math.min(n, summaries.size()));
     }
 
+    /**
+     * Calculates the longest consecutive streak of logged days.
+     * A streak counts consecutive calendar days where at least one food item was logged.
+     *
+     * @return The length of the longest streak of consecutive logged days
+     */
     public int getLongestStreak() {
         List<String> dates = getPastAndTodayDates();
         if (dates.isEmpty()) {
@@ -211,6 +275,13 @@ public class FoodList {
         return longestStreak;
     }
 
+    /**
+     * Calculates the current active streak of logged days.
+     * A streak is considered active if the last logged day is either today or yesterday.
+     * If the last logged day is older than yesterday, the streak is broken.
+     *
+     * @return The length of the current streak, or 0 if the streak is broken
+     */
     public int getCurrentStreak() {
         List<String> dates = getPastAndTodayDates();
         if (dates.isEmpty()) {
@@ -253,6 +324,14 @@ public class FoodList {
                 .collect(java.util.stream.Collectors.toList());
     }
 
+    /**
+     * Checks if two dates are consecutive calendar days.
+     *
+     * @param date1 The first date string in "dd-MM-yyyy" format
+     * @param date2 The second date string in "dd-MM-yyyy" format
+     * @return true if date2 is exactly one day after date1, false otherwise
+     * @throws AssertionError If either date is null
+     */
     private boolean isConsecutive(String date1, String date2) {
         assert date1 != null && date2 != null : "Dates should not be null";
         try {
