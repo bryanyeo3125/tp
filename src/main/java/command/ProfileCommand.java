@@ -107,14 +107,22 @@ public class ProfileCommand extends Command {
             String[] prefixes = {"n/", "g/", "a/", "w/", "h/"};
             Profile existing = ProfileStorage.loadProfile(name);
             String profileName = existing != null ? existing.getName() : name;
-            String gender = existing != null ? existing.getGender() : "male";
+            String gender = existing != null ? existing.getGender() : null; // Bug 2 fix: no default
             int age = existing != null ? existing.getAge() : 0;
             double weight = existing != null ? existing.getWeight() : 0.0;
             double height = existing != null ? existing.getHeight() : 0.0;
 
+            // Disallow name changes via profile set
             if (command.contains("n/")) {
-                profileName = extractValue(command, "n/", nextPrefix(command, "n/", prefixes));
+                String newName = extractValue(command, "n/", nextPrefix(command, "n/", prefixes));
+                if (!newName.equalsIgnoreCase(name)) {
+                    System.out.println("Name cannot be changed via 'profile set'.");
+                    System.out.println("Please log in with a different username to use a different name.");
+                    return;
+                }
+                // Same name as current user — silently ignore and continue
             }
+
             if (command.contains("g/")) {
                 gender = extractValue(command, "g/", nextPrefix(command, "g/", prefixes));
                 if (!gender.equalsIgnoreCase("male") && !gender.equalsIgnoreCase("female")) {
@@ -132,8 +140,23 @@ public class ProfileCommand extends Command {
                 height = Double.parseDouble(extractValue(command, "h/", nextPrefix(command, "h/", prefixes)));
             }
 
-            if (age <= 0 || weight <= 0 || height <= 0) {
-                System.out.println("Age, weight, and height must be positive.");
+            // Validates if gender parameter is filled
+            if (gender == null) {
+                System.out.println("Please specify your gender with g/male or g/female.");
+                return;
+            }
+
+            // Validates profile parameters
+            if (age <= 0 || age > 120) {
+                System.out.println("Age must be between 1 and 120 years.");
+                return;
+            }
+            if (weight < 20 || weight > 500) {
+                System.out.println("Weight must be between 20 and 500 kg.");
+                return;
+            }
+            if (height < 80 || height > 250) {
+                System.out.println("Height must be between 80 and 250 cm.");
                 return;
             }
 
