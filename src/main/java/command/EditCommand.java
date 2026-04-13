@@ -108,7 +108,8 @@ public class EditCommand extends Command {
                     throw new BitbitesException("Calories must be non-negative.");
                 }
                 if (caloriesLong > 10000) {
-                    throw new BitbitesException("Calories value is too large. Please enter a realistic value (max 10000 kcal).");
+                    throw new BitbitesException("Calories value is too large. " +
+                            "Please enter a realistic value (max 10000 kcal).");
                 }
                 food.setCalories((int) caloriesLong);
                 logger.log(Level.INFO, "Updated calories to: " + caloriesLong);
@@ -126,7 +127,8 @@ public class EditCommand extends Command {
                     throw new BitbitesException("Protein must be non-negative.");
                 }
                 if (protein > 1000) {
-                    throw new BitbitesException("Protein value is too large. Please enter a realistic value (max 1000g).");
+                    throw new BitbitesException("Protein value is too large. " +
+                            "Please enter a realistic value (max 1000g).");
                 }
                 food.setProtein(protein);
                 logger.log(Level.INFO, "Updated protein to: " + protein);
