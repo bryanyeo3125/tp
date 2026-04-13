@@ -1,14 +1,12 @@
-@startuml history_top
-skinparam arrowThickness 1.1
-skinparam maxMessageSize 150
-
+@startuml
+actor User
 participant ":Bitbites" as Bitbites
 participant ":Parser" as Parser
-participant "c:HistoryTopCommand" as Cmd
-participant "foods:FoodList" as FoodList
-participant "ui:UserInterface" as UI
+participant ":HistoryTopCommand" as HistoryTopCommand
+participant ":FoodList" as FoodList
+participant ":UserInterface" as UI
 
--> Bitbites : "history /top 3"
+User -> Bitbites : input "history /top 3"
 activate Bitbites
 
 Bitbites -> Parser : parse("history /top 3")
@@ -16,26 +14,28 @@ activate Parser
 Parser --> Bitbites : HistoryTopCommand
 deactivate Parser
 
-Bitbites -> Cmd : execute(context)
-activate Cmd
+Bitbites -> HistoryTopCommand : execute(context)
+activate HistoryTopCommand
 
-alt N missing or non-numeric
-    Cmd --> Bitbites : throws BitbitesException
-else N <= 0
-    Cmd --> Bitbites : throws BitbitesException
-else valid N
-    Cmd -> FoodList : getTopDaysByCalories(3)
-    activate FoodList
-    FoodList --> Cmd : List<NutritionSummary>
-    deactivate FoodList
+alt [N missing or non-numeric]
+  HistoryTopCommand --> Bitbites : throws BitbitesException
+else [N <= 0]
+  HistoryTopCommand --> Bitbites : throws BitbitesException
+else [valid N]
+  HistoryTopCommand -> FoodList : getTopDaysByCalories(3)
+  activate FoodList
+  FoodList --> HistoryTopCommand : List<NutritionSummary>
+  deactivate FoodList
 
-    Cmd -> UI : showHistoryTop(top, 3)
-    activate UI
-    UI --> Cmd
-    deactivate UI
+  HistoryTopCommand -> UI : showHistoryTop(top, 3)
+  activate UI
+  UI --> HistoryTopCommand
+  deactivate UI
 end
 
-Cmd --> Bitbites : false
-deactivate Cmd
+HistoryTopCommand --> Bitbites : false
+deactivate HistoryTopCommand
+
+Bitbites --> User
 deactivate Bitbites
 @enduml

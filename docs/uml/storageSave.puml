@@ -1,12 +1,12 @@
 @startuml
-skinparam ArrowFontStyle normal
-
+actor User
 participant ":Bitbites" as Bitbites
-participant "foodStorage:Storage" as FoodStorage
-participant "presetStorage:Storage" as PresetStorage
-participant "foods:FoodList" as FoodList
+participant ":FoodStorage" as FoodStorage
+participant ":PresetStorage" as PresetStorage
+participant ":FoodList" as FoodList
 participant "fw:FileWriter" as FileWriter
 
+User -> Bitbites : command executed
 activate Bitbites
 
 Bitbites -> FoodStorage : save(foods)
@@ -14,11 +14,10 @@ activate FoodStorage
 
 FoodStorage -> FoodStorage : ensureDirectoryExists()
 activate FoodStorage
-FoodStorage --> FoodStorage
 deactivate FoodStorage
 
 create FileWriter
-FoodStorage -> FileWriter : FileWriter(filePath)
+FoodStorage -> FileWriter : new FileWriter(filePath)
 activate FileWriter
 FileWriter --> FoodStorage : fw
 deactivate FileWriter
@@ -28,33 +27,32 @@ activate FoodList
 FoodList --> FoodStorage : size
 deactivate FoodList
 
-loop i < size
-    FoodStorage -> FoodList : getFood(i)
-    activate FoodList
-    FoodList --> FoodStorage : food
-    deactivate FoodList
+loop [i < size]
+  FoodStorage -> FoodList : getFood(i)
+  activate FoodList
+  FoodList --> FoodStorage : food
+  deactivate FoodList
 
-    FoodStorage -> FileWriter : write(line)
-    activate FileWriter
-    FileWriter --> FoodStorage
-    deactivate FileWriter
+  FoodStorage -> FileWriter : write(line)
+  activate FileWriter
+  FileWriter --> FoodStorage
+  deactivate FileWriter
 end
 
 FoodStorage -> FileWriter : close()
 activate FileWriter
-FileWriter --> FoodStorage
-deactivate FileWriter
 destroy FileWriter
+deactivate FileWriter
 
 FoodStorage --> Bitbites
 deactivate FoodStorage
 
+note over PresetStorage : Execution flow is identical\nto foodStorage.save(foods)
 Bitbites -> PresetStorage : save(presets)
 activate PresetStorage
-note right of PresetStorage: Execution flow is identical\nto foodStorage.save(foods)
 PresetStorage --> Bitbites
 deactivate PresetStorage
 
-<-- Bitbites
+Bitbites --> User
 deactivate Bitbites
 @enduml

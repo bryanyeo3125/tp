@@ -1,60 +1,55 @@
-@startuml command_class
-skinparam arrowThickness 1.1
-skinparam classBackgroundColor #F1EFE8
-skinparam classBorderColor #888780
-skinparam roundcorner 8
-skinparam linetype ortho
-
+@startuml
 abstract class Command {
-    + {abstract} execute(context : AppContext) : boolean
-    # extractValue(command, prefix, nextPfx) : String
-    # nextPrefix(command, currentPrefix, prefixes[]) : String
+  +execute(context : AppContext) : boolean
+  #extractValue(command : String, prefix : String, nextPfx : String) : String
+  #nextPrefix(command : String, currentPrefix : String, prefixes : String[]) : String
 }
 
 class AppContext {
-    - foodList : FoodList
-    - presetList : PresetList
-    - ui : UserInterface
-    + getFoodList() : FoodList
-    + getPresetList() : PresetList
-    + getUi() : UserInterface
+  -foodList : FoodList
+  -presetList : PresetList
+  -ui : UserInterface
+  +getFoodList() : FoodList
+  +getPresetList() : PresetList
+  +getUi() : UserInterface
 }
 
 class AddCommand {
-    + execute(context : AppContext) : boolean
+  +execute(context : AppContext) : boolean
 }
 
 class ProfileCommand {
-    + execute(context : AppContext) : boolean
+  +execute(context : AppContext) : boolean
 }
 
 class GoalsCommand {
-    + execute(context : AppContext) : boolean
-    + {static} showDailyProgress(foodList : FoodList) : void
-    + {static} autoSetGoalsFromBmr(name, bmr) : void
+  +execute(context : AppContext) : boolean
+  +showDailyProgress(foodList : FoodList) : void
+  +autoSetGoalsFromBmr(name : String, bmr : double) : void
 }
 
-class "XYZCommand\n(e.g. Delete, List,\nHelp, Edit, History...)" as OtherCmd {
-    + execute(context : AppContext) : boolean
+class XYZCommand {
+  +execute(context : AppContext) : boolean
 }
 
 class ProfileStorage {
-    + {static} saveProfile(profile) : void
-    + {static} loadProfile(name) : Profile
-    + {static} deleteProfile(name) : void
+  +saveProfile(profile : Profile) : void
+  +loadProfile(name : String) : Profile
+  +deleteProfile(name : String) : void
 }
 
 class GoalsStorage {
-    + {static} saveGoals(...) : void
-    + {static} loadGoals(name) : double[]
+  +saveGoals(...) : void
+  +loadGoals(name : String) : double[]
 }
 
 Command <|-- AddCommand
 Command <|-- ProfileCommand
 Command <|-- GoalsCommand
-Command <|-- OtherCmd
+Command <|-- XYZCommand
 
-Command ..> AppContext : uses
-ProfileCommand ..> ProfileStorage : uses
-GoalsCommand ..> GoalsStorage : uses
+Command ..> AppContext
+
+ProfileCommand ..> ProfileStorage
+GoalsCommand ..> GoalsStorage
 @enduml

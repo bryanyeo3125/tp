@@ -1,14 +1,12 @@
-@startuml summary_range
-skinparam arrowThickness 1.1
-skinparam maxMessageSize 150
-
+@startuml
+actor User
 participant ":Bitbites" as Bitbites
 participant ":Parser" as Parser
-participant "c:SummaryRangeCommand" as Cmd
-participant "foods:FoodList" as FoodList
-participant "ui:UserInterface" as UI
+participant ":SummaryRangeCommand" as SummaryRangeCommand
+participant ":FoodList" as FoodList
+participant ":UserInterface" as UI
 
--> Bitbites : "summary from/27-03-2026 to/01-04-2026"
+User -> Bitbites : input "summary from/27-03-2026 to/01-04-2026"
 activate Bitbites
 
 Bitbites -> Parser : parse(fullCommand)
@@ -16,35 +14,37 @@ activate Parser
 Parser --> Bitbites : SummaryRangeCommand
 deactivate Parser
 
-Bitbites -> Cmd : execute(context)
-activate Cmd
+Bitbites -> SummaryRangeCommand : execute(context)
+activate SummaryRangeCommand
 
-alt missing from/ or to/
-    Cmd --> Bitbites : throws BitbitesException
-else dates present
-    Cmd -> Cmd : parse fromDate, toDate with LocalDate
-    alt invalid date format
-        Cmd --> Bitbites : throws BitbitesException
-    else from isAfter to
-        Cmd --> Bitbites : throws BitbitesException
-    else valid range
-        Cmd -> FoodList : getSummariesInRange(fromDate, toDate)
-        activate FoodList
-        FoodList --> Cmd : List<NutritionSummary>
-        deactivate FoodList
+alt [missing from/ or to/]
+  SummaryRangeCommand --> Bitbites : throws BitbitesException
+else [invalid date format]
+  SummaryRangeCommand --> Bitbites : throws BitbitesException
+else [fromDate is after toDate]
+  SummaryRangeCommand --> Bitbites : throws BitbitesException
+else [valid range]
+  SummaryRangeCommand -> FoodList : getSummariesInRange(fromDate, toDate)
+  activate FoodList
+  FoodList --> SummaryRangeCommand : List<NutritionSummary>
+  deactivate FoodList
 
-        alt summaries empty
-            Cmd -> Cmd : print "No food items found"
-        else
-            Cmd -> UI : showSummaryRange(summaries, fromDate, toDate)
-            activate UI
-            UI --> Cmd
-            deactivate UI
-        end
-    end
+  alt [summaries empty]
+    SummaryRangeCommand -> UI : print "No food items found"
+    activate UI
+    UI --> SummaryRangeCommand
+    deactivate UI
+  else
+    SummaryRangeCommand -> UI : showSummaryRange(summaries, fromDate, toDate)
+    activate UI
+    UI --> SummaryRangeCommand
+    deactivate UI
+  end
 end
 
-Cmd --> Bitbites : false
-deactivate Cmd
+SummaryRangeCommand --> Bitbites : false
+deactivate SummaryRangeCommand
+
+Bitbites --> User
 deactivate Bitbites
 @enduml

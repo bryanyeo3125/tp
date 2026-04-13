@@ -1,0 +1,43 @@
+@startuml
+actor User
+participant ":Bitbites" as Bitbites
+participant ":Parser" as Parser
+participant ":DeleteCommand" as DeleteCommand
+participant ":FoodList" as FoodList
+participant ":UserInterface" as UI
+
+User -> Bitbites : input "delete 2"
+activate Bitbites
+
+Bitbites -> Parser : parse("delete 2")
+activate Parser
+Parser --> Bitbites : DeleteCommand
+deactivate Parser
+
+Bitbites -> DeleteCommand : execute(context)
+activate DeleteCommand
+
+DeleteCommand -> FoodList : deleteFood(1)
+activate FoodList
+alt [index out of range]
+  FoodList --> DeleteCommand : throws BitbitesException
+else [index valid]
+  FoodList --> DeleteCommand : removed Food
+end
+deactivate FoodList
+
+DeleteCommand -> UI : showDeletedFood(removed, remaining)
+activate UI
+UI --> DeleteCommand
+deactivate UI
+
+DeleteCommand --> Bitbites : false
+deactivate DeleteCommand
+
+Bitbites -> Bitbites : foodStorage.save(foods)
+activate Bitbites
+deactivate Bitbites
+
+Bitbites --> User
+deactivate Bitbites
+@enduml

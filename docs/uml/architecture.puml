@@ -1,0 +1,15 @@
+@startuml
+package "BitBites" {
+  [Bitbites] --> [Parser]
+  [Bitbites] --> [AppContext]
+  [Parser] --> [Command]
+  [Command] --> [AppContext]
+  [AppContext] --> [FoodList]
+  [AppContext] --> [PresetList]
+  [AppContext] --> [UserInterface]
+  [Bitbites] --> [FoodStorage]
+  [Bitbites] --> [ProfileStorage]
+  [Bitbites] --> [GoalsStorage]
+  [Bitbites] --> [PresetStorage]
+}
+@enduml

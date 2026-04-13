@@ -1,0 +1,36 @@
+@startuml
+actor User
+participant ":Bitbites" as Bitbites
+participant ":Parser" as Parser
+participant ":EditCommand" as EditCommand
+participant ":FoodList" as FoodList
+participant ":Food" as Food
+participant ":UserInterface" as UI
+
+User -> Bitbites : input "edit 1 n/Duck Rice c/500"
+activate Bitbites
+Bitbites -> Parser : parse(...)
+activate Parser
+Parser --> Bitbites : EditCommand
+deactivate Parser
+
+Bitbites -> EditCommand : execute(context)
+activate EditCommand
+EditCommand -> FoodList : getFood(0)
+activate FoodList
+FoodList --> EditCommand : Food
+deactivate FoodList
+
+EditCommand -> Food : setName("Duck Rice")
+EditCommand -> Food : setCalories(500)
+EditCommand -> UI : showEditedFood(food)
+EditCommand --> Bitbites : false
+deactivate EditCommand
+
+Bitbites -> Bitbites : foodStorage.save(foods)
+activate Bitbites
+deactivate Bitbites
+
+Bitbites --> User
+deactivate Bitbites
+@enduml

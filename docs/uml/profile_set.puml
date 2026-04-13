@@ -1,64 +1,65 @@
-@startuml profile_set
-skinparam arrowThickness 1.1
-skinparam maxMessageSize 150
+@startuml
+actor User
+participant ":Bitbites" as Bitbites
+participant ":Parser" as Parser
+participant ":ProfileCommand" as ProfileCommand
+participant ":ProfileStorage" as ProfileStorage
+participant ":GoalsCommand" as GoalsCommand
+participant ":Profile" as Profile
 
-box "Logic" #LightBlue
-participant "parser:Parser" as Parser
-participant "cmd:ProfileCommand" as Profile
-end box
+User -> Bitbites : input "profile set g/GENDER a/AGE w/WEIGHT h/HEIGHT"
+activate Bitbites
 
-box "Storage" #LightYellow
-participant "storage:ProfileStorage" as PStorage
-end box
-
-box "Goals" #LightGreen
-participant "goals:GoalsCommand" as Goals
-end box
-
--> Parser : parse("profile set n/NAME g/GENDER a/AGE w/WEIGHT h/HEIGHT")
+Bitbites -> Parser : parse(...)
 activate Parser
+Parser --> Bitbites : ProfileCommand
+deactivate Parser
 
-Parser -> Profile ** : new ProfileCommand(fullCommand)
-Parser -> Profile : execute(context)
+Bitbites -> ProfileCommand : execute(context)
+activate ProfileCommand
+
+alt [missing prefix or blank input]
+  ProfileCommand --> Bitbites : print format error, return false
+end
+
+ProfileCommand -> ProfileStorage : loadProfile(name)
+activate ProfileStorage
+ProfileStorage --> ProfileCommand : existing Profile or null
+deactivate ProfileStorage
+
+ProfileCommand -> ProfileCommand : extractValue() for each prefix
+activate ProfileCommand
+deactivate ProfileCommand
+
+alt [invalid gender]
+  ProfileCommand --> Bitbites : print error, return false
+else [age/weight/height out of range]
+  ProfileCommand --> Bitbites : print error, return false
+end
+
+create Profile
+ProfileCommand -> Profile : new Profile(name, gender, age, weight, height)
 activate Profile
-
-alt missing prefix OR blank "profile set"
-    Profile -> Profile : print format error, return false
-end
-
-Profile -> PStorage : loadProfile(name)
-activate PStorage
-PStorage --> Profile : existing Profile (or null)
-deactivate PStorage
-
-Profile -> Profile : extractValue() for each prefix (n/, g/, a/, w/, h/)
-note right : preserves unchanged fields\nfrom existing profile
-
-alt invalid gender (not male/female)
-    Profile -> Profile : print error, return false
-end
-
-alt age/weight/height < 0
-    Profile -> Profile : print error, return false
-end
-
-Profile -> Profile : new Profile(name, gender, age, weight, height)
-
-Profile -> PStorage : saveProfile(profile)
-activate PStorage
-PStorage --> Profile
-deactivate PStorage
-
-Profile -> Profile : showProfile(name)
-
-Profile -> Goals : autoSetGoalsFromBmr(name, profile.getBmr())
-activate Goals
-Goals --> Profile : daily + weekly calorie goals updated
-deactivate Goals
-
-Profile --> Parser : return false
+Profile --> ProfileCommand : profile
 deactivate Profile
 
-<-- Parser
-deactivate Parser
+ProfileCommand -> ProfileStorage : saveProfile(profile)
+activate ProfileStorage
+ProfileStorage --> ProfileCommand
+deactivate ProfileStorage
+
+ProfileCommand -> ProfileCommand : showProfile(name)
+activate ProfileCommand
+deactivate ProfileCommand
+
+ProfileCommand -> GoalsCommand : autoSetGoalsFromBmr(name, profile.getBmr())
+activate GoalsCommand
+GoalsCommand --> ProfileCommand : daily + weekly calorie goals updated
+deactivate GoalsCommand
+
+ProfileCommand --> Bitbites : false
+deactivate ProfileCommand
+
+Bitbites --> User
+deactivate Bitbites
 @enduml

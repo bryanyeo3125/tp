@@ -1,57 +1,61 @@
-@startuml goals_set
-skinparam arrowThickness 1.1
-skinparam maxMessageSize 150
+@startuml
+actor User
+participant ":Bitbites" as Bitbites
+participant ":Parser" as Parser
+participant ":GoalsCommand" as GoalsCommand
+participant ":GoalsStorage" as GoalsStorage
 
-box "Logic" #LightBlue
-participant "parser:Parser" as Parser
-participant "cmd:GoalsCommand" as Goals
-end box
+User -> Bitbites : input "goals set dc/CAL dp/PROT wc/CAL wp/PROT"
+activate Bitbites
 
-box "Storage" #LightYellow
-participant "storage:GoalsStorage" as GStorage
-end box
-
--> Parser : parse("goals set dc/CAL dp/PROT wc/CAL wp/PROT")
+Bitbites -> Parser : parse(...)
 activate Parser
-
-Parser -> Goals ** : new GoalsCommand(fullCommand)
-Parser -> Goals : execute(context)
-activate Goals
-
-Goals -> GStorage : loadGoals(name)
-activate GStorage
-GStorage --> Goals : double[] {dc, dp, wc, wp} (or null)
-deactivate GStorage
-
-Goals -> Goals : loadGoalsIfNeeded() — overwrite defaults if file exists
-
-alt fullCommand equals "goals set" (no prefixes)
-    Goals -> Goals : print format reminder, return false
-end
-
-alt no valid prefix found (not dc/, dp/, wc/, wp/)
-    Goals -> Goals : print unknown prefix error, return false
-end
-
-Goals -> Goals : handleSetGoals(fullCommand)
-
-loop for each prefix present (dc/, dp/, wc/, wp/)
-    Goals -> Goals : extractValue() for prefix
-    alt value < 0 OR non-numeric
-        Goals -> Goals : print error, return false
-    end
-    Goals -> Goals : update static goal field
-    Goals -> Goals : print confirmation message
-end
-
-Goals -> GStorage : saveGoals(name, dc, dp, wc, wp)
-activate GStorage
-GStorage --> Goals
-deactivate GStorage
-
-Goals --> Parser : return false
-deactivate Goals
-
-<-- Parser
+Parser --> Bitbites : GoalsCommand
 deactivate Parser
+
+Bitbites -> GoalsCommand : execute(context)
+activate GoalsCommand
+
+GoalsCommand -> GoalsStorage : loadGoals(name)
+activate GoalsStorage
+GoalsStorage --> GoalsCommand : double[] or null
+deactivate GoalsStorage
+
+GoalsCommand -> GoalsCommand : loadGoalsIfNeeded()
+activate GoalsCommand
+deactivate GoalsCommand
+
+alt [no subcommand provided]
+  GoalsCommand -> UI : print format reminder
+else [no valid prefix found]
+  GoalsCommand -> UI : print unknown prefix error
+end
+
+GoalsCommand -> GoalsCommand : handleSetGoals(fullCommand)
+activate GoalsCommand
+deactivate GoalsCommand
+
+loop [for each prefix present]
+  GoalsCommand -> GoalsCommand : extractValue()
+  activate GoalsCommand
+  deactivate GoalsCommand
+  alt [value invalid or non-numeric]
+    GoalsCommand -> UI : print error
+  else [value valid]
+    GoalsCommand -> GoalsCommand : update goal field
+    activate GoalsCommand
+    deactivate GoalsCommand
+  end
+end
+
+GoalsCommand -> GoalsStorage : saveGoals(name, dc, dp, wc, wp)
+activate GoalsStorage
+GoalsStorage --> GoalsCommand
+deactivate GoalsStorage
+
+GoalsCommand --> Bitbites : false
+deactivate GoalsCommand
+
+Bitbites --> User
+deactivate Bitbites
 @enduml

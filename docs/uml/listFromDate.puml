@@ -1,50 +1,49 @@
 @startuml
-skinparam arrowThickness 1.1
-skinparam maxMessageSize 150
-
+actor User
 participant ":Bitbites" as Bitbites
 participant ":Parser" as Parser
-participant "c:ListByDateCommand" as ListByDateCommand
-participant "foods:FoodList" as FoodList
-participant "foodItem:Food" as Food
+participant ":ListByDateCommand" as ListByDateCommand
+participant ":AppContext" as AppContext
+participant ":FoodList" as FoodList
+participant ":Food" as Food
 
--> Bitbites : "list d/DATE"
+User -> Bitbites : input "list d/DATE"
 activate Bitbites
 
 Bitbites -> Parser : parse("list d/DATE")
 activate Parser
-
-create ListByDateCommand
-Parser -> ListByDateCommand : ListByDateCommand("list d/DATE")
-activate ListByDateCommand
-ListByDateCommand --> Parser : c
-deactivate ListByDateCommand
-
-Parser --> Bitbites : c
+Parser --> Bitbites : ListByDateCommand
 deactivate Parser
 
 Bitbites -> ListByDateCommand : execute(context)
 activate ListByDateCommand
 
-loop for i = 0 to foods.size() - 1
-    ListByDateCommand -> FoodList : get(i)
-    activate FoodList
-    FoodList --> ListByDateCommand : foodItem
-    deactivate FoodList
+ListByDateCommand -> AppContext : getFoodList()
+activate AppContext
+AppContext --> ListByDateCommand : foods
+deactivate AppContext
 
-    ListByDateCommand -> Food : getDate()
-    activate Food
-    Food --> ListByDateCommand : itemDate
-    deactivate Food
+loop [for i = 0 to foods.size() - 1]
+  ListByDateCommand -> FoodList : get(i)
+  activate FoodList
+  FoodList --> ListByDateCommand : foodItem
+  deactivate FoodList
 
-    opt itemDate.equals(date)
-        ListByDateCommand -> ListByDateCommand : System.out.println(foodItem)
-    end
+  ListByDateCommand -> Food : getDate()
+  activate Food
+  Food --> ListByDateCommand : itemDate
+  deactivate Food
+
+  opt [itemDate.equals(date)]
+    ListByDateCommand -> ListByDateCommand : print(foodItem)
+    activate ListByDateCommand
+    deactivate ListByDateCommand
+  end
 end
 
-ListByDateCommand --> Bitbites : isExit = false
+ListByDateCommand --> Bitbites : false
 deactivate ListByDateCommand
 
-<-- Bitbites
+Bitbites --> User
 deactivate Bitbites
 @enduml

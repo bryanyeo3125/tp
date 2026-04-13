@@ -2,7 +2,7 @@
 actor User
 participant ":Bitbites" as Bitbites
 participant ":Parser" as Parser
-participant ":HistoryCommand" as Cmd
+participant ":HistoryCommand" as HistoryCommand
 participant ":FoodList" as FoodList
 participant ":UserInterface" as UI
 
@@ -14,25 +14,22 @@ activate Parser
 Parser --> Bitbites : HistoryCommand
 deactivate Parser
 
-Bitbites -> Cmd : execute(context)
-activate Cmd
+Bitbites -> HistoryCommand : execute(context)
+activate HistoryCommand
 
-Cmd -> FoodList : getItemCountByDate(today)
+HistoryCommand -> FoodList : getSummariesByDate()
 activate FoodList
-FoodList --> Cmd : count
+FoodList --> HistoryCommand : List<NutritionSummary>
 deactivate FoodList
 
-Cmd -> FoodList : getAllDailySummaries()
-activate FoodList
-FoodList --> Cmd : List<NutritionSummary>
-deactivate FoodList
-
-Cmd -> UI : showHistory(summaries, recordedToday)
+HistoryCommand -> UI : showHistory(summaries)
 activate UI
-UI --> Cmd
+UI --> HistoryCommand
 deactivate UI
 
-Cmd --> Bitbites : false
-deactivate Cmd
+HistoryCommand --> Bitbites : false
+deactivate HistoryCommand
+
+Bitbites --> User
 deactivate Bitbites
 @enduml

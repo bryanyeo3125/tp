@@ -1,15 +1,13 @@
-@startuml history_best
-skinparam arrowThickness 1.1
-skinparam maxMessageSize 150
-
+@startuml
+actor User
 participant ":Bitbites" as Bitbites
 participant ":Parser" as Parser
-participant "c:HistoryBestCommand" as Cmd
-participant "foods:FoodList" as FoodList
-participant "goals:GoalsCommand" as Goals
-participant "ui:UserInterface" as UI
+participant ":HistoryBestCommand" as HistoryBestCommand
+participant ":FoodList" as FoodList
+participant ":GoalsCommand" as GoalsCommand
+participant ":UserInterface" as UI
 
--> Bitbites : "history /best 3"
+User -> Bitbites : input "history /best 3"
 activate Bitbites
 
 Bitbites -> Parser : parse("history /best 3")
@@ -17,36 +15,38 @@ activate Parser
 Parser --> Bitbites : HistoryBestCommand
 deactivate Parser
 
-Bitbites -> Cmd : execute(context)
-activate Cmd
+Bitbites -> HistoryBestCommand : execute(context)
+activate HistoryBestCommand
 
-alt N missing or non-numeric
-    Cmd --> Bitbites : throws BitbitesException
-else N <= 0
-    Cmd --> Bitbites : throws BitbitesException
-else valid N
-    Cmd -> Goals : getDailyCalorieGoal()
-    activate Goals
-    Goals --> Cmd : int
-    deactivate Goals
+alt [N missing or non-numeric]
+  HistoryBestCommand --> Bitbites : throws BitbitesException
+else [N <= 0]
+  HistoryBestCommand --> Bitbites : throws BitbitesException
+else [valid N]
+  HistoryBestCommand -> GoalsCommand : getDailyCalorieGoal()
+  activate GoalsCommand
+  GoalsCommand --> HistoryBestCommand : calorieGoal
+  deactivate GoalsCommand
 
-    Cmd -> Goals : getDailyProteinGoal()
-    activate Goals
-    Goals --> Cmd : double
-    deactivate Goals
+  HistoryBestCommand -> GoalsCommand : getDailyProteinGoal()
+  activate GoalsCommand
+  GoalsCommand --> HistoryBestCommand : proteinGoal
+  deactivate GoalsCommand
 
-    Cmd -> FoodList : getDaysClosestToGoal(3, calorieGoal)
-    activate FoodList
-    FoodList --> Cmd : List<NutritionSummary>
-    deactivate FoodList
+  HistoryBestCommand -> FoodList : getDaysClosestToGoal(3, calorieGoal)
+  activate FoodList
+  FoodList --> HistoryBestCommand : List<NutritionSummary>
+  deactivate FoodList
 
-    Cmd -> UI : showHistoryBest(best, 3, calorieGoal, proteinGoal)
-    activate UI
-    UI --> Cmd
-    deactivate UI
+  HistoryBestCommand -> UI : showHistoryBest(best, 3, calorieGoal, proteinGoal)
+  activate UI
+  UI --> HistoryBestCommand
+  deactivate UI
 end
 
-Cmd --> Bitbites : false
-deactivate Cmd
+HistoryBestCommand --> Bitbites : false
+deactivate HistoryBestCommand
+
+Bitbites --> User
 deactivate Bitbites
 @enduml

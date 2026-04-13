@@ -1,13 +1,71 @@
 # BitBites Developer Guide
 
+## Table of Contents
+1. [Acknowledgements](#acknowledgements)
+2. [Setting Up, Getting Started](#setting-up-getting-started)
+3. [Design & Implementation](#design--implementation)
+  - 3.1 [Architecture Overview](#architecture-overview)
+  - 3.2 [Command Pattern and AppContext](#1-design-command-pattern-and-appcontext)
+  - 3.3 [List Command](#2-listing-food-items-list)
+  - 3.4 [Add Command](#3-adding-a-food-item-add)
+  - 3.5 [Edit Command](#4-editing-a-food-item-edit)
+  - 3.6 [Delete Command](#5-deleting-a-food-item-delete)
+  - 3.7 [Exit Command](#6-exiting-the-application-exit)
+  - 3.8 [Help Command](#7-help-command-help)
+    *(continue for all remaining features)*
+4. [Appendix A: Product Scope](#appendix-a-product-scope)
+5. [Appendix B: User Stories](#appendix-b-user-stories)
+6. [Appendix C: Non-Functional Requirements](#appendix-c-non-functional-requirements)
+7. [Appendix D: Glossary](#appendix-d-glossary)
+8. [Appendix E: Instructions for Manual Testing](#appendix-e-instructions-for-manual-testing)
+
+---
+
 ## Acknowledgements
 
-{list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
-
 The following resources, libraries, and tools were instrumental in the development of this project:
-- Java Standard Library: Leveraged as the foundational framework for core logic implementation, efficient data structure management, and stream-based I/O operations.
-- Gradle Build Tool: Used as the primary build automation system.
-- Checkstyle: Integrated to ensure strict adherence to the Google Java Style Guide.
+- **Java Standard Library**: Used as the foundational framework for core logic, data structures,
+  and stream-based I/O operations.
+- **Gradle Build Tool**: Used as the primary build automation and dependency management system.
+- **Checkstyle**: Integrated to enforce adherence to the Google Java Style Guide during development.
+- **Mifflin-St Jeor Equation**: The BMR formula used in the `profile` feature is based on the
+  Mifflin-St Jeor equation. Reference: Mifflin, M., St Jeor, S., Hill, L., Scott, B., Daugherty, S., & Koh, Y. (1990). A new predictive equation for resting energy expenditure in healthy individuals. American Journal of Clinical Nutrition, 51(2), 241–247. https://doi.org/10.1093/ajcn/51.2.241
+- **AddressBook-Level3 (AB3)**: The overall project structure, command pattern design, and DG
+  format were inspired by the SE-EDU AddressBook-Level3 project
+  (https://github.com/se-edu/addressbook-level3).
+
+---
+
+## Design & Implementation
+
+### Architecture Overview
+
+BitBites follows a simple layered architecture. The diagram below gives a high-level view
+of the main components and how they interact.
+
+![Architecture Diagram](uml/architecture.png)
+
+The main components are:
+
+- **`Bitbites`** (Main): The entry point. Initialises all components and runs the main
+  input loop.
+- **`Parser`**: Reads raw user input and returns the appropriate `Command` object.
+- **`Command`**: Abstract base class. Each user action (add, delete, edit, etc.) is
+  implemented as a concrete subclass.
+- **`AppContext`**: Bundles `FoodList`, `PresetList`, and `UserInterface` into a single
+  object passed to every command.
+- **`FoodList` / `PresetList`**: In-memory data structures holding the user's food entries
+  and presets respectively.
+- **`UserInterface`**: Handles all output to the terminal.
+- **`Storage` classes** (`FoodStorage`, `PresetStorage`, `ProfileStorage`, `GoalsStorage`):
+  Each handles reading and writing one type of data to disk.
+
+**Typical command execution flow:**
+1. `Bitbites` reads a line of user input.
+2. `Parser.parse()` creates the appropriate `Command` object.
+3. `Bitbites` calls `command.execute(context)`.
+4. The command reads/writes data via `AppContext`, then returns `true` (exit) or `false` (continue).
+5. `Bitbites` calls the relevant Storage class to persist any changes.
 
 ---
 
@@ -319,9 +377,14 @@ The sequence diagram below illustrates the execution of `profile set ...`:
 `Profile` stores five fields: `name`, `gender`, `age`, `weight` (kg), and `height` (cm). It derives two computed values:
 
 - **BMI** — calculated as `weight / (height in metres)²`
-- **BMR** — calculated using the Mifflin-St Jeor formula:
+- **BMR** — calculated using the Mifflin-St Jeor formula [1]:
    - Male: `(10 × weight) + (6.25 × height) − (5 × age) + 5`
    - Female: `(10 × weight) + (6.25 × height) − (5 × age) − 161`
+
+> [1] Mifflin, M., St Jeor, S., Hill, L., Scott, B., Daugherty, S., & Koh, Y. (1990). 
+> A new predictive equation for resting energy expenditure in healthy individuals. 
+> American Journal of Clinical Nutrition, 51(2), 241–247. 
+> https://doi.org/10.1093/ajcn/51.2.241.
 
 BMI is also categorised into `Underweight`, `Normal`, `Overweight`, or `Obese` based on standard thresholds.
 
@@ -521,6 +584,8 @@ BitBites targets health-conscious individuals who want to track their daily food
 
 - Is comfortable using a command-line interface and prefers typing to clicking
 - Tracks calories and protein regularly as part of a fitness or dietary routine
+- Health-conscious individuals who want to track their daily food intake
+- Users who want a lightweight, no-frills nutrition tracker without requiring internet access
 
 ### Value Proposition
 

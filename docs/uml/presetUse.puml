@@ -1,28 +1,18 @@
 @startuml
-skinparam ArrowFontStyle normal
-
+actor User
 participant ":Bitbites" as Bitbites
 participant ":Parser" as Parser
-participant "c:PresetCommand" as PresetCommand
+participant ":PresetCommand" as PresetCommand
+participant ":PresetList" as PresetList
+participant "newFood:Food" as Food
+participant ":FoodList" as FoodList
 
-participant "presets:PresetList" as PresetList
-participant "template:Food" as TemplateFood
-participant "newFood:Food" as NewFood
-participant "foods:FoodList" as FoodList
-
--> Bitbites : "preset use 1"
+User -> Bitbites : input "preset use 1"
 activate Bitbites
 
 Bitbites -> Parser : parse("preset use 1")
 activate Parser
-
-create PresetCommand
-Parser -> PresetCommand : PresetCommand("preset use 1")
-activate PresetCommand
-PresetCommand --> Parser : c
-deactivate PresetCommand
-
-Parser --> Bitbites : c
+Parser --> Bitbites : PresetCommand
 deactivate Parser
 
 Bitbites -> PresetCommand : execute(context)
@@ -30,31 +20,35 @@ activate PresetCommand
 
 PresetCommand -> PresetCommand : handleUse("1", presets, foods)
 activate PresetCommand
+deactivate PresetCommand
 
 PresetCommand -> PresetList : getPreset(0)
 activate PresetList
 PresetList --> PresetCommand : template
 deactivate PresetList
 
-create NewFood
-PresetCommand -> NewFood : Food(name, calories, protein, date)
-activate NewFood
-NewFood --> PresetCommand : newFood
-deactivate NewFood
+create Food
+PresetCommand -> Food : new Food(name, calories, protein, date)
+activate Food
+Food --> PresetCommand : newFood
+deactivate Food
 
 PresetCommand -> FoodList : addFood(newFood)
 activate FoodList
 FoodList --> PresetCommand
 deactivate FoodList
 
-PresetCommand -> PresetCommand : System.out.println("Successfully logged...")
-
-PresetCommand --> PresetCommand
+PresetCommand -> PresetCommand : print "Successfully logged..."
+activate PresetCommand
 deactivate PresetCommand
 
-PresetCommand --> Bitbites : isExit = false
+PresetCommand --> Bitbites : false
 deactivate PresetCommand
 
-<-- Bitbites
+Bitbites -> Bitbites : foodStorage.save(foods)
+activate Bitbites
+deactivate Bitbites
+
+Bitbites --> User
 deactivate Bitbites
 @enduml
