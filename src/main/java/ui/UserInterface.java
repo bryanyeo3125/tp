@@ -70,7 +70,8 @@ public class UserInterface {
         if (profile != null) {
             System.out.println("Welcome back " + name + "!");
         } else if (!name.matches("[a-zA-Z][a-zA-Z0-9 ]*")) {
-            System.out.println("Name must start with a letter and can only contain letters, numbers, and spaces. Please try again.");
+            System.out.println("Name must start with a letter and can only contain letters, numbers, and spaces."
+                    + "Please try again.");
         } else {
             System.out.println("Hello " + name + "! Set up your profile with:");
             System.out.println("  profile set g/GENDER a/AGE w/WEIGHT h/HEIGHT");
