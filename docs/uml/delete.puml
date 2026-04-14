@@ -19,9 +19,9 @@ activate DeleteCommand
 
 DeleteCommand -> FoodList : deleteFood(1)
 activate FoodList
-alt [index out of range]
+alt [* index out of range]
   FoodList --> DeleteCommand : throws BitbitesException
-else [index valid]
+else [* index valid]
   FoodList --> DeleteCommand : removed Food
 end
 deactivate FoodList
@@ -33,10 +33,6 @@ deactivate UI
 
 DeleteCommand --> Bitbites : false
 deactivate DeleteCommand
-
-Bitbites -> Bitbites : foodStorage.save(foods)
-activate Bitbites
-deactivate Bitbites
 
 Bitbites --> User
 deactivate Bitbites

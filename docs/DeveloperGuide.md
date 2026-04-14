@@ -214,7 +214,8 @@ At least one field must be provided.
 2. **Index Conversion:** Same as `DeleteCommand`.
 3. **Field Detection:** The fields string is checked for `n/`, `c/`, `p/`, `d/`. At least one must be present or a `BitbitesException` is thrown.
 4. **In-place Update:** `FoodList.getFood(index)` returns a reference to the existing `Food` object. Each field is extracted using `extractField()` which stops at the next prefix, then applied via the corresponding setter.
-5. **Validation:** Calories and protein must be non-negative. Date must match `\d{2}-\d{2}-\d{4}`.
+5. **Validation:** Calories must be a non-negative integer not exceeding 10000 kcal. Protein must be a non-negative decimal not exceeding 1000g. Date must pass both format (`\d{2}-\d{2}-\d{4}`)
+   and strict calendar validation via `Command.validateDate()`. Input containing `|` is rejected.
 6. **Confirmation:** `ui.showEditedFood()` prints the updated food item.
 7. **Persistence:** `foodStorage.save(foods)` is called in the main loop.
 
@@ -453,7 +454,7 @@ Each sub-command is a dedicated Command class. All retrieve `NutritionSummary` o
 `NutritionSummary` stores aggregated `totalCalories`, `totalProtein`, `itemCount`, and the list of `Food` items. `ProgressBar.generateSegmented()` generates a bar where each segment's width represents that meal's calorie share of the day's total.
 
 **`summary d/DATE`:**
-1. The date is extracted after `d/`.
+1. The date is extracted after `d/`. It is validated using `Command.validateDate()` to check format and strict calendar validity before any data lookup is performed.
 2. If no items exist for the date, a message is shown and execution stops.
 3. Goal values are retrieved from `GoalsCommand.getDailyCalorieGoal()` and `getDailyProteinGoal()`.
 4. `ui.showSummary(summary, calorieGoal, proteinGoal)` prints the breakdown and goal status.
@@ -462,7 +463,7 @@ Each sub-command is a dedicated Command class. All retrieve `NutritionSummary` o
 
 **`summary from/DATE1 to/DATE2`:**
 1. Both `from/` and `to/` prefixes must be present.
-2. Dates are parsed using `LocalDate.parse()` with `dd-MM-yyyy` formatter.
+2. Dates are parsed using `LocalDate.parse()` with strict `dd-MM-uuuu` formatter. Both dates are validated using `Command.validateDate()` before parsing.
 3. If `from` is after `to`, a `BitbitesException` is thrown.
 4. `FoodList.getSummariesInRange()` returns daily summaries within the range.
 5. If no summaries found, a message is shown and execution stops.
@@ -472,7 +473,7 @@ Each sub-command is a dedicated Command class. All retrieve `NutritionSummary` o
 
 **`summary compare d/DATE1 d/DATE2`:**
 1. The command is split by `d/` — at least 3 parts must exist.
-2. Both dates are extracted and checked for emptiness.
+2. Both dates are extracted and checked for emptiness. They are validated using `Command.validateDate()` before any data lookup.
 3. If either date has no items, a message is shown and execution stops early.
 4. `FoodList.getSummaryByDate()` is called for each date.
 5. `ui.showSummaryCompare()` displays both days side by side with calorie and protein differences.
@@ -495,22 +496,22 @@ The `history` feature shows a chronological log of all recorded days. It support
 #### 3.14.1 Implementation Details
 
 **`history`:**
-`HistoryCommand` checks whether any food has been logged today using `LocalDate.now()`. It retrieves all daily summaries and passes them with a `recordedToday` flag to `ui.showHistory()`, which appends a reminder if today has not been logged.
+`HistoryCommand` retrieves past and present daily summaries via `getPastAndTodaySummaries()`, which filters out future-dated entries, then reverses the list so the most recent date appears first. It checks whether any food has been logged today using `LocalDate.now()`, and passes all daily summaries along with a `recordedToday` flag to `ui.showHistory()`, which appends a reminder if today has not been logged.
 
 ![history sequence diagram](uml/history.png)
 
 **`history /top N`:**
-`HistoryTopCommand` splits the command by `/top` to extract `N`. It calls `foodList.getTopDaysByCalories(N)` which sorts summaries by total calories descending and returns the top N.
+`HistoryTopCommand` splits the command by `/top` to extract `N`. It calls `foodList.getTopDaysByCalories(N)` and sorts summaries by total calories descending and returns the top N.
 
 ![history top sequence diagram](uml/history_top.png)
 
 **`history /best N`:**
-`HistoryBestCommand` calls `foodList.getDaysClosestToGoal(n, calorieGoal)`, which sorts summaries by `|totalCalories - dailyCalorieGoal|` ascending, surfacing the days where intake was closest to the user's target.
+`HistoryBestCommand` splits the command by `/top` to extract `N`. It calls `foodList.getDaysClosestToGoal(n, calorieGoal)` and sorts summaries by `|totalCalories - dailyCalorieGoal|` ascending, surfacing the days where intake was closest to the user's target.
 
 ![history best sequence diagram](uml/history_best.png)
 
 **`history streak`:**
-`HistoryStreakCommand` calls `getCurrentStreak()` and `getLongestStreak()`. Streak calculation uses `LocalDate.parse()` with `dd-MM-yyyy` format to compare consecutive dates. `getCurrentStreak()` also checks whether the last recorded date is today or yesterday using `LocalDate.now()` — if neither, the streak returns 0.
+`HistoryStreakCommand` calls `getCurrentStreak()` and `getLongestStreak()`. Both methods filter out future-dated entries via `getPastAndTodayDates()` before computing streaks, preventing future food entries from incorrectly breaking or inflating the streak count.Streak calculation uses `LocalDate.parse()` with `dd-MM-yyyy` format to compare consecutive dates. `getCurrentStreak()` also checks whether the last recorded date is today or yesterday using `LocalDate.now()` — if neither, the streak returns 0.
 
 ![history streak sequence diagram](uml/history_streak.png)
 

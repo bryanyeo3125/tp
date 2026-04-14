@@ -218,13 +218,13 @@ summary from/01-04-2025 to/07-04-2025
 
 ### Viewing food history : `history`
 
-Displays a historical overview of all days you have logged food.
+Displays a historical overview of past days you have logged food (future-dated logs are excluded).
 
 #### Full history
 
 **Format:** `history`
 
-Shows a table of all logged dates with total calories, protein, and a segmented bar. Also indicates whether you have recorded food today.
+Shows a table of past logged dates (excluding future dates) with total calories, protein, and a segmented bar. Also indicates whether you have recorded food today.
 
 #### Top N highest calorie days
 
@@ -252,7 +252,7 @@ history /best 3
 
 **Format:** `history streak`
 
-Shows your current consecutive logging streak and your all-time longest streak. A streak is maintained as long as you log at least one food entry each day.
+Shows your current consecutive logging streak and your all-time longest streak based on past logs only. A streak is maintained as long as you log at least one food entry each day.
 Today counts toward your streak if you have already logged food today; otherwise, yesterday's entry keeps your streak alive until you log today.
 
 ---

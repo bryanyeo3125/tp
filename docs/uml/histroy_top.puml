@@ -17,11 +17,11 @@ deactivate Parser
 Bitbites -> HistoryTopCommand : execute(context)
 activate HistoryTopCommand
 
-alt [N missing or non-numeric]
+alt [* N missing or non-numeric]
   HistoryTopCommand --> Bitbites : throws BitbitesException
-else [N <= 0]
+else [* N <= 0]
   HistoryTopCommand --> Bitbites : throws BitbitesException
-else [valid N]
+else [* valid N]
   HistoryTopCommand -> FoodList : getTopDaysByCalories(3)
   activate FoodList
   FoodList --> HistoryTopCommand : List<NutritionSummary>

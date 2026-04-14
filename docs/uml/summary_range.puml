@@ -9,7 +9,7 @@ participant ":UserInterface" as UI
 User -> Bitbites : input "summary from/27-03-2026 to/01-04-2026"
 activate Bitbites
 
-Bitbites -> Parser : parse(fullCommand)
+Bitbites -> Parser : parse("summary from/27-03-2026 to/01-04-2026")
 activate Parser
 Parser --> Bitbites : SummaryRangeCommand
 deactivate Parser
@@ -17,23 +17,22 @@ deactivate Parser
 Bitbites -> SummaryRangeCommand : execute(context)
 activate SummaryRangeCommand
 
-alt [missing from/ or to/]
+alt [* missing from/ or to/]
   SummaryRangeCommand --> Bitbites : throws BitbitesException
-else [invalid date format]
+else [* empty fromDate or toDate]
   SummaryRangeCommand --> Bitbites : throws BitbitesException
-else [fromDate is after toDate]
+else [* invalid date format or impossible date]
   SummaryRangeCommand --> Bitbites : throws BitbitesException
-else [valid range]
+else [* from isAfter to]
+  SummaryRangeCommand --> Bitbites : throws BitbitesException
+else [* valid range]
   SummaryRangeCommand -> FoodList : getSummariesInRange(fromDate, toDate)
   activate FoodList
   FoodList --> SummaryRangeCommand : List<NutritionSummary>
   deactivate FoodList
 
-  alt [summaries empty]
-    SummaryRangeCommand -> UI : print "No food items found"
-    activate UI
-    UI --> SummaryRangeCommand
-    deactivate UI
+  alt [* summaries empty]
+    SummaryRangeCommand -> SummaryRangeCommand : print "No food items found"
   else
     SummaryRangeCommand -> UI : showSummaryRange(summaries, fromDate, toDate)
     activate UI

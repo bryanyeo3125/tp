@@ -454,7 +454,8 @@ class BitbitesTest {
         FileWriter fw = new FileWriter(tempFilePath);
         fw.write("Pizza | abc | 15.0 | 01-04-2026\n");
         fw.close();
-        assertThrows(BitbitesException.class, () -> storage.load());
+        ArrayList<Food> loadedFoods = storage.load();
+        assertTrue(loadedFoods.isEmpty());
     }
 
     /**
@@ -513,12 +514,15 @@ class BitbitesTest {
      */
     @Test
     void storage_save_presetValid() throws FileNotFoundException {
+        String presetFilePath = tempDir.resolve("test_presets.txt").toString();
+        Storage presetStorage = new Storage(presetFilePath);
+
         PresetList listToSave = new PresetList();
         listToSave.addPreset(new Food("Banana", 105, 1.3, "PRESET"));
         listToSave.addPreset(new Food("Eggs", 140, 12.0, "PRESET"));
-        storage.save(listToSave);
+        presetStorage.save(listToSave);
 
-        ArrayList<Food> loadedPresets = new Storage(tempFilePath).load();
+        ArrayList<Food> loadedPresets = new Storage(presetFilePath).load();
         assertEquals(2, loadedPresets.size());
         assertEquals("Banana", loadedPresets.get(0).getName());
         assertEquals("Eggs", loadedPresets.get(1).getName());
